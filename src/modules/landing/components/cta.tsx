@@ -346,7 +346,7 @@ export const CTASection = () => {
                 >
                   <div className="relative bg-gradient-to-br from-[#451C15] to-[#5A241C] backdrop-blur-xl rounded-3xl p-4 sm:p-5 lg:p-6 shadow-2xl max-w-[180px] sm:max-w-[220px] lg:max-w-[280px] border border-[#451C15]/10">
                     <p className="text-[#E0D9C9] text-xs sm:text-sm lg:text-base italic font-light [font-family:var(--font-playfair)] leading-relaxed">
-                      "{ctaContent.mascot.quote}"
+                      &quot;{ctaContent.mascot.quote}&quot;
                     </p>
                     <div className="absolute -bottom-3 left-12 sm:left-16 w-6 h-6 bg-gradient-to-br from-[#451C15] to-[#5A241C] rotate-45 border-r border-b border-[#451C15]/10" />
                   </div>

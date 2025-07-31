@@ -135,10 +135,10 @@ export const AboutMe = () => {
                 whileInView={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.3, duration: 0.6 }}
                 viewport={{ once: true }}
-                className="absolute -bottom-8 left-8 right-8 z-20"
+                className="absolute -bottom-8 left-4 right-4 sm:left-8 sm:right-8 z-20"
               >
-                <div className="bg-white/95 backdrop-blur-xl rounded-2xl p-6 shadow-2xl border border-[#E0D9C9]/10">
-                  <div className="grid grid-cols-3 gap-4">
+                <div className="bg-white/95 backdrop-blur-xl rounded-xl sm:rounded-2xl p-4 sm:p-6 shadow-2xl border border-[#E0D9C9]/10">
+                  <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
                     {aboutContent.stats.map((stat, index) => (
                       <motion.div
                         key={index}
@@ -148,10 +148,10 @@ export const AboutMe = () => {
                         viewport={{ once: true }}
                         className="text-center"
                       >
-                        <div className="text-2xl lg:text-3xl font-medium text-[#451C15] [font-family:var(--font-inter)]">
+                        <div className="text-xl sm:text-2xl lg:text-3xl font-medium text-[#451C15] [font-family:var(--font-inter)]">
                           {stat.number}
                         </div>
-                        <div className="text-xs lg:text-sm text-[#451C15]/70 mt-1 font-medium [font-family:var(--font-inter)]">
+                        <div className="text-xs sm:text-sm text-[#451C15]/70 mt-1 font-medium [font-family:var(--font-inter)]">
                           {stat.label}
                         </div>
                       </motion.div>
