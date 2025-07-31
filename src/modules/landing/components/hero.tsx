@@ -24,7 +24,7 @@ const heroContent = {
     label: "Happy Clients",
   },
   article: {
-    title: "The Art of Tiramisu",
+    title: "The Art of kids-classes",
     cta: "Read More →",
   },
 };
@@ -141,7 +141,7 @@ export const Hero = () => {
                         className="relative"
                       >
                         <Avatar className="border-2 border-amber-200/50 w-8 h-8 sm:w-9 sm:h-9 lg:w-10 lg:h-10 shadow-lg">
-                          <AvatarImage src="/img/avatar1.jpg" />
+                          <AvatarImage src="/img/kids-classes.jpg" />
                           <AvatarFallback className="bg-gradient-to-br from-amber-200 to-amber-300 text-amber-900 text-xs">
                             U1
                           </AvatarFallback>
@@ -152,7 +152,7 @@ export const Hero = () => {
                         className="relative"
                       >
                         <Avatar className="border-2 border-amber-200/50 w-8 h-8 sm:w-9 sm:h-9 lg:w-10 lg:h-10 shadow-lg">
-                          <AvatarImage src="/img/avatar2.jpg" />
+                          <AvatarImage src="/img/kids-classes.jpg" />
                           <AvatarFallback className="bg-gradient-to-br from-amber-200 to-amber-300 text-amber-900 text-xs">
                             U2
                           </AvatarFallback>
@@ -163,7 +163,7 @@ export const Hero = () => {
                         className="relative"
                       >
                         <Avatar className="border-2 border-amber-200/50 w-8 h-8 sm:w-9 sm:h-9 lg:w-10 lg:h-10 shadow-lg">
-                          <AvatarImage src="/img/avatar3.jpg" />
+                          <AvatarImage src="/img/kids-classes.jpg" />
                           <AvatarFallback className="bg-gradient-to-br from-amber-200 to-amber-300 text-amber-900 text-xs">
                             U3
                           </AvatarFallback>
@@ -192,7 +192,7 @@ export const Hero = () => {
                 </Card>
               </motion.div>
 
-              {/* Enhanced Tiramisu Card - Adjusted for narrower column */}
+              {/* Enhanced kids-classes Card - Adjusted for narrower column */}
               <motion.div
                 initial={{ opacity: 0, x: 50, y: 50 }}
                 animate={{ opacity: 1, x: 0, y: 0 }}
@@ -207,8 +207,8 @@ export const Hero = () => {
                     <div className="relative w-14 h-14 sm:w-16 sm:h-16 lg:w-18 lg:h-18 rounded-lg sm:rounded-xl overflow-hidden flex-shrink-0 shadow-xl group-hover:shadow-2xl transition-shadow duration-300">
                       <div className="absolute inset-0 bg-gradient-to-t from-amber-900/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 z-10" />
                       <Image
-                        src="/img/tiramisu.jpg"
-                        alt="Tiramisu"
+                        src="/img/kids-classes.jpg"
+                        alt="kids-classes"
                         fill
                         className="object-cover group-hover:scale-110 transition-transform duration-500"
                         sizes="(max-width: 640px) 56px, (max-width: 1024px) 64px, 72px"
