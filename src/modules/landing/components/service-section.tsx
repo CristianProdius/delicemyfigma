@@ -227,14 +227,6 @@ const GiftServiceCard = ({
     >
       {/* Animated background pattern */}
       <div className="absolute inset-0">
-        <div
-          className="absolute inset-0 opacity-[0.03] group-hover:opacity-[0.05] transition-opacity duration-500"
-          style={{
-            backgroundImage: `repeating-linear-gradient(45deg, #451C15 0, #451C15 1px, transparent 1px, transparent 20px),
-                             repeating-linear-gradient(-45deg, #451C15 0, #451C15 1px, transparent 1px, transparent 20px)`,
-          }}
-        />
-
         {/* Floating shapes */}
         <motion.div
           className="absolute top-10 right-10 w-32 h-32 rounded-full"
