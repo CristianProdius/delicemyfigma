@@ -110,7 +110,8 @@ interface GalleryItemProps {
 
 const GalleryItem = ({ item, index }: GalleryItemProps) => {
   const [isHovered, setIsHovered] = useState(false);
-  const [likes, setLikes] = useState(Math.floor(Math.random() * 500) + 100);
+  const baseLikes = 100 + ((item.id * 47) % 400);
+  const [likes, setLikes] = useState(baseLikes);
   const [isLiked, setIsLiked] = useState(false);
 
   const handleLike = (e: React.MouseEvent) => {
