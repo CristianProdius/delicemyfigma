@@ -42,6 +42,7 @@ export interface PricingPackage {
   ctaText?: string;
   savings?: string; // "Save $100"
   originalPrice?: number; // For showing discounts
+  note?: string; // Additional pricing note
 }
 
 export interface ServicePricingProps {
@@ -250,9 +251,15 @@ const PricingCard = ({
                   <span className="text-3xl sm:text-4xl font-light text-[#451C15] [font-family:var(--font-playfair)]">
                     Custom Quote
                   </span>
-                  <span className="text-sm text-[#451C15]/60 mt-2 [font-family:var(--font-inter)]">
-                    Tailored to your needs
-                  </span>
+                  {pkg.note ? (
+                    <span className="text-sm text-[#451C15]/60 mt-2 [font-family:var(--font-inter)]">
+                      {pkg.note}
+                    </span>
+                  ) : (
+                    <span className="text-sm text-[#451C15]/60 mt-2 [font-family:var(--font-inter)]">
+                      Tailored to your needs
+                    </span>
+                  )}
                 </div>
               ) : (
                 <div className="flex items-baseline justify-center gap-1">
@@ -274,6 +281,11 @@ const PricingCard = ({
                     </span>
                   )}
                 </div>
+              )}
+              {pkg.note && pkg.price !== "custom" && (
+                <p className="text-xs text-[#451C15]/50 mt-2 [font-family:var(--font-inter)]">
+                  {pkg.note}
+                </p>
               )}
             </div>
 

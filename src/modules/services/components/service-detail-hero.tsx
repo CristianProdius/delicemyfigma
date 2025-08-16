@@ -491,28 +491,6 @@ export const ServiceDetailHero = ({
           />
 
           {/* Floating Rating Badge (optional) */}
-          <motion.div
-            initial={{ opacity: 0, scale: 0 }}
-            animate={{ opacity: 1, scale: 1 }}
-            transition={{ delay: 1, type: "spring", stiffness: 100 }}
-            className="absolute top-8 right-8 hidden xl:block"
-          >
-            <div className="bg-white/10 backdrop-blur-md rounded-2xl p-4 border border-white/20">
-              <div className="flex items-center gap-2">
-                <div className="flex gap-1">
-                  {[...Array(5)].map((_, i) => (
-                    <Star
-                      key={i}
-                      className="w-4 h-4 fill-amber-400 text-amber-400"
-                    />
-                  ))}
-                </div>
-                <span className="text-white font-light text-sm">
-                  4.9 (157 reviews)
-                </span>
-              </div>
-            </div>
-          </motion.div>
         </div>
       </motion.div>
 

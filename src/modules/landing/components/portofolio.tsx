@@ -12,7 +12,7 @@ const portfolioContent = {
     "Each piece tells a story of passion, precision, and the pursuit of chocolate perfection",
   categories: [
     { id: "all", label: "All Creations" },
-    { id: "bonbons", label: "Bonbons" },
+    { id: "Recipes", label: "Free Recipes" },
     { id: "sculptures", label: "Sculptures" },
     { id: "cakes", label: "Cakes" },
     { id: "seasonal", label: "Seasonal" },
@@ -21,7 +21,7 @@ const portfolioContent = {
     {
       id: 1,
       title: "Ruby Chocolate Rose",
-      category: "bonbons",
+      category: "Recipes",
       description: "Delicate rose-infused ganache in ruby chocolate shell",
       image: "/logo.png",
       size: "normal" as const,
@@ -39,7 +39,7 @@ const portfolioContent = {
     {
       id: 3,
       title: "Midnight Truffle Collection",
-      category: "bonbons",
+      category: "Recipes",
       description: "Dark chocolate truffles with exotic flavor profiles",
       image: "/img/custom-desserts.jpg",
       size: "wide" as const,
@@ -56,7 +56,7 @@ const portfolioContent = {
     },
     {
       id: 5,
-      title: "Spring Blossom Bonbons",
+      title: "Spring Blossom Recipes",
       category: "seasonal",
       description: "Cherry blossom and yuzu chocolate delights",
       image: "/img/adult-classes.jpg",

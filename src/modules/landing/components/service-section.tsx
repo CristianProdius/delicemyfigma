@@ -12,6 +12,7 @@ import {
   Palette,
   Gift,
 } from "lucide-react";
+import Link from "next/link";
 
 const servicesData = {
   title: "Our Services:",
@@ -23,6 +24,7 @@ const servicesData = {
         "Learn to make chocolates like a pro. Group or private lessons available. We even help you start your own chocolate business!",
       image: "/img/adult-classes.jpg",
       buttonText: "Learn More",
+      href: "/services/chocolate-classes-adults",
       gridClass: "col-span-1 row-span-1",
       icon: Users,
       accentColor: "#D4A574",
@@ -34,6 +36,7 @@ const servicesData = {
         "Fun, safe chocolate making for children. They create, play, and take home sweet treats!",
       image: "/img/kids-classes.jpg",
       buttonText: "Learn More",
+      href: "/services/kids-chocolate-classes",
       gridClass: "col-span-1 row-span-1",
       icon: Sparkles,
       accentColor: "#E8B4B8",
@@ -45,6 +48,7 @@ const servicesData = {
         "Add amazing chocolate desserts to your menu. We help you create treats that bring customers back.",
       image: "/img/restaurant-service.jpg",
       buttonText: "Learn More",
+      href: "/services/restaurant-cafe-services",
       gridClass: "col-span-1 row-span-2 md:row-span-2",
       icon: Utensils,
       accentColor: "#A67B5B",
@@ -56,6 +60,7 @@ const servicesData = {
         "Book a chocolate tasting party. Perfect for birthdays, team building, or any celebration.",
       image: "/img/parties-events.jpg",
       buttonText: "Book Event",
+      href: "/services/chocolate-parties-events",
       gridClass: "col-span-1 row-span-1",
       icon: PartyPopper,
       accentColor: "#F4A460",
@@ -67,6 +72,7 @@ const servicesData = {
         "We create unique chocolate decorations and molds just for your business.",
       image: "/img/custom-desserts.jpg",
       buttonText: "Learn More",
+      href: "/services/custom-dessert-design",
       gridClass: "col-span-1 row-span-1",
       icon: Palette,
       accentColor: "#CD853F",
@@ -78,6 +84,7 @@ const servicesData = {
     description:
       "Create unforgettable moments with our custom chocolate creations. Perfect for corporate gifts, weddings, or special celebrations.",
     buttonText: "Order Now",
+    href: "/services/personalized-chocolate-gifts",
     decorativeImage: "/img/cat.png",
     gridClass: "col-span-1 md:col-span-3 row-span-1",
     icon: Gift,
@@ -93,6 +100,7 @@ type Service = {
   gridClass: string;
   icon: React.ElementType;
   accentColor: string;
+  href: string;
 };
 
 interface ServiceCardProps {
@@ -178,19 +186,21 @@ const ServiceCard = ({ service, index }: ServiceCardProps) => {
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: index * 0.1 + 0.4, duration: 0.6 }}
         >
-          <Button
-            variant="ghost"
-            className="relative p-0 text-[#E0D9C9] hover:text-black transition-all duration-300 font-light text-base lg:text-lg group/btn"
-          >
-            <span className="relative z-10">{service.buttonText}</span>
-            <ArrowRight className="ml-2 w-5 h-5 transition-all duration-300 group-hover/btn:translate-x-2" />
+          <Link href={service.href}>
+            <Button
+              variant="ghost"
+              className="relative p-0 text-[#E0D9C9] hover:text-black transition-all duration-300 font-light text-base lg:text-lg group/btn"
+            >
+              <span className="relative z-10">{service.buttonText}</span>
+              <ArrowRight className="ml-2 w-5 h-5 transition-all duration-300 group-hover/btn:translate-x-2" />
 
-            {/* Underline effect */}
-            <span
-              className="absolute bottom-0 left-0 h-0.5 w-0 group-hover/btn:w-full transition-all duration-300"
-              style={{ backgroundColor: service.accentColor }}
-            />
-          </Button>
+              {/* Underline effect */}
+              <span
+                className="absolute bottom-0 left-0 h-0.5 w-0 group-hover/btn:w-full transition-all duration-300"
+                style={{ backgroundColor: service.accentColor }}
+              />
+            </Button>
+          </Link>
         </motion.div>
       </div>
 
@@ -301,15 +311,17 @@ const GiftServiceCard = ({
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.9, duration: 0.6 }}
           >
-            <Button
-              className="bg-[#451C15] text-[#E0D9C9] hover:bg-[#451C15]/90 hover:scale-105 transition-all duration-300 rounded-full px-10 py-4 text-base lg:text-lg shadow-xl hover:shadow-2xl group/btn"
-              style={{
-                boxShadow: "0 10px 30px rgba(69, 28, 21, 0.3)",
-              }}
-            >
-              <span className="relative z-10">{service.buttonText}</span>
-              <ArrowRight className="ml-3 w-5 h-5 group-hover/btn:translate-x-2 transition-transform duration-300" />
-            </Button>
+            <Link href={service.href}>
+              <Button
+                className="bg-[#451C15] text-[#E0D9C9] hover:bg-[#451C15]/90 hover:scale-105 transition-all duration-300 rounded-full px-10 py-4 text-base lg:text-lg shadow-xl hover:shadow-2xl group/btn"
+                style={{
+                  boxShadow: "0 10px 30px rgba(69, 28, 21, 0.3)",
+                }}
+              >
+                <span className="relative z-10">{service.buttonText}</span>
+                <ArrowRight className="ml-3 w-5 h-5 group-hover/btn:translate-x-2 transition-transform duration-300" />
+              </Button>
+            </Link>
           </motion.div>
         </div>
 

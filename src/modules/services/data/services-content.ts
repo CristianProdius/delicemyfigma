@@ -1,37 +1,5 @@
 // src/modules/services/data/services-content.ts
 
-import {
-  Users,
-  Sparkles,
-  Utensils,
-  PartyPopper,
-  Palette,
-  Gift,
-  Clock,
-  Award,
-  Heart,
-  Target,
-  BookOpen,
-  Briefcase,
-  Home,
-  Smile,
-  Star,
-  Trophy,
-  Zap,
-  Coffee,
-  Cake,
-  ChefHat,
-  GraduationCap,
-  DollarSign,
-  Calendar,
-  MapPin,
-  Phone,
-  Mail,
-  CheckCircle,
-  TrendingUp,
-  Sparkle,
-} from "lucide-react";
-
 // Type definitions for better TypeScript support and Strapi integration
 export interface ServiceFeature {
   icon: string; // Icon name as string for Strapi compatibility
@@ -935,7 +903,7 @@ export const servicesContent: Service[] = [
       "Create unforgettable moments with our custom chocolate creations. Perfect for corporate gifts, weddings, or special celebrations.",
     longDescription:
       "Express your sentiments in the sweetest way possible with our personalized chocolate gifts. Each piece is crafted with attention to detail and infused with meaning, making every bite a reminder of your thoughtfulness. From elegant corporate gifts that strengthen business relationships to romantic gestures that melt hearts, from celebration favors that guests treasure to sympathy gifts that provide comfort, our personalized chocolates speak when words aren't enough. We offer complete customization including flavors, packaging, messages, and presentation.",
-    heroImage: "/img/personalized-gifts.jpg",
+    heroImage: "/img/parties-events.jpg",
     galleryImages: [
       "/img/gift-1.jpg",
       "/img/gift-2.jpg",

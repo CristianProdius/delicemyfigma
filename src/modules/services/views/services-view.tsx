@@ -11,7 +11,6 @@ import {
   Sparkles,
   Clock,
   Users,
-  DollarSign,
   Home,
 } from "lucide-react";
 import { servicesContent, type Service } from "../data/services-content";
