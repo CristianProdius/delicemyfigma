@@ -4,7 +4,7 @@
 
 import React from "react";
 import { motion, useScroll, useTransform } from "motion/react";
-import { MapPin, Clock, Phone, Sparkles, Star, Heart } from "lucide-react";
+import { MapPin, Clock, Phone, Sparkles, Star } from "lucide-react";
 import { contactContent, isAtelierOpen } from "../data/contact-content";
 
 export const ContactHero = () => {

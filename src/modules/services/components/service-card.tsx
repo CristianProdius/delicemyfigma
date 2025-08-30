@@ -68,7 +68,6 @@ export interface ServiceCardProps {
 }
 
 export const ServiceCard = ({
-  id,
   title,
   shortDescription,
   image,

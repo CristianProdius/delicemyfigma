@@ -10,7 +10,6 @@ export const LandingView = () => {
   return (
     <>
       <Hero />
-
       <ServicesSection />
       <AboutMe />
       <PortfolioSection />

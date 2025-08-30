@@ -1,11 +1,10 @@
-// src/modules/landing/components/hero.tsx
+
 "use client";
 
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
 import Image from "next/image";
-import Header from "@/components/header";
 import { motion } from "motion/react";
 
 const heroContent = {
@@ -34,7 +33,7 @@ const heroContent = {
 
 export const Hero = () => {
   return (
-    <section className="relative z-10 flex flex-col w-full max-w-[91.666667%] mx-auto h-auto">
+    <section className="relative z-10 flex flex-col w-full max-w-[91.666667%] mx-auto h-auto mt-32">
       {/* Ultra premium glassmorphism container */}
       <div className="relative">
         {/* Gradient border effect */}
@@ -63,14 +62,14 @@ export const Hero = () => {
           <div
             className="absolute inset-0 opacity-[0.015] mix-blend-overlay pointer-events-none"
             style={{
-              backgroundImage:
-                'url("data:image/svg+xml,%3Csvg viewBox="0 0 256 256" xmlns="http://www.w3.org/2000/svg"%3E%3Cfilter id="noiseFilter"%3E%3CfeTurbulence type="fractalNoise" baseFrequency="0.85" numOctaves="4" stitchTiles="stitch"/%3E%3C/filter%3E%3Crect width="100%25" height="100%25" filter="url(%23noiseFilter)"/%3E%3C/svg%3E")',
+              backgroundImage: 'url("/img/bg.jpg")',
+              backgroundSize: "cover",
+              backgroundPosition: "center",
             }}
           />
 
           <div className="relative p-6 sm:p-8 md:p-10 lg:p-14 xl:p-20">
-            {/* Header inside the glass container */}
-            <Header variant="hero" />
+
 
             {/* Main content grid - adjusted for 70/30 split on desktop */}
             <div className="grid grid-cols-1 lg:grid-cols-[70fr_30fr] gap-8 md:gap-10 lg:gap-12 xl:gap-16 items-start lg:items-stretch mt-8 sm:mt-10 lg:mt-16">
@@ -176,7 +175,7 @@ export const Hero = () => {
                     <div className="relative pl-6 sm:pl-8 lg:pl-12">
                       {/* Quote mark */}
                       <div className="absolute left-0 -top-2 sm:-top-4 text-amber-300/20 text-4xl sm:text-6xl lg:text-7xl font-serif leading-none select-none">
-                        "
+                        &apos;
                       </div>
 
                       <p className="text-amber-200/70 text-[10px] sm:text-xs lg:text-sm mb-2 sm:mb-3 font-medium tracking-[0.3em] uppercase [font-family:var(--font-inter)]">

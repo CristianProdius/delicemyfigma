@@ -133,10 +133,10 @@ const PhotoGallery = ({
 // Testimonials Carousel Component (keep for specific carousel functionality)
 const TestimonialsCarousel = ({
   testimonials,
-  accentColor = "#D4A574",
+  accentColor,
 }: {
   testimonials: ServiceTestimonial[];
-  accentColor?: string;
+  accentColor: string;  
 }) => {
   const [activeTestimonial, setActiveTestimonial] = useState(0);
 
@@ -170,19 +170,27 @@ const TestimonialsCarousel = ({
                 <div key={index} className="w-full flex-shrink-0 px-4">
                   <Card className="bg-white/95 backdrop-blur-sm border border-[#451C15]/10 p-8 lg:p-12 rounded-3xl">
                     <div className="flex flex-col items-center text-center">
-                      <Quote className="w-10 h-10 text-[#D4A574]/30 mb-6" />
+                      {/* Use accentColor for the Quote icon */}
+                      <Quote 
+                        className="w-10 h-10 mb-6" 
+                        style={{ color: `${accentColor}30` }} // Using accentColor with opacity
+                      />
 
                       <div className="flex gap-1 mb-6">
                         {[...Array(testimonial.rating)].map((_, i) => (
                           <Star
                             key={i}
-                            className="w-5 h-5 fill-[#D4A574] text-[#D4A574]"
+                            className="w-5 h-5"
+                            style={{ 
+                              fill: accentColor, // Using accentColor for star fill
+                              color: accentColor // Using accentColor for star stroke
+                            }}
                           />
                         ))}
                       </div>
 
                       <p className="text-lg lg:text-xl text-[#451C15]/80 mb-8 leading-relaxed italic [font-family:var(--font-playfair)]">
-                        "{testimonial.content}"
+                        &quot;{testimonial.content}&quot;
                       </p>
 
                       <div>
@@ -203,7 +211,7 @@ const TestimonialsCarousel = ({
             </div>
           </div>
 
-          {/* Navigation Dots */}
+          {/* Navigation Dots - also use accentColor */}
           <div className="flex justify-center gap-2 mt-8">
             {testimonials.map((_, index) => (
               <button
@@ -212,9 +220,14 @@ const TestimonialsCarousel = ({
                 className={cn(
                   "w-2 h-2 rounded-full transition-all duration-300",
                   index === activeTestimonial
-                    ? "w-8 bg-gradient-to-r from-[#451C15] to-[#A67B5B]"
-                    : "bg-[#451C15]/20 hover:bg-[#451C15]/40"
+                    ? "w-8"
+                    : "hover:opacity-60"
                 )}
+                style={{
+                  backgroundColor: index === activeTestimonial 
+                    ? accentColor 
+                    : `${accentColor}33` // 20% opacity in hex
+                }}
               />
             ))}
           </div>
@@ -352,7 +365,7 @@ const DescriptionSection = ({ service }: { service: Service }) => {
               {service.includedInPrice && (
                 <div>
                   <h4 className="text-sm font-medium text-[#451C15] mb-2 [font-family:var(--font-inter)]">
-                    What's Included
+                    What&apos;s Included
                   </h4>
                   <ul className="space-y-1">
                     {service.includedInPrice.slice(0, 4).map((item, index) => (

@@ -8,10 +8,9 @@ import Link from "next/link";
 import {
   Clock,
   Calendar,
-  User,
+ 
   ArrowRight,
-  BookOpen,
-  TrendingUp,
+
   Star,
 } from "lucide-react";
 import { cn } from "@/lib/utils";

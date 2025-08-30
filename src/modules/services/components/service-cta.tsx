@@ -12,16 +12,15 @@ import {
   MapPin,
   ArrowRight,
   Calendar,
-  Clock,
   Heart,
   Star,
   MessageCircle,
-  CheckCircle,
   Users,
   Award,
   Zap,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
+import type { LucideIcon } from "lucide-react";
 
 export interface ServiceCTAProps {
   serviceTitle: string;
@@ -47,6 +46,12 @@ export interface ServiceCTAProps {
   className?: string;
 }
 
+interface BadgeData {
+  icon: LucideIcon;
+  value: string | number;
+  label: string;
+}
+
 // Animated Stat Badge Component
 const StatBadge = ({
   icon: Icon,
@@ -54,7 +59,7 @@ const StatBadge = ({
   label,
   index,
 }: {
-  icon: any;
+  icon: LucideIcon;
   value: string | number;
   label: string;
   index: number;
@@ -123,7 +128,7 @@ export const ServiceCTA = ({
     `"I can't wait to share the magic of ${serviceTitle.toLowerCase()} with you!"`;
 
   // Prepare stat badges
-  const statBadges = [
+  const statBadges: BadgeData[] = [
     spotsLeft && { icon: Users, value: spotsLeft, label: "spots left" },
     nextSessionDate && { icon: Calendar, value: nextSessionDate, label: "" },
     testimonialCount && {
@@ -132,7 +137,7 @@ export const ServiceCTA = ({
       label: "happy clients",
     },
     rating && { icon: Star, value: rating, label: "/5 rating" },
-  ].filter(Boolean);
+  ].filter(Boolean) as BadgeData[];
 
   return (
     <section
@@ -335,7 +340,7 @@ export const ServiceCTA = ({
                 viewport={{ once: true }}
                 className="flex flex-wrap gap-3 justify-center lg:justify-start mb-10"
               >
-                {statBadges.map((badge: any, index) => (
+                {statBadges.map((badge, index) => (
                   <StatBadge
                     key={index}
                     icon={badge.icon}

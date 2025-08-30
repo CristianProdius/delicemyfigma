@@ -349,8 +349,8 @@ export const AtelierShowcase = ({ metrics, team }: AtelierShowcaseProps) => {
           className="mt-12 text-center"
         >
           <blockquote className="text-xl text-gray-600 italic max-w-3xl mx-auto">
-            "Together, we craft not just chocolates, but memories that last a
-            lifetime."
+            &quot;Together, we craft not just chocolates, but memories that last a
+            lifetime.&quot;
           </blockquote>
           <p className="mt-4 text-[#D2691E] font-medium">
             — The Cocoa Dreams Team

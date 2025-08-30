@@ -26,9 +26,13 @@ import {
   Smile,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
+import type { LucideIcon } from "lucide-react";
+import type { FC } from "react";
+
+type IconComponent = FC | LucideIcon;
 
 // Extended icon mapping for various feature types
-const iconMap: { [key: string]: any } = {
+const iconMap: { [key: string]: IconComponent } = {
   Award,
   BookOpen,
   Briefcase,

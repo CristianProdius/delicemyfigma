@@ -11,7 +11,7 @@ import {
   Train,
   Clock,
   Phone,
-  Globe,
+ 
   Building,
   Sparkles,
   Star,
@@ -28,7 +28,6 @@ export const LocationMap = () => {
   const mapUrl = `https://www.google.com/maps/embed/v1/place?key=YOUR_API_KEY&q=${location.coordinates.lat},${location.coordinates.lng}&zoom=15&maptype=roadmap`;
 
   // Alternative: Static map image for demo purposes
-  const staticMapUrl = `https://maps.googleapis.com/maps/api/staticmap?center=${location.coordinates.lat},${location.coordinates.lng}&zoom=15&size=800x600&maptype=roadmap&markers=color:0x451C15%7C${location.coordinates.lat},${location.coordinates.lng}&style=feature:all|element:geometry|color:0xf5f5f5&style=feature:all|element:labels.text.fill|color:0x616161&style=feature:all|element:labels.text.stroke|color:0xf5f5f5&style=feature:administrative.land_parcel|element:labels.text.fill|color:0xbdbdbd&style=feature:poi|element:geometry|color:0xeeeeee&style=feature:poi|element:labels.text.fill|color:0x757575&style=feature:poi.park|element:geometry|color:0xe5e5e5&style=feature:road|element:geometry|color:0xffffff&style=feature:road.arterial|element:labels.text.fill|color:0x757575&style=feature:road.highway|element:geometry|color:0xdadada&style=feature:road.highway|element:labels.text.fill|color:0x616161&style=feature:road.local|element:labels.text.fill|color:0x9e9e9e&style=feature:transit.line|element:geometry|color:0xe5e5e5&style=feature:water|element:geometry|color:0xc9c9c9`;
 
   const locationDetails = [
     {

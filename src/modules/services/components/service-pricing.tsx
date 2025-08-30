@@ -14,7 +14,6 @@ import {
   Phone,
   Mail,
   Gift,
-  TrendingUp,
   Award,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -449,9 +448,9 @@ const CustomQuoteCard = ({ onContact }: { onContact?: () => void }) => {
           </h3>
 
           <p className="text-[#451C15]/60 mb-8 max-w-xl mx-auto [font-family:var(--font-inter)]">
-            Every event is unique. Let's create a personalized package that
+            Every event is unique. Let&apos;s create a personalized package that
             perfectly matches your vision, budget, and requirements. From
-            intimate gatherings to grand celebrations, we're here to help.
+            intimate gatherings to grand celebrations, we&apos;re here to help.
           </p>
 
           <div className="flex flex-col sm:flex-row gap-4 justify-center">

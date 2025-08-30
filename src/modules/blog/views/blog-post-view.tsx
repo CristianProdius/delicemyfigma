@@ -14,10 +14,10 @@ import {
   Clock,
   Calendar,
   Tag,
-  User,
+
   ArrowUp,
   Coffee,
-  Loader2,
+
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
@@ -39,6 +39,12 @@ import { BlogComments } from "../components/blog-comments";
 import { BlogSidebar } from "../components/blog-sidebar";
 import { ShareButtons } from "../components/share-buttons";
 import { TableOfContents } from "../components/table-of-contents";
+
+interface TableOfContentsItem {
+  id: string;
+  title: string;
+  level: number;
+}
 
 interface BlogPostViewProps {
   slug: string;
@@ -161,7 +167,6 @@ const ReadingProgress = ({ progress }: { progress: number }) => {
 
 // Floating Action Buttons
 const FloatingActions = ({
-  post,
   onShare,
   onBookmark,
   isBookmarked,
@@ -254,7 +259,7 @@ export const BlogPostView = ({ slug }: BlogPostViewProps) => {
   const [post, setPost] = useState<BlogPost | null>(null);
   const [relatedPosts, setRelatedPosts] = useState<BlogPost[]>([]);
   const [isBookmarked, setIsBookmarked] = useState(false);
-  const [tableOfContents, setTableOfContents] = useState<any[]>([]);
+  const [tableOfContents, setTableOfContents] = useState<TableOfContentsItem[]>([]);
 
   // Scroll progress tracking
   const { scrollYProgress } = useScroll({

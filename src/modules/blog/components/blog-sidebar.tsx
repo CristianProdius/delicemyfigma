@@ -9,8 +9,7 @@ import {
   Mail,
   Tag,
   Clock,
-  Calendar,
-  User,
+
   ArrowRight,
   Sparkles,
   Coffee,

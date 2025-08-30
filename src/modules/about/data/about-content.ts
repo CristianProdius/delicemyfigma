@@ -485,8 +485,9 @@ export const getTeamMemberByRole = (role: string) =>
     member.role.toLowerCase().includes(role.toLowerCase())
   );
 
-// Export all content as default
-export default {
+const aboutContent = {
   personal: oleseaContent,
   company: companyContent,
 };
+
+export default aboutContent;

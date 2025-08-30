@@ -13,13 +13,12 @@ import {
   Star,
   Sparkles,
   ArrowRight,
-  Calendar,
-  ExternalLink,
+  LucideIcon
 } from "lucide-react";
 
 interface ContactMethod {
   id: string;
-  icon: any;
+  icon: LucideIcon;
   title: string;
   subtitle: string;
   description: string;
@@ -131,7 +130,7 @@ export const ContactMethods = () => {
             Choose Your Preferred Way
           </h2>
           <p className="text-lg text-[#451C15]/70 [font-family:var(--font-inter)] max-w-2xl mx-auto">
-            We're here to make your chocolate dreams come true. Select the
+            We&apos;re here to make your chocolate dreams come true. Select the
             contact method that works best for you.
           </p>
 

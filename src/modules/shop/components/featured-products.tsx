@@ -4,7 +4,6 @@ import React, { useState, useRef, useEffect } from "react";
 import {
   Star,
   ChefHat,
-  Award,
   Crown,
   ArrowRight,
   Sparkles,
@@ -12,6 +11,7 @@ import {
   ChevronRight,
   Eye,
 } from "lucide-react";
+import Image from "next/image";
 
 interface Product {
   id: string;
@@ -45,7 +45,6 @@ const FeaturedProducts: React.FC<FeaturedProductsProps> = ({
   const [hoveredProduct, setHoveredProduct] = useState<string | null>(null);
   const [isInView, setIsInView] = useState(false);
   const sectionRef = useRef<HTMLDivElement>(null);
-  const scrollRef = useRef<HTMLDivElement>(null);
 
   // Intersection Observer for animation on scroll
   useEffect(() => {
@@ -225,10 +224,12 @@ const FeaturedProducts: React.FC<FeaturedProductsProps> = ({
 
                 {/* Product Image Container */}
                 <div className="relative aspect-square overflow-hidden bg-gradient-to-br from-amber-50 to-yellow-50">
-                  <img
+                  <Image
                     src={product.image}
                     alt={product.name}
                     className="w-full h-full object-cover transform group-hover:scale-110 transition-transform duration-700"
+                    width={300}
+                    height={300}
                   />
 
                   {/* Vignette Effect */}
@@ -314,10 +315,12 @@ const FeaturedProducts: React.FC<FeaturedProductsProps> = ({
                   {/* Mobile Product Card - Same structure as desktop */}
                   <div className="relative bg-white/90 backdrop-blur-sm rounded-2xl shadow-lg overflow-hidden border border-amber-100">
                     <div className="relative aspect-square overflow-hidden bg-gradient-to-br from-amber-50 to-yellow-50">
-                      <img
+                      <Image
                         src={product.image}
                         alt={product.name}
                         className="w-full h-full object-cover"
+                        width={300}
+                        height={300}
                       />
                       <div className="absolute inset-0 bg-gradient-to-t from-black/20 via-transparent to-transparent opacity-60" />
                       {product.badge && (

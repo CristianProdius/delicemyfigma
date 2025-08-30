@@ -17,6 +17,9 @@ import {
 import { Card } from "@/components/ui/card";
 import { useState } from "react";
 
+import type { LucideIcon } from "lucide-react";
+import type { FC } from "react";
+
 // Custom icon components
 const QualityIcon = () => (
   <svg
@@ -181,8 +184,10 @@ const EducationIcon = () => (
   </svg>
 );
 
+type IconComponent = FC | LucideIcon;
+
 // Icon mapping
-const iconMap: { [key: string]: any } = {
+const iconMap: { [key: string]: IconComponent } = {
   "⭐": ExcellenceIcon,
   "✨": QualityIcon,
   "🎨": CreativityIcon,

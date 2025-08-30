@@ -340,10 +340,13 @@ export const faqs = [
   },
 ];
 
-// Export all content sections for easy import
-export default {
+
+ 
+const schoolData = {
   schoolContent,
   testimonials,
   upcomingEvents,
   faqs,
 };
+
+export default schoolData;

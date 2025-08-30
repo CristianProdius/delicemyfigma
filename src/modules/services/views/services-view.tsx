@@ -16,8 +16,13 @@ import {
 import { servicesContent, type Service } from "../data/services-content";
 import { Button } from "@/components/ui/button";
 
+import type { LucideIcon } from "lucide-react";
+import type { FC } from "react";
+
+type IconComponent = FC | LucideIcon;
+
 // Icon mapping for service icons (since we can't import dynamically from lucide-react)
-const iconMap: { [key: string]: any } = {
+const iconMap: { [key: string]: IconComponent } = {
   Users: Users,
   Sparkles: Sparkles,
   Utensils: () => (
@@ -442,11 +447,11 @@ export const ServicesView = () => {
         >
           <div className="bg-gradient-to-br from-[#451C15]/5 to-[#D4A574]/5 backdrop-blur-sm rounded-3xl p-8 sm:p-12 lg:p-16 border border-[#451C15]/10 max-w-4xl mx-auto">
             <h2 className="text-2xl sm:text-3xl lg:text-4xl font-light text-[#451C15] mb-4 [font-family:var(--font-playfair)]">
-              Can't Find What You're Looking For?
+              Can&apos;t Find What You&apos;re Looking For?
             </h2>
             <p className="text-[#451C15]/60 text-base sm:text-lg mb-8 max-w-2xl mx-auto font-light [font-family:var(--font-inter)]">
               We love creating custom experiences tailored to your unique needs.
-              Let's discuss how we can make your chocolate dreams come true.
+              Let&apos;s discuss how we can make your chocolate dreams come true.
             </p>
             <Button
               size="lg"

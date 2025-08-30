@@ -14,14 +14,14 @@ import {
   TrendingUp,
   Clock,
   BookOpen,
-  Tag,
+ 
   Sparkles,
   Coffee,
   ChefHat,
-  Award,
+ 
   Heart,
   Users,
-  Loader2,
+
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
@@ -29,7 +29,7 @@ import { Button } from "@/components/ui/button";
 // Import blog data and components
 import {
   blogCategories,
-  blogPosts,
+ 
   getPostsByCategory,
   type BlogCategory,
   type BlogPost,

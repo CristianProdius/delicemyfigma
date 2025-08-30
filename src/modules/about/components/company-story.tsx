@@ -159,7 +159,7 @@ export const CompanyStory = ({ chapters }: CompanyStoryProps) => {
             transition={{ duration: 0.5, delay: 0.3 }}
             className="space-y-3"
           >
-            {["Innovation", "Growth", "Excellence"].map((highlight, index) => (
+            {["Innovation", "Growth", "Excellence"].map((highlight) => (
               <div key={highlight} className="flex items-center gap-3">
                 <div className="w-2 h-2 rounded-full bg-[#D2691E]" />
                 <span className="text-gray-600">

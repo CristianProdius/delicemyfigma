@@ -217,7 +217,7 @@ const ChefCatMascot: React.FC<{ className?: string }> = ({ className }) => {
               className="absolute -top-20 -right-20 bg-white px-3 py-2 rounded-lg shadow-lg"
             >
               <p className="text-xs font-medium text-gray-800">
-                Let's make chocolate!
+                Let&apos;s make chocolate!
               </p>
               <div className="absolute bottom-0 left-4 w-0 h-0 border-l-[6px] border-l-transparent border-t-[8px] border-t-white border-r-[6px] border-r-transparent" />
             </motion.div>

@@ -11,8 +11,7 @@ import {
   Clock,
   Users,
   ChefHat,
-  Star,
-  Heart,
+
   BookOpen,
   AlertCircle,
   Info,
@@ -22,14 +21,11 @@ import {
   ExternalLink,
   Copy,
   Check,
-  Play,
-  Pause,
-  Volume2,
+
   ShoppingBag,
-  Mail,
-  ArrowRight,
+
   Sparkles,
-  Coffee,
+ 
   Utensils,
   Timer,
 } from "lucide-react";
@@ -91,7 +87,7 @@ const Blockquote = ({
       className="my-10 relative"
     >
       <div className="absolute -left-4 top-0 text-6xl lg:text-8xl text-[#D4A574]/20 [font-family:var(--font-playfair)]">
-        "
+        &ldquo;
       </div>
       <blockquote className="relative z-10 pl-12 border-l-4 border-[#D4A574]">
         <p className="text-xl lg:text-2xl font-normal italic text-[#451C15] leading-relaxed mb-3 [font-family:var(--font-playfair)]">
@@ -667,7 +663,6 @@ const ProductLink = ({
 
 // Main BlogPostContent Component
 export const BlogPostContent = ({
-  content,
   className,
 }: BlogPostContentProps) => {
   // Parse and render content blocks
@@ -685,19 +680,19 @@ export const BlogPostContent = ({
 
       <Typography variant="paragraph">
         Chocolate tempering might seem intimidating at first, but with the right
-        knowledge and practice, you'll be creating stunning chocolates that
+        knowledge and practice, you&apos;ll be creating stunning chocolates that
         rival those from the finest chocolatiers in the world.
       </Typography>
 
       <Blockquote author="Olesea Stamatin" source="Master Class 2024">
-        The secret to perfect chocolate isn't just in the quality of the beans,
+        The secret to perfect chocolate isn&apos;t just in the quality of the beans,
         but in the patience and precision of the tempering process.
       </Blockquote>
 
       <Typography variant="h2">Understanding the Science</Typography>
 
       <Typography variant="paragraph">
-        Before we dive into the practical techniques, it's crucial to understand
+        Before we dive into the practical techniques, it&apos;s crucial to understand
         what happens at a molecular level during tempering. Cocoa butter can
         crystallize in six different forms, but only one gives us the desired
         properties.
@@ -706,7 +701,7 @@ export const BlogPostContent = ({
       <CalloutBox type="info" title="Did You Know?">
         Properly tempered chocolate can be stored at room temperature for months
         without losing its shine or developing bloom. This is why professional
-        chocolates don't need refrigeration!
+        chocolates don&apos;t need refrigeration!
       </CalloutBox>
 
       <Typography variant="h3">Essential Equipment</Typography>
@@ -776,13 +771,13 @@ export const BlogPostContent = ({
       <Typography variant="h3">Common Problems and Solutions</Typography>
 
       <CalloutBox type="warning" title="Troubleshooting">
-        If your chocolate has white streaks or spots (bloom), it's likely out of
+        If your chocolate has white streaks or spots (bloom), it&apos;s likely out of
         temper. This is purely cosmetic and the chocolate is still safe to eat,
-        but you'll need to re-temper for professional results.
+        but you&apos;ll need to re-temper for professional results.
       </CalloutBox>
 
       <Typography variant="paragraph">
-        Let's explore the most common issues chocolatiers face and how to solve
+        Let&apos;s explore the most common issues chocolatiers face and how to solve
         them effectively. Understanding these problems will save you time and
         ingredients.
       </Typography>
@@ -809,7 +804,7 @@ White Chocolate:
       <Typography variant="h2">Advanced Techniques</Typography>
 
       <Typography variant="paragraph">
-        Once you've mastered basic tempering, you can explore advanced
+        Once you&apos;ve mastered basic tempering, you can explore advanced
         techniques like creating colored cocoa butter decorations, working with
         inclusions, and developing your own signature chocolate blends.
       </Typography>
@@ -829,7 +824,7 @@ White Chocolate:
       <Typography variant="h3">Creating Your First Bonbons</Typography>
 
       <Typography variant="paragraph">
-        With properly tempered chocolate, you're ready to create professional
+        With properly tempered chocolate, you&apos;re ready to create professional
         bonbons. The key is maintaining temperature throughout the process and
         working efficiently.
       </Typography>
@@ -851,13 +846,13 @@ White Chocolate:
 
       <CalloutBox type="success" title="Success!">
         Congratulations on completing this comprehensive guide! With practice,
-        tempering will become second nature, and you'll be creating
+        tempering will become second nature, and you&apos;ll be creating
         professional-quality chocolates that impress everyone.
       </CalloutBox>
 
       <Typography variant="paragraph">
-        Remember, chocolate making is both an art and a science. Don't be
-        discouraged if your first attempts aren't perfect. Every master
+        Remember, chocolate making is both an art and a science. Don&apos;t be
+        discouraged if your first attempts aren&apos;t perfect. Every master
         chocolatier started exactly where you are now.
       </Typography>
 

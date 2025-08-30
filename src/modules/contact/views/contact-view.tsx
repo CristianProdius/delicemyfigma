@@ -20,11 +20,12 @@ import { ContactInfo } from "../components/contact-info";
 import { ContactMethods } from "../components/contact-methods";
 import { LocationMap } from "../components/location-map";
 import { ContactFAQ } from "../components/contact-faq";
+import type { LucideIcon } from "lucide-react";
 
 interface SocialLink {
   id: string;
   name: string;
-  icon: any;
+  icon: LucideIcon;
   href: string;
   color: string;
 }

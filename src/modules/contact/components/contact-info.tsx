@@ -21,8 +21,9 @@ import {
   isAtelierOpen,
   getNextOpeningTime,
 } from "../data/contact-content";
+import type { LucideIcon } from "lucide-react";
 
-const iconMap: Record<string, any> = {
+const iconMap: Record<string, LucideIcon> = {
   Mail,
   Phone,
   MessageCircle,
@@ -118,7 +119,7 @@ export const ContactInfo = () => {
                       Get in Touch
                     </h3>
                     <p className="text-white/70 text-xs sm:text-sm [font-family:var(--font-inter)]">
-                      We're here to assist you
+                      We&apos;re here to assist you
                     </p>
                   </div>
                 </motion.div>
@@ -411,7 +412,7 @@ export const ContactInfo = () => {
                     </p>
                     {!isOpen && nextOpening !== "Today" && (
                       <p className="text-[#D4A574] text-xs sm:text-sm font-medium [font-family:var(--font-inter)] mt-1.5 sm:mt-2">
-                        We'll be open {nextOpening}
+                        We&apos;ll be open {nextOpening}
                       </p>
                     )}
                   </div>

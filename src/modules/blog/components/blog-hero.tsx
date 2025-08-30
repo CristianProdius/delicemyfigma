@@ -2,7 +2,7 @@
 "use client";
 
 import React, { useState, useRef, useEffect } from "react";
-import { motion, useScroll, useTransform, AnimatePresence } from "motion/react";
+import { motion, useScroll, useTransform } from "motion/react";
 import {
   Search,
   X,
@@ -13,7 +13,7 @@ import {
   Filter,
   ChevronRight,
 } from "lucide-react";
-import { blogCategories, blogContent } from "../data/blog-content";
+import { blogCategories } from "../data/blog-content";
 
 interface BlogHeroProps {
   onSearch?: (query: string) => void;

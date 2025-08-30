@@ -9,10 +9,7 @@ import {
   ChevronLeft,
   ChevronRight,
   BookOpen,
-  TrendingUp,
-  Calendar,
-  Clock,
-  Loader2,
+  
   Coffee,
   X,
 } from "lucide-react";
@@ -143,7 +140,7 @@ const EmptyState = ({
       </h3>
       <p className="text-[#451C15]/60 text-center max-w-md [font-family:var(--font-inter)]">
         {searchQuery ? (
-          <>We couldn't find any articles matching "{searchQuery}"</>
+          <>We couldn&apos;t find any articles matching &quot;{searchQuery}&quot;</>
         ) : category ? (
           <>No articles available in this category yet</>
         ) : (
@@ -332,17 +329,17 @@ export const BlogListing = ({
     },
   };
 
-  const itemVariants = {
-    hidden: { opacity: 0, y: 20 },
-    visible: {
-      opacity: 1,
-      y: 0,
-      transition: {
-        duration: 0.5,
-        ease: "easeInOut",
-      },
+ const itemVariants = {
+  hidden: { opacity: 0, y: 20 },
+  visible: {
+    opacity: 1,
+    y: 0,
+    transition: {
+      duration: 0.5,
+      ease: "easeInOut" as const,
     },
-  };
+  },
+};
 
   return (
     <section className={cn("py-12 sm:py-16 lg:py-20", className)}>
@@ -604,37 +601,7 @@ export const BlogListing = ({
           />
         )}
 
-        {/* Load More Style Alternative (Optional) */}
-        {/* Uncomment if you prefer load more instead of pagination */}
-        {/* 
-        {!isLoading && paginatedPosts.length < filteredPosts.length && (
-          <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6 }}
-            viewport={{ once: true }}
-            className="text-center mt-12 sm:mt-16"
-          >
-            <motion.button
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.98 }}
-              onClick={() => setCurrentPage(currentPage + 1)}
-              className="group relative px-10 py-4 bg-[#451C15] text-white rounded-full overflow-hidden transition-all duration-300 hover:shadow-2xl [font-family:var(--font-inter)]"
-            >
-              <span className="relative z-10 flex items-center gap-3">
-                Load More Articles
-                <motion.span
-                  animate={{ y: [0, 3, 0] }}
-                  transition={{ duration: 1.5, repeat: Infinity }}
-                >
-                  <ChevronDown className="w-5 h-5" />
-                </motion.span>
-              </span>
-              <div className="absolute inset-0 bg-gradient-to-r from-[#5A241C] to-[#451C15] opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-            </motion.button>
-          </motion.div>
-        )}
-        */}
+        
       </div>
 
       {/* Add shimmer animation keyframe */}

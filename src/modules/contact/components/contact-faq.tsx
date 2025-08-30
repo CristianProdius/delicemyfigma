@@ -17,13 +17,14 @@ import {
   Info,
 } from "lucide-react";
 import { contactContent } from "../data/contact-content";
+import type { LucideIcon } from "lucide-react";
 
 type FAQCategory = "all" | "booking" | "orders" | "visiting" | "general";
 
 interface CategoryOption {
   id: FAQCategory;
   label: string;
-  icon: any;
+  icon: LucideIcon;
   count: number;
 }
 

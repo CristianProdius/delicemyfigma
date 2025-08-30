@@ -241,7 +241,7 @@ export const SkillsShowcase = ({
 
                 {/* Content */}
                 <blockquote className="text-lg lg:text-xl text-gray-700 mb-8 italic leading-relaxed max-w-3xl mx-auto">
-                  "{testimonials[currentTestimonial].content}"
+                  &quot;{testimonials[currentTestimonial].content}&quot;
                 </blockquote>
 
                 {/* Author */}

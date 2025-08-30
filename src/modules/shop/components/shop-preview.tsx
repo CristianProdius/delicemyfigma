@@ -17,6 +17,7 @@ import {
   ChevronRight,
   Quote,
 } from "lucide-react";
+import Image from "next/image";
 
 interface Collection {
   name: string;
@@ -183,7 +184,9 @@ const ShopPreview: React.FC<ShopPreviewProps> = ({
 
                 {/* Full-bleed Image */}
                 <div className="relative h-80 overflow-hidden">
-                  <img
+                  <Image
+                    width={300}
+                    height={300}
                     src={collection.image}
                     alt={collection.name}
                     className="w-full h-full object-cover transform group-hover:scale-110 transition-transform duration-700"
@@ -283,7 +286,7 @@ const ShopPreview: React.FC<ShopPreviewProps> = ({
             ref={benefitsScrollRef}
           >
             <div className="flex space-x-4" style={{ width: "max-content" }}>
-              {premiumBenefits.map((benefit, index) => (
+              {premiumBenefits.map((benefit) => (
                 <div key={benefit.title} className="w-72 flex-shrink-0">
                   <div className="relative h-full p-6 bg-white/70 backdrop-blur-sm rounded-2xl border border-amber-100">
                     <div className="mb-4 text-amber-600">
@@ -350,7 +353,7 @@ const ShopPreview: React.FC<ShopPreviewProps> = ({
 
                 {/* Testimonial Text */}
                 <p className="text-gray-700 text-lg md:text-xl italic text-center mb-6 leading-relaxed min-h-[100px] transition-opacity duration-500">
-                  "{testimonials[currentTestimonial].text}"
+                  &quot;{testimonials[currentTestimonial].text}&quot;
                 </p>
 
                 {/* Author & Product */}
@@ -444,10 +447,12 @@ const ShopPreview: React.FC<ShopPreviewProps> = ({
                   }`}
                   style={{ animationDelay: `${index * 0.1}s` }}
                 >
-                  <img
+                  <Image
                     src={image}
                     alt={`Instagram post ${index + 1}`}
                     className="w-full h-full object-cover transform group-hover:scale-110 transition-transform duration-500"
+                    width={300}
+                    height={300}
                   />
 
                   {/* Hover Overlay */}

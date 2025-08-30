@@ -11,7 +11,15 @@ import {
   Mail,
   ArrowRight,
   Sparkles,
+  GraduationCap,
+  Baby,
+  Store,
+  PartyPopper,
+  Palette,
+  Gift,
 } from "lucide-react";
+import Image from "next/image";
+import Link from "next/link";
 
 // Types
 interface NavItem {
@@ -54,89 +62,119 @@ const NavigationHeader: React.FC = () => {
   const headerRef = useRef<HTMLDivElement>(null);
 
   // ============================================
-  // CUSTOMIZE YOUR NAVIGATION ITEMS HERE
+  // DELICEMY NAVIGATION ITEMS
   // ============================================
   const navItems = useMemo<NavItem[]>(
     () => [
       {
-        id: "home",
-        label: "Home",
-        href: "#home",
+        id: "services",
+        label: "Services",
+        href: "/services",
+        subItems: [
+          {
+            label: "Chocolate Classes for Adults",
+            href: "/services/chocolate-classes-adults",
+            description: "Learn from master chocolatiers",
+            icon: <GraduationCap size={16} className="text-amber-500" />,
+          },
+          {
+            label: "Kids Chocolate Classes",
+            href: "/services/kids-chocolate-classes",
+            description: "Fun workshops for children",
+            icon: <Baby size={16} className="text-amber-500" />,
+          },
+          {
+            label: "Restaurant & Café Services",
+            href: "/services/restaurant-cafe-services",
+            description: "Elevate your dessert menu",
+            icon: <Store size={16} className="text-amber-500" />,
+          },
+          {
+            label: "Chocolate Parties & Events",
+            href: "/services/chocolate-parties-events",
+            description: "Unforgettable celebrations",
+            icon: <PartyPopper size={16} className="text-amber-500" />,
+          },
+          {
+            label: "Custom Dessert Design",
+            href: "/services/custom-dessert-design",
+            description: "Bespoke chocolate creations",
+            icon: <Palette size={16} className="text-amber-500" />,
+          },
+          {
+            label: "Personalized Chocolate Gifts",
+            href: "/services/personalized-chocolate-gifts",
+            description: "Unique gifts for special moments",
+            icon: <Gift size={16} className="text-amber-500" />,
+          },
+        ],
+      },
+      {
+        id: "school",
+        label: "School",
+        href: "/school",
+      },
+      {
+        id: "shop",
+        label: "Shop",
+        href: "/shop",
+      },
+      {
+        id: "blog",
+        label: "Blog",
+        href: "/blog",
       },
       {
         id: "about",
         label: "About",
-        href: "#about",
-      },
-      {
-        id: "services",
-        label: "Services",
-        href: "#services",
+        href: "#",
         subItems: [
           {
-            label: "Service 1",
-            href: "#service-1",
-            description: "Description for your first service",
-            icon: <Sparkles size={16} className="text-yellow-500" />,
+            label: "About Olesea",
+            href: "/about-olesea",
+            description: "Meet our master chocolatier",
+            icon: <Sparkles size={16} className="text-amber-500" />,
           },
           {
-            label: "Service 2",
-            href: "#service-2",
-            description: "Description for your second service",
-            icon: <Sparkles size={16} className="text-yellow-500" />,
+            label: "About Company",
+            href: "/about-company",
+            description: "Our story and mission",
+            icon: <Store size={16} className="text-amber-500" />,
           },
-          {
-            label: "Service 3",
-            href: "#service-3",
-            description: "Description for your third service",
-            icon: <Sparkles size={16} className="text-yellow-500" />,
-          },
-          // Add more services as needed
         ],
-      },
-      {
-        id: "portfolio",
-        label: "Portfolio",
-        href: "#portfolio",
-      },
-      {
-        id: "testimonials",
-        label: "Testimonials",
-        href: "#testimonials",
       },
       {
         id: "contact",
         label: "Contact",
-        href: "#contact",
+        href: "/contact",
       },
     ],
     []
   );
 
   // ============================================
-  // CUSTOMIZE YOUR LANGUAGES HERE
+  // DELICEMY LANGUAGES
   // ============================================
   const languages: Language[] = [
     { code: "EN", label: "English", flag: "🇬🇧" },
-    { code: "ES", label: "Español", flag: "🇪🇸" },
-    { code: "FR", label: "Français", flag: "🇫🇷" },
+    { code: "RO", label: "Română", flag: "🇷🇴" },
+    { code: "RU", label: "Русский", flag: "🇷🇺" },
   ];
 
   // ============================================
-  // CUSTOMIZE YOUR CONTACT INFO HERE
+  // DELICEMY CONTACT INFO
   // ============================================
   const contactInfo = {
-    phone: "+1 234 567 890",
-    email: "info@yourcompany.com",
-    address: "123 Main Street, Your City, State 12345",
-    schedule: "Monday-Friday: 9:00 AM - 6:00 PM",
+    phone: "+373 61 234 555",
+    email: "hello@delicemy.com",
+    address: "Str. București 45, Chișinău, Moldova",
+    schedule: "Mon-Sat: 10:00 AM - 8:00 PM",
   };
 
   // ============================================
-  // CUSTOMIZE YOUR COMPANY NAME HERE
+  // COMPANY NAME
   // ============================================
-  const companyName = "Your Company";
-  const logoPath = "/images/logo/logo.png"; // Update with your logo path
+  const companyName = "DeliceMy";
 
   // Mount effect - enable animations after hydration
   useEffect(() => {
@@ -167,7 +205,7 @@ const NavigationHeader: React.FC = () => {
       // Set scrolled state with premium threshold
       setIsScrolled(scrollPosition > 50);
 
-      // Update active section
+      // Update active section (if using hash navigation)
       const offset = 100;
       const sections = navItems.map((item) => item.id);
 
@@ -228,22 +266,11 @@ const NavigationHeader: React.FC = () => {
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, [mounted]);
 
-  // Handle smooth scroll to section
-  const handleScrollToSection = (href: string) => {
-    const targetId = href.replace("#", "");
-    const element = document.getElementById(targetId);
-
-    if (element) {
-      const offset = 100;
-      const elementPosition = element.getBoundingClientRect().top;
-      const offsetPosition = elementPosition + window.pageYOffset - offset;
-
-      window.scrollTo({
-        top: offsetPosition,
-        behavior: "smooth",
-      });
-    }
-
+  // Handle navigation
+  const handleNavigation = (href: string) => {
+    // For Next.js routing, you might want to use router.push(href)
+    // For now, using standard navigation
+    window.location.href = href;
     setIsMobileMenuOpen(false);
   };
 
@@ -268,15 +295,15 @@ const NavigationHeader: React.FC = () => {
           ref={navRef}
           className={`relative transition-all duration-500 ${
             isScrolled
-              ? "bg-white/90 backdrop-blur-2xl shadow-2xl border-b border-gray-100"
-              : "bg-gradient-to-b from-black/40 to-transparent backdrop-blur-sm"
+              ? "bg-white/90 backdrop-blur-2xl shadow-2xl border-b border-amber-100"
+              : "bg-gradient-to-b from-amber-950/40 to-transparent backdrop-blur-sm"
           }`}
           role="navigation"
           aria-label="Main navigation"
         >
           {/* Premium gradient overlay */}
           <div
-            className={`absolute inset-0 bg-gradient-to-r from-yellow-500/5 via-transparent to-yellow-500/5 opacity-50 pointer-events-none transition-opacity duration-500 ${
+            className={`absolute inset-0 bg-gradient-to-r from-amber-500/5 via-transparent to-amber-500/5 opacity-50 pointer-events-none transition-opacity duration-500 ${
               isScrolled ? "opacity-100" : "opacity-0"
             }`}
           />
@@ -289,23 +316,23 @@ const NavigationHeader: React.FC = () => {
                   mounted ? "hover:scale-110" : ""
                 } ${isScrolled ? "scale-100" : "scale-110"}`}
               >
-                <a
+                <Link
                   href="/"
                   aria-label={`${companyName} - Home`}
                   className="relative group"
                 >
-                  <div className="absolute inset-0 bg-gradient-to-r from-yellow-400/20 to-yellow-600/20 blur-xl group-hover:blur-2xl transition-all duration-500 rounded-full" />
-                  {/* Replace with your logo or text */}
+                  <div className="absolute inset-0 bg-gradient-to-r from-amber-400/20 to-amber-600/20 blur-xl group-hover:blur-2xl transition-all duration-500 rounded-full" />
+                  {/* Logo Text */}
                   <div className="relative z-10 px-4 py-2">
-                    <h1
-                      className={`text-2xl font-bold ${
-                        isScrolled ? "text-gray-900" : "text-white"
-                      }`}
-                    >
-                      {companyName}
-                    </h1>
+                    <Image
+                      src="/logo.png"
+                      alt={`${companyName} - Logo`}
+                      width={64}
+                      height={64}
+                      className="object-contain"
+                    />
                   </div>
-                </a>
+                </Link>
               </div>
 
               {/* Desktop Navigation with Premium Effects */}
@@ -320,15 +347,15 @@ const NavigationHeader: React.FC = () => {
                       onMouseLeave={() => setHoveredItem(null)}
                     >
                       <button
-                        onClick={() => handleScrollToSection(item.href)}
+                        onClick={() => handleNavigation(item.href)}
                         className={`relative py-3 font-medium text-sm lg:text-base transition-all duration-300 flex items-center gap-2 group ${
                           activeSection === item.id
                             ? isScrolled
-                              ? "text-yellow-600"
-                              : "text-yellow-300"
+                              ? "text-amber-600"
+                              : "text-amber-300"
                             : isScrolled
-                            ? "text-gray-700 hover:text-yellow-600"
-                            : "text-white hover:text-yellow-300"
+                            ? "text-gray-700 hover:text-amber-600"
+                            : "text-white hover:text-amber-300"
                         }`}
                         role="menuitem"
                         aria-current={
@@ -337,7 +364,7 @@ const NavigationHeader: React.FC = () => {
                         tabIndex={0}
                         onKeyDown={(e) =>
                           handleKeyDown(e, () =>
-                            handleScrollToSection(item.href)
+                            handleNavigation(item.href)
                           )
                         }
                       >
@@ -345,7 +372,7 @@ const NavigationHeader: React.FC = () => {
                           {item.label}
                           {/* Premium hover effect */}
                           <span
-                            className={`absolute -bottom-1 left-0 w-full h-0.5 bg-gradient-to-r from-yellow-400 to-yellow-600 transform origin-left transition-transform duration-300 ${
+                            className={`absolute -bottom-1 left-0 w-full h-0.5 bg-gradient-to-r from-amber-400 to-amber-600 transform origin-left transition-transform duration-300 ${
                               hoveredItem === item.id ||
                               activeSection === item.id
                                 ? "scale-x-100"
@@ -363,10 +390,10 @@ const NavigationHeader: React.FC = () => {
                         )}
                       </button>
 
-                      {/* Premium Dropdown with Enhanced Styling */}
+                      {/* Premium Dropdown for Services */}
                       {item.subItems && hoveredItem === item.id && (
                         <div
-                          className={`absolute top-full left-0 mt-4 w-72 bg-white/95 backdrop-blur-xl rounded-2xl shadow-2xl border border-gray-100 overflow-hidden transition-all duration-300 ${
+                          className={`absolute top-full left-0 mt-4 w-80 bg-white/95 backdrop-blur-xl rounded-2xl shadow-2xl border border-amber-100 overflow-hidden transition-all duration-300 ${
                             mounted
                               ? "opacity-100 translate-y-0"
                               : "opacity-0 -translate-y-4"
@@ -377,15 +404,15 @@ const NavigationHeader: React.FC = () => {
                               <button
                                 key={index}
                                 onClick={() =>
-                                  handleScrollToSection(subItem.href)
+                                  handleNavigation(subItem.href)
                                 }
-                                className="w-full px-4 py-3 text-left rounded-xl hover:bg-gradient-to-r hover:from-yellow-50 hover:to-yellow-100/50 transition-all duration-300 group flex items-start gap-3"
+                                className="w-full px-4 py-3 text-left rounded-xl hover:bg-gradient-to-r hover:from-amber-50 hover:to-amber-100/50 transition-all duration-300 group flex items-start gap-3"
                               >
                                 {subItem.icon && (
                                   <span className="mt-1">{subItem.icon}</span>
                                 )}
                                 <div>
-                                  <div className="font-medium text-gray-900 group-hover:text-yellow-600 transition-colors">
+                                  <div className="font-medium text-gray-900 group-hover:text-amber-600 transition-colors">
                                     {subItem.label}
                                   </div>
                                   {subItem.description && (
@@ -411,7 +438,7 @@ const NavigationHeader: React.FC = () => {
                     }
                     className={`flex items-center gap-2 px-4 py-2.5 rounded-xl transition-all duration-300 ${
                       isScrolled
-                        ? "hover:bg-gray-100 text-gray-700"
+                        ? "hover:bg-amber-50 text-gray-700"
                         : "hover:bg-white/10 text-white backdrop-blur-sm"
                     }`}
                     aria-label="Change language"
@@ -432,7 +459,7 @@ const NavigationHeader: React.FC = () => {
                   {/* Premium Language Dropdown */}
                   {showLanguageDropdown && (
                     <div
-                      className={`absolute top-full right-0 mt-3 bg-white/95 backdrop-blur-xl rounded-xl shadow-2xl border border-gray-100 py-2 min-w-[180px] transition-all duration-300 ${
+                      className={`absolute top-full right-0 mt-3 bg-white/95 backdrop-blur-xl rounded-xl shadow-2xl border border-amber-100 py-2 min-w-[180px] transition-all duration-300 ${
                         mounted ? "opacity-100 scale-100" : "opacity-0 scale-95"
                       }`}
                     >
@@ -443,8 +470,8 @@ const NavigationHeader: React.FC = () => {
                             setSelectedLanguage(lang.code);
                             setShowLanguageDropdown(false);
                           }}
-                          className={`w-full text-left px-5 py-3 hover:bg-gradient-to-r hover:from-yellow-50 hover:to-transparent transition-all duration-300 flex items-center gap-3 ${
-                            selectedLanguage === lang.code ? "bg-yellow-50" : ""
+                          className={`w-full text-left px-5 py-3 hover:bg-gradient-to-r hover:from-amber-50 hover:to-transparent transition-all duration-300 flex items-center gap-3 ${
+                            selectedLanguage === lang.code ? "bg-amber-50" : ""
                           }`}
                         >
                           <span className="text-lg">{lang.flag}</span>
@@ -463,7 +490,7 @@ const NavigationHeader: React.FC = () => {
                     href={`tel:${contactInfo.phone.replace(/\s/g, "")}`}
                     className={`flex items-center gap-2 px-5 py-2.5 rounded-xl font-medium transition-all duration-300 ${
                       isScrolled
-                        ? "hover:bg-gray-100 text-gray-700"
+                        ? "hover:bg-amber-50 text-gray-700"
                         : "hover:bg-white/10 text-white backdrop-blur-sm"
                     }`}
                     aria-label="Call now"
@@ -475,14 +502,13 @@ const NavigationHeader: React.FC = () => {
                   </a>
 
                   <button
-                    onClick={() => handleScrollToSection("#contact")}
+                    onClick={() => handleNavigation("/contact")}
                     className="group relative px-6 py-3 rounded-xl font-semibold text-white overflow-hidden transition-all duration-300 hover:scale-105 hover:shadow-2xl"
+                    style={{ backgroundColor: "#451C15" }}
                   >
-                    <div className="absolute inset-0 bg-gradient-to-r from-yellow-500 to-yellow-600 transition-all duration-300 group-hover:scale-110" />
-                    <div className="absolute inset-0 bg-gradient-to-r from-yellow-600 to-yellow-700 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-                    <span className="relative flex items-center gap-2">
+                      <span className="relative flex items-center gap-2">
                       <Calendar size={20} />
-                      <span>Get Started</span>
+                      <span>Book Workshop</span>
                     </span>
                   </button>
                 </div>
@@ -493,7 +519,7 @@ const NavigationHeader: React.FC = () => {
                 onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
                 className={`xl:hidden relative p-3 rounded-xl transition-all duration-300 ${
                   isScrolled
-                    ? "text-gray-700 hover:bg-gray-100"
+                    ? "text-gray-700 hover:bg-amber-50"
                     : "text-white hover:bg-white/10 backdrop-blur-sm"
                 }`}
                 aria-label={isMobileMenuOpen ? "Close menu" : "Open menu"}
@@ -549,27 +575,28 @@ const NavigationHeader: React.FC = () => {
                 mobileMenuStage >= 2 ? "-10px 0 40px rgba(0,0,0,0.1)" : "none",
             }}
           >
-            <div className="flex flex-col h-full bg-gradient-to-br from-white via-gray-50/30 to-yellow-50/20">
+            <div className="flex flex-col h-full bg-gradient-to-br from-white via-amber-50/30 to-amber-100/20">
               {/* Premium Mobile Menu Header */}
               <div
-                className={`flex items-center justify-between p-6 border-b border-gray-100 bg-white/80 backdrop-blur-sm transition-all duration-500 delay-100 ${
+                className={`flex items-center justify-between p-6 border-b border-amber-100 bg-white/80 backdrop-blur-sm transition-all duration-500 delay-100 ${
                   mobileMenuStage >= 3
                     ? "opacity-100 translate-y-0"
                     : "opacity-0 -translate-y-4"
                 }`}
               >
-                <a
+                <Link
                   href="/"
                   onClick={() => setIsMobileMenuOpen(false)}
                   className="transform hover:scale-105 transition-transform"
                 >
-                  <h1 className="text-xl font-bold text-gray-900">
+                  <h1 className="text-xl font-bold text-amber-900">
                     {companyName}
                   </h1>
-                </a>
+                  <p className="text-xs text-amber-700">Chocolate Atelier</p>
+                </Link>
                 <button
                   onClick={() => setIsMobileMenuOpen(false)}
-                  className="p-3 rounded-xl hover:bg-gray-100 transition-all duration-300 group"
+                  className="p-3 rounded-xl hover:bg-amber-50 transition-all duration-300 group"
                   aria-label="Close menu"
                 >
                   <X
@@ -598,11 +625,11 @@ const NavigationHeader: React.FC = () => {
                       }}
                     >
                       <button
-                        onClick={() => handleScrollToSection(item.href)}
+                        onClick={() => handleNavigation(item.href)}
                         className={`w-full text-left px-5 py-4 rounded-xl font-medium transition-all duration-300 flex items-center justify-between group ${
                           activeSection === item.id
-                            ? "bg-gradient-to-r from-yellow-100 to-yellow-50 text-yellow-700 shadow-lg"
-                            : "text-gray-700 hover:bg-gray-50"
+                            ? "bg-gradient-to-r from-amber-100 to-amber-50 text-amber-700 shadow-lg"
+                            : "text-gray-700 hover:bg-amber-50"
                         }`}
                       >
                         <span className="text-base">{item.label}</span>
@@ -610,7 +637,7 @@ const NavigationHeader: React.FC = () => {
                           size={18}
                           className={`transition-all duration-300 ${
                             activeSection === item.id
-                              ? "translate-x-1 text-yellow-600"
+                              ? "translate-x-1 text-amber-600"
                               : "text-gray-400 group-hover:translate-x-1"
                           }`}
                         />
@@ -623,11 +650,11 @@ const NavigationHeader: React.FC = () => {
                             <li key={index}>
                               <button
                                 onClick={() =>
-                                  handleScrollToSection(subItem.href)
+                                  handleNavigation(subItem.href)
                                 }
-                                className="w-full text-left px-4 py-2.5 text-sm text-gray-600 hover:text-yellow-600 hover:bg-yellow-50/50 rounded-lg transition-all duration-300 flex items-center gap-2"
+                                className="w-full text-left px-4 py-2.5 text-sm text-gray-600 hover:text-amber-600 hover:bg-amber-50/50 rounded-lg transition-all duration-300 flex items-center gap-2"
                               >
-                                <span className="w-1.5 h-1.5 bg-yellow-400 rounded-full" />
+                                {subItem.icon}
                                 {subItem.label}
                               </button>
                             </li>
@@ -649,18 +676,18 @@ const NavigationHeader: React.FC = () => {
                     transitionDelay: mobileMenuStage >= 3 ? "600ms" : "0ms",
                   }}
                 >
-                  <div className="text-sm font-semibold text-gray-900 mb-4 flex items-center gap-2">
-                    <Sparkles size={16} className="text-yellow-500" />
+                  <div className="text-sm font-semibold text-amber-900 mb-4 flex items-center gap-2">
+                    <Sparkles size={16} className="text-amber-500" />
                     Quick Contact
                   </div>
 
                   <div className="space-y-4">
                     <a
                       href={`tel:${contactInfo.phone.replace(/\s/g, "")}`}
-                      className="flex items-start gap-4 text-gray-700 hover:text-yellow-600 transition-all duration-300 p-3 rounded-xl hover:bg-yellow-50/50"
+                      className="flex items-start gap-4 text-gray-700 hover:text-amber-600 transition-all duration-300 p-3 rounded-xl hover:bg-amber-50/50"
                     >
-                      <div className="p-2 bg-yellow-100 rounded-lg">
-                        <Phone size={20} className="text-yellow-600" />
+                      <div className="p-2 bg-amber-100 rounded-lg">
+                        <Phone size={20} className="text-amber-600" />
                       </div>
                       <div>
                         <div className="text-xs text-gray-500 uppercase tracking-wider">
@@ -674,10 +701,10 @@ const NavigationHeader: React.FC = () => {
 
                     <a
                       href={`mailto:${contactInfo.email}`}
-                      className="flex items-start gap-4 text-gray-700 hover:text-yellow-600 transition-all duration-300 p-3 rounded-xl hover:bg-yellow-50/50"
+                      className="flex items-start gap-4 text-gray-700 hover:text-amber-600 transition-all duration-300 p-3 rounded-xl hover:bg-amber-50/50"
                     >
-                      <div className="p-2 bg-yellow-100 rounded-lg">
-                        <Mail size={20} className="text-yellow-600" />
+                      <div className="p-2 bg-amber-100 rounded-lg">
+                        <Mail size={20} className="text-amber-600" />
                       </div>
                       <div>
                         <div className="text-xs text-gray-500 uppercase tracking-wider">
@@ -690,12 +717,12 @@ const NavigationHeader: React.FC = () => {
                     </a>
 
                     <div className="flex items-start gap-4 text-gray-700 p-3">
-                      <div className="p-2 bg-yellow-100 rounded-lg">
-                        <MapPin size={20} className="text-yellow-600" />
+                      <div className="p-2 bg-amber-100 rounded-lg">
+                        <MapPin size={20} className="text-amber-600" />
                       </div>
                       <div>
                         <div className="text-xs text-gray-500 uppercase tracking-wider">
-                          Address
+                          Atelier
                         </div>
                         <div className="text-base mt-1">
                           {contactInfo.address}
@@ -704,8 +731,8 @@ const NavigationHeader: React.FC = () => {
                     </div>
 
                     <div className="flex items-start gap-4 text-gray-700 p-3">
-                      <div className="p-2 bg-yellow-100 rounded-lg">
-                        <Clock size={20} className="text-yellow-600" />
+                      <div className="p-2 bg-amber-100 rounded-lg">
+                        <Clock size={20} className="text-amber-600" />
                       </div>
                       <div>
                         <div className="text-xs text-gray-500 uppercase tracking-wider">
@@ -713,6 +740,9 @@ const NavigationHeader: React.FC = () => {
                         </div>
                         <div className="text-base mt-1">
                           {contactInfo.schedule}
+                        </div>
+                        <div className="text-sm text-gray-500 mt-0.5">
+                          Sun: By appointment
                         </div>
                       </div>
                     </div>
@@ -730,7 +760,7 @@ const NavigationHeader: React.FC = () => {
                           onClick={() => setSelectedLanguage(lang.code)}
                           className={`px-4 py-3 rounded-xl text-sm font-medium transition-all duration-300 ${
                             selectedLanguage === lang.code
-                              ? "bg-gradient-to-r from-yellow-100 to-yellow-50 text-yellow-700 shadow-md"
+                              ? "bg-gradient-to-r from-amber-100 to-amber-50 text-amber-700 shadow-md"
                               : "bg-gray-100 text-gray-700 hover:bg-gray-200"
                           }`}
                         >
@@ -747,7 +777,7 @@ const NavigationHeader: React.FC = () => {
 
               {/* Premium Mobile CTA */}
               <div
-                className={`p-6 border-t border-gray-100 bg-white/80 backdrop-blur-sm transition-all duration-500 ${
+                className={`p-6 border-t border-amber-100 bg-white/80 backdrop-blur-sm transition-all duration-500 ${
                   mobileMenuStage >= 3
                     ? "opacity-100 translate-y-0"
                     : "opacity-0 translate-y-4"
@@ -757,14 +787,14 @@ const NavigationHeader: React.FC = () => {
                 }}
               >
                 <button
-                  onClick={() => handleScrollToSection("#contact")}
-                  className="w-full py-4 bg-gradient-to-r from-yellow-500 to-yellow-600 hover:from-yellow-600 hover:to-yellow-700 text-white rounded-xl font-semibold shadow-xl hover:shadow-2xl transition-all duration-300 flex items-center justify-center gap-3 group"
+                  onClick={() => handleNavigation("/contact")}
+                  className="w-full py-4 bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-600 hover:to-amber-700 text-white rounded-xl font-semibold shadow-xl hover:shadow-2xl transition-all duration-300 flex items-center justify-center gap-3 group"
                 >
                   <Calendar
                     size={20}
                     className="group-hover:rotate-12 transition-transform duration-300"
                   />
-                  <span>Schedule Consultation</span>
+                  <span>Schedule Workshop</span>
                   <ArrowRight
                     size={18}
                     className="group-hover:translate-x-1 transition-transform duration-300"
@@ -775,8 +805,6 @@ const NavigationHeader: React.FC = () => {
           </div>
         </>
       )}
-
- 
     </>
   );
 };

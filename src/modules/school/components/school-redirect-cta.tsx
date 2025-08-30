@@ -111,7 +111,7 @@ const EmailSignupForm: React.FC<{
       >
         <CheckCircle className="w-6 h-6 text-green-400" />
         <span className="text-lg">
-          Thank you! We'll notify you when we launch.
+          Thank you! We&apos;ll notify you when we launch.
         </span>
       </motion.div>
     );

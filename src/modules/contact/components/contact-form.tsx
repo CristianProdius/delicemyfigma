@@ -400,7 +400,7 @@ export const ContactForm = () => {
                           className="absolute z-50 w-full mt-1 bg-white border border-[#451C15]/20 rounded-xl shadow-xl overflow-hidden"
                         >
                           {formConfig.fields.subject.options.map(
-                            (option, index) => (
+                            (option) => (
                               <button
                                 key={option}
                                 type="button"

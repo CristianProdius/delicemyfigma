@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect } from "react";
 import { motion, useScroll, useTransform } from "motion/react";
-import { ExternalLink, Sparkles, ChevronDown } from "lucide-react";
+import {Sparkles, ChevronDown } from "lucide-react";
 
 // Component imports
 import ShopHero from "../components/shop-hero";
@@ -11,7 +11,7 @@ import ShopPreview from "../components/shop-preview";
 import ShopRedirectCTA from "../components/shop-redirect-cta";
 
 // Data imports
-import shopContent, { getProductsByCategory } from "../data/shop-content";
+import shopContent from "../data/shop-content";
 
 // Loading Shimmer Component
 const LoadingShimmer: React.FC = () => (
@@ -35,7 +35,7 @@ const LoadingShimmer: React.FC = () => (
 const ShopView: React.FC = () => {
   // State management
   const [isLoading, setIsLoading] = useState(true);
-  const [activeCollection, setActiveCollection] = useState<string>("All");
+  const [, setActiveCollection] = useState<string>("All");
   const [filteredProducts, setFilteredProducts] = useState(
     shopContent.featuredProducts
   );

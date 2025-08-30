@@ -11,7 +11,7 @@ import {
   Calendar,
   Coffee,
 } from "lucide-react";
-import { cn } from "@/lib/utils";
+
 
 // Import blog components
 import { BlogHero } from "../components/blog-hero";
@@ -191,7 +191,7 @@ export const BlogView = () => {
   const [posts, setPosts] = useState<BlogPost[]>([]);
   const [categories, setCategories] = useState<BlogCategory[]>([]);
   const [featuredPosts, setFeaturedPosts] = useState<BlogPost[]>([]);
-  const [searchQuery, setSearchQuery] = useState("");
+  const [, setSearchQuery] = useState("");
   const [activeCategory, setActiveCategory] = useState<string | null>(null);
 
   // Scroll progress tracking

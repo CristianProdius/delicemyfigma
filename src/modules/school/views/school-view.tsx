@@ -36,10 +36,9 @@ export interface SchoolViewProps {
 
 const SchoolView: React.FC<SchoolViewProps> = ({
   className,
-  showExternalIndicators = true,
 }) => {
   const [isLoading, setIsLoading] = useState(true);
-  const [emailSubmitted, setEmailSubmitted] = useState(false);
+  const [, setEmailSubmitted] = useState(false);
 
   // Refs for smooth scrolling
   const featuresRef = useRef<HTMLDivElement>(
@@ -305,7 +304,7 @@ const SchoolView: React.FC<SchoolViewProps> = ({
                     ))}
                   </div>
                   <p className="text-gray-600 mb-4 italic">
-                    "{testimonial.content}"
+                    &quot;{testimonial.content}&quot;
                   </p>
                   <div className="border-t pt-4">
                     <p className="font-semibold">{testimonial.name}</p>

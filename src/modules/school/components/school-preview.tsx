@@ -7,7 +7,6 @@ import {
   Users,
   Award,
   ArrowRight,
-  Calendar,
   BookOpen,
   ExternalLink,
   ChevronRight,

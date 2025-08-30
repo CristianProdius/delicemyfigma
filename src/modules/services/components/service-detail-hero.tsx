@@ -16,13 +16,16 @@ import {
   Award,
   Sparkles,
   Home,
-  Star,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 
+import type { LucideIcon } from "lucide-react";
+import type { FC } from "react";
+
+type IconComponent = FC | LucideIcon;
 // Icon mapping for service icons
-const iconMap: { [key: string]: any } = {
+const iconMap: { [key: string]: IconComponent } = {
   Users,
   Sparkles,
   Utensils: () => (
@@ -134,6 +137,11 @@ export interface ServiceDetailHeroProps {
   className?: string;
 }
 
+interface StatData {
+  icon: LucideIcon;
+  label: string;
+  value: string;
+}
 // Breadcrumbs Component
 const Breadcrumbs = ({ serviceName }: { serviceName: string }) => {
   return (
@@ -171,7 +179,7 @@ const StatCard = ({
   index,
   accentColor,
 }: {
-  icon: any;
+  icon: LucideIcon;
   label: string;
   value: string;
   index: number;
@@ -226,7 +234,6 @@ const StatCard = ({
 };
 
 export const ServiceDetailHero = ({
-  id,
   title,
   shortDescription,
   heroImage,
@@ -277,7 +284,7 @@ export const ServiceDetailHero = ({
   };
 
   // Prepare stat cards data
-  const stats = [
+  const stats: StatData[] = [
     duration && { icon: Clock, label: "Duration", value: duration },
     groupSize && { icon: Users, label: "Group Size", value: groupSize },
     location && { icon: MapPin, label: "Location", value: location },
@@ -291,7 +298,7 @@ export const ServiceDetailHero = ({
       label: "Availability",
       value: availability,
     },
-  ].filter(Boolean);
+  ].filter(Boolean) as StatData[];
 
   return (
     <section
@@ -468,7 +475,7 @@ export const ServiceDetailHero = ({
             {/* Right: Floating Stat Cards */}
             {stats.length > 0 && (
               <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-1 gap-3 lg:gap-4 lg:min-w-[280px]">
-                {stats.map((stat: any, index) => (
+                {stats.map((stat, index) => (
                   <StatCard
                     key={index}
                     icon={stat.icon}
