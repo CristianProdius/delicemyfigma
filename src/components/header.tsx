@@ -1,621 +1,784 @@
 "use client";
+import React, { useState, useEffect, useRef, useMemo } from "react";
+import {
+  X,
+  Phone,
+  ChevronDown,
+  Calendar,
+  Globe,
+  MapPin,
+  Clock,
+  Mail,
+  ArrowRight,
+  Sparkles,
+} from "lucide-react";
 
-import React, { useState, useEffect } from "react";
-import { ChevronDown, Menu, X } from "lucide-react";
-import Image from "next/image";
-import Link from "next/link";
-import { usePathname } from "next/navigation";
-import { motion, AnimatePresence } from "motion/react";
-import { cn } from "@/lib/utils";
-
-interface HeaderProps {
-  variant?: "hero" | "solid" | "transparent";
-  className?: string;
+// Types
+interface NavItem {
+  id: string;
+  label: string;
+  href: string;
+  subItems?: SubNavItem[];
 }
 
-export default function Header({ variant = "hero", className }: HeaderProps) {
-  const [isAboutOpen, setIsAboutOpen] = useState(false);
-  const [isServicesOpen, setIsServicesOpen] = useState(false);
+interface SubNavItem {
+  label: string;
+  href: string;
+  description?: string;
+  icon?: React.ReactNode;
+}
+
+interface Language {
+  code: string;
+  label: string;
+  flag?: string;
+}
+
+const NavigationHeader: React.FC = () => {
+  // Track if we're on the client and ready for animations
+  const [mounted, setMounted] = useState(false);
+
+  // Core states
+  const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-  const [isMobileAboutOpen, setIsMobileAboutOpen] = useState(false);
-  const [isMobileServicesOpen, setIsMobileServicesOpen] = useState(false);
-  const [scrolled, setScrolled] = useState(false);
+  const [activeSection, setActiveSection] = useState("home");
+  const [hoveredItem, setHoveredItem] = useState<string | null>(null);
+  const [selectedLanguage, setSelectedLanguage] = useState("EN");
+  const [showLanguageDropdown, setShowLanguageDropdown] = useState(false);
+  const [headerVisible, setHeaderVisible] = useState(false);
+  const [mobileMenuStage, setMobileMenuStage] = useState(0);
 
-  const pathname = usePathname();
+  // Refs
+  const navRef = useRef<HTMLElement>(null);
+  const languageRef = useRef<HTMLDivElement>(null);
+  const headerRef = useRef<HTMLDivElement>(null);
 
-  // Handle scroll for transparent variant
-  useEffect(() => {
-    if (variant === "transparent") {
-      const handleScroll = () => {
-        setScrolled(window.scrollY > 20);
-      };
-      window.addEventListener("scroll", handleScroll);
-      return () => window.removeEventListener("scroll", handleScroll);
-    }
-  }, [variant]);
-
-  // Close mobile menu when route changes
-  useEffect(() => {
-    setIsMobileMenuOpen(false);
-    setIsMobileAboutOpen(false);
-    setIsMobileServicesOpen(false);
-  }, [pathname]);
-
-  // Check if current page is active
-  const isActive = (path: string) => {
-    if (path === "/services") {
-      return pathname?.startsWith("/services");
-    }
-    return pathname === path;
-  };
-
-  // Navigation content
-  const navContent = {
-    logo: {
-      src: "/logo.png",
-      alt: "DeliceMy",
-    },
-    mainNav: {
-      services: "Services",
-      school: "School",
-      shop: "Shop",
-      blog: "Blog",
-      about: "About",
-      contact: "Contact",
-    },
-    servicesDropdown: [
+  // ============================================
+  // CUSTOMIZE YOUR NAVIGATION ITEMS HERE
+  // ============================================
+  const navItems = useMemo<NavItem[]>(
+    () => [
       {
-        title: "Chocolate Classes for Adults",
-        href: "/services/chocolate-classes-adults",
-        description: "Learn from master chocolatiers",
+        id: "home",
+        label: "Home",
+        href: "#home",
       },
       {
-        title: "Kids Chocolate Classes",
-        href: "/services/kids-chocolate-classes",
-        description: "Fun workshops for children",
+        id: "about",
+        label: "About",
+        href: "#about",
       },
       {
-        title: "Restaurant & Café Services",
-        href: "/services/restaurant-cafe-services",
-        description: "Elevate your dessert menu",
+        id: "services",
+        label: "Services",
+        href: "#services",
+        subItems: [
+          {
+            label: "Service 1",
+            href: "#service-1",
+            description: "Description for your first service",
+            icon: <Sparkles size={16} className="text-yellow-500" />,
+          },
+          {
+            label: "Service 2",
+            href: "#service-2",
+            description: "Description for your second service",
+            icon: <Sparkles size={16} className="text-yellow-500" />,
+          },
+          {
+            label: "Service 3",
+            href: "#service-3",
+            description: "Description for your third service",
+            icon: <Sparkles size={16} className="text-yellow-500" />,
+          },
+          // Add more services as needed
+        ],
       },
       {
-        title: "Chocolate Parties & Events",
-        href: "/services/chocolate-parties-events",
-        description: "Unforgettable celebrations",
+        id: "portfolio",
+        label: "Portfolio",
+        href: "#portfolio",
       },
       {
-        title: "Custom Dessert Design",
-        href: "/services/custom-dessert-design",
-        description: "Bespoke chocolate creations",
+        id: "testimonials",
+        label: "Testimonials",
+        href: "#testimonials",
       },
       {
-        title: "Personalized Chocolate Gifts",
-        href: "/services/personalized-chocolate-gifts",
-        description: "Unique gifts for special moments",
+        id: "contact",
+        label: "Contact",
+        href: "#contact",
       },
     ],
-    aboutDropdown: {
-      aboutOlesea: "About Olesea",
-      aboutCompany: "About Company",
-    },
-    routes: {
-      services: "/services",
-      school: "/school",
-      shop: "/shop",
-      blog: "/blog",
-      aboutOlesea: "/about-olesea",
-      aboutCompany: "/about-company",
-      contact: "/contact",
-    },
+    []
+  );
+
+  // ============================================
+  // CUSTOMIZE YOUR LANGUAGES HERE
+  // ============================================
+  const languages: Language[] = [
+    { code: "EN", label: "English", flag: "🇬🇧" },
+    { code: "ES", label: "Español", flag: "🇪🇸" },
+    { code: "FR", label: "Français", flag: "🇫🇷" },
+  ];
+
+  // ============================================
+  // CUSTOMIZE YOUR CONTACT INFO HERE
+  // ============================================
+  const contactInfo = {
+    phone: "+1 234 567 890",
+    email: "info@yourcompany.com",
+    address: "123 Main Street, Your City, State 12345",
+    schedule: "Monday-Friday: 9:00 AM - 6:00 PM",
   };
 
-  // Dynamic nav item classes based on variant
-  const getNavItemClass = () => {
-    if (variant === "hero") {
-      return "text-white/70 hover:text-white";
-    } else if (variant === "solid") {
-      return "text-white/80 hover:text-white";
+  // ============================================
+  // CUSTOMIZE YOUR COMPANY NAME HERE
+  // ============================================
+  const companyName = "Your Company";
+  const logoPath = "/images/logo/logo.png"; // Update with your logo path
+
+  // Mount effect - enable animations after hydration
+  useEffect(() => {
+    setMounted(true);
+    // Trigger header animation after mount
+    setTimeout(() => setHeaderVisible(true), 100);
+  }, []);
+
+  // Handle mobile menu animation stages
+  useEffect(() => {
+    if (isMobileMenuOpen) {
+      // Stagger the animation stages
+      setTimeout(() => setMobileMenuStage(1), 50);
+      setTimeout(() => setMobileMenuStage(2), 150);
+      setTimeout(() => setMobileMenuStage(3), 250);
     } else {
-      // Transparent variant - dark text on white background
-      return "text-white/80 hover:text-white";
+      setMobileMenuStage(0);
     }
-  };
+  }, [isMobileMenuOpen]);
 
-  const getActiveClass = () => {
-    if (variant === "transparent") {
-      return "text-white font-semibold";
-    }
-    return "text-white";
-  };
+  // Handle scroll effects
+  useEffect(() => {
+    if (!mounted) return;
 
-  const navItemClass = getNavItemClass();
-  const activeClass = getActiveClass();
+    const handleScroll = () => {
+      const scrollPosition = window.scrollY;
 
-  // Dropdown background classes
-  const getDropdownClass = () => {
-    if (variant === "transparent") {
-      return "bg-white shadow-xl border border-gray-100";
-    }
-    return "bg-[#2C1810]/95 backdrop-blur-xl border border-white/10";
-  };
+      // Set scrolled state with premium threshold
+      setIsScrolled(scrollPosition > 50);
 
-  const getDropdownTextClass = () => {
-    if (variant === "transparent") {
-      return {
-        title: "text-gray-800 hover:text-[#8B4513]",
-        description: "text-gray-500",
-        hover: "hover:bg-gray-50",
-      };
-    }
-    return {
-      title: "text-white/90",
-      description: "text-white/50",
-      hover: "hover:bg-white/5",
+      // Update active section
+      const offset = 100;
+      const sections = navItems.map((item) => item.id);
+
+      const currentSection = sections.find((section) => {
+        const element = document.getElementById(section);
+        if (element) {
+          const rect = element.getBoundingClientRect();
+          const elementTop = rect.top + scrollPosition;
+          const elementBottom = elementTop + rect.height;
+
+          return (
+            scrollPosition >= elementTop - offset - 100 &&
+            scrollPosition < elementBottom - offset
+          );
+        }
+        return false;
+      });
+
+      if (currentSection) {
+        setActiveSection(currentSection);
+      }
     };
+
+    handleScroll();
+    window.addEventListener("scroll", handleScroll, { passive: true });
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, [mounted, navItems]);
+
+  // Prevent body scroll when mobile menu is open
+  useEffect(() => {
+    if (!mounted) return;
+
+    if (isMobileMenuOpen) {
+      document.body.style.overflow = "hidden";
+    } else {
+      document.body.style.overflow = "";
+    }
+
+    return () => {
+      document.body.style.overflow = "";
+    };
+  }, [isMobileMenuOpen, mounted]);
+
+  // Close dropdowns when clicking outside
+  useEffect(() => {
+    if (!mounted) return;
+
+    const handleClickOutside = (event: MouseEvent) => {
+      if (
+        languageRef.current &&
+        !languageRef.current.contains(event.target as Node)
+      ) {
+        setShowLanguageDropdown(false);
+      }
+    };
+
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, [mounted]);
+
+  // Handle smooth scroll to section
+  const handleScrollToSection = (href: string) => {
+    const targetId = href.replace("#", "");
+    const element = document.getElementById(targetId);
+
+    if (element) {
+      const offset = 100;
+      const elementPosition = element.getBoundingClientRect().top;
+      const offsetPosition = elementPosition + window.pageYOffset - offset;
+
+      window.scrollTo({
+        top: offsetPosition,
+        behavior: "smooth",
+      });
+    }
+
+    setIsMobileMenuOpen(false);
   };
 
-  const dropdownClass = getDropdownClass();
-  const dropdownTextClass = getDropdownTextClass();
+  // Handle keyboard navigation
+  const handleKeyDown = (event: React.KeyboardEvent, action: () => void) => {
+    if (event.key === "Enter" || event.key === " ") {
+      event.preventDefault();
+      action();
+    }
+  };
 
   return (
-    <header
-      className={cn(
-        "transition-all duration-300",
-        variant === "solid" &&
-          "fixed top-0 left-0 right-0 z-50 bg-gradient-to-r from-[#2C1810] via-[#3A1F15] to-[#2C1810] backdrop-blur-lg shadow-xl",
-        variant === "transparent" && [
-          "fixed top-0 left-0 right-0 z-50",
-          scrolled
-            ? "bg-white/95 backdrop-blur-md shadow-lg"
-            : "bg-transparent",
-        ],
-        className
-      )}
-    >
-      <nav
-        className={cn(
-          "relative",
-          (variant === "solid" || variant === "transparent") &&
-            "max-w-[95%] xl:max-w-[90%] mx-auto"
-        )}
+    <>
+      {/* Main Navigation with Premium Glass Effect */}
+      <header
+        ref={headerRef}
+        className={`fixed top-0 left-0 right-0 z-50 w-full transition-all duration-700 ${
+          mounted && headerVisible ? "translate-y-0" : "-translate-y-full"
+        }`}
       >
-        <div className="flex justify-between items-center h-20 px-4 lg:px-0">
-          {/* Logo */}
-          <Link href="/" className="group flex items-center gap-3">
-            <Image
-              src={navContent.logo.src}
-              alt={navContent.logo.alt}
-              width={60}
-              height={38}
-              className="cursor-pointer transition-all duration-300 hover:scale-105"
-              style={{
-                filter: variant === "transparent" ? "none" : "brightness(1.1)",
-              }}
-            />
-          </Link>
+        <nav
+          ref={navRef}
+          className={`relative transition-all duration-500 ${
+            isScrolled
+              ? "bg-white/90 backdrop-blur-2xl shadow-2xl border-b border-gray-100"
+              : "bg-gradient-to-b from-black/40 to-transparent backdrop-blur-sm"
+          }`}
+          role="navigation"
+          aria-label="Main navigation"
+        >
+          {/* Premium gradient overlay */}
+          <div
+            className={`absolute inset-0 bg-gradient-to-r from-yellow-500/5 via-transparent to-yellow-500/5 opacity-50 pointer-events-none transition-opacity duration-500 ${
+              isScrolled ? "opacity-100" : "opacity-0"
+            }`}
+          />
 
-          {/* Desktop Navigation */}
-          <div className="hidden md:flex items-center gap-8">
-            {/* Services Dropdown */}
-            <div className="relative">
-              <button
-                onClick={() => {
-                  setIsServicesOpen(!isServicesOpen);
-                  setIsAboutOpen(false);
-                }}
-                onBlur={() => setTimeout(() => setIsServicesOpen(false), 200)}
-                className={cn(
-                  "flex items-center gap-1.5 text-sm tracking-wide transition-all duration-300 [font-family:var(--font-inter)]",
-                  isActive("/services") ? activeClass : navItemClass
-                )}
-              >
-                {navContent.mainNav.services}
-                <ChevronDown
-                  className={cn(
-                    "w-3.5 h-3.5 transition-transform duration-300",
-                    isServicesOpen && "rotate-180"
-                  )}
-                />
-              </button>
-
-              <AnimatePresence>
-                {isServicesOpen && (
-                  <motion.div
-                    initial={{ opacity: 0, y: -10 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    exit={{ opacity: 0, y: -10 }}
-                    transition={{ duration: 0.2 }}
-                    className={cn(
-                      "absolute left-0 mt-4 w-80 rounded-xl py-3 z-50",
-                      dropdownClass
-                    )}
-                  >
-                    {/* View All Services */}
-                    <Link
-                      href={navContent.routes.services}
-                      className={cn(
-                        "block px-5 py-2.5 text-sm font-medium transition-all duration-200 border-b",
-                        variant === "transparent"
-                          ? "text-[#8B4513] hover:text-[#6B3410] border-gray-100"
-                          : "text-white/80 hover:text-white hover:bg-white/5 border-white/10"
-                      )}
-                    >
-                      View All Services →
-                    </Link>
-
-                    {/* Service Items */}
-                    {navContent.servicesDropdown.map((service) => (
-                      <Link
-                        key={service.href}
-                        href={service.href}
-                        className={cn(
-                          "block px-5 py-3.5 transition-all duration-200",
-                          dropdownTextClass.hover
-                        )}
-                      >
-                        <div
-                          className={cn(
-                            "text-sm font-medium [font-family:var(--font-inter)]",
-                            dropdownTextClass.title
-                          )}
-                        >
-                          {service.title}
-                        </div>
-                        <div
-                          className={cn(
-                            "text-xs mt-1",
-                            dropdownTextClass.description
-                          )}
-                        >
-                          {service.description}
-                        </div>
-                      </Link>
-                    ))}
-                  </motion.div>
-                )}
-              </AnimatePresence>
-            </div>
-
-            {/* Other Nav Items */}
-            <Link
-              href={navContent.routes.school}
-              className={cn(
-                "text-sm tracking-wide transition-colors duration-300 [font-family:var(--font-inter)]",
-                isActive("/school") ? activeClass : navItemClass
-              )}
-            >
-              {navContent.mainNav.school}
-            </Link>
-
-            <Link
-              href={navContent.routes.shop}
-              className={cn(
-                "text-sm tracking-wide transition-colors duration-300 [font-family:var(--font-inter)]",
-                isActive("/shop") ? activeClass : navItemClass
-              )}
-            >
-              {navContent.mainNav.shop}
-            </Link>
-
-            <Link
-              href={navContent.routes.blog}
-              className={cn(
-                "text-sm tracking-wide transition-colors duration-300 [font-family:var(--font-inter)]",
-                isActive("/blog") ? activeClass : navItemClass
-              )}
-            >
-              {navContent.mainNav.blog}
-            </Link>
-
-            {/* About Dropdown */}
-            <div className="relative">
-              <button
-                onClick={() => {
-                  setIsAboutOpen(!isAboutOpen);
-                  setIsServicesOpen(false);
-                }}
-                onBlur={() => setTimeout(() => setIsAboutOpen(false), 200)}
-                className={cn(
-                  "flex items-center gap-1.5 text-sm tracking-wide transition-all duration-300 [font-family:var(--font-inter)]",
-                  isActive("/about-olesea") || isActive("/about-company")
-                    ? activeClass
-                    : navItemClass
-                )}
-              >
-                {navContent.mainNav.about}
-                <ChevronDown
-                  className={cn(
-                    "w-3.5 h-3.5 transition-transform duration-300",
-                    isAboutOpen && "rotate-180"
-                  )}
-                />
-              </button>
-
-              <AnimatePresence>
-                {isAboutOpen && (
-                  <motion.div
-                    initial={{ opacity: 0, y: -10 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    exit={{ opacity: 0, y: -10 }}
-                    transition={{ duration: 0.2 }}
-                    className={cn(
-                      "absolute right-0 mt-4 w-48 rounded-xl py-2 z-50",
-                      dropdownClass
-                    )}
-                  >
-                    <Link
-                      href={navContent.routes.aboutOlesea}
-                      className={cn(
-                        "block px-5 py-2.5 text-sm font-medium transition-all duration-200",
-                        dropdownTextClass.hover,
-                        dropdownTextClass.title
-                      )}
-                    >
-                      {navContent.aboutDropdown.aboutOlesea}
-                    </Link>
-                    <Link
-                      href={navContent.routes.aboutCompany}
-                      className={cn(
-                        "block px-5 py-2.5 text-sm font-medium transition-all duration-200",
-                        dropdownTextClass.hover,
-                        dropdownTextClass.title
-                      )}
-                    >
-                      {navContent.aboutDropdown.aboutCompany}
-                    </Link>
-                  </motion.div>
-                )}
-              </AnimatePresence>
-            </div>
-
-            <Link
-              href={navContent.routes.contact}
-              className={cn(
-                "text-sm tracking-wide transition-colors duration-300 [font-family:var(--font-inter)]",
-                isActive("/contact") ? activeClass : navItemClass
-              )}
-            >
-              {navContent.mainNav.contact}
-            </Link>
-          </div>
-
-          {/* Mobile menu button */}
-          <div className="md:hidden">
-            <button
-              onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-              className={cn(
-                "p-2 rounded-lg transition-all duration-200",
-                variant === "transparent"
-                  ? "text-gray-700 hover:text-[#8B4513] hover:bg-gray-100"
-                  : "text-white/70 hover:text-white hover:bg-white/10"
-              )}
-            >
-              {isMobileMenuOpen ? (
-                <X className="h-6 w-6" />
-              ) : (
-                <Menu className="h-6 w-6" />
-              )}
-            </button>
-          </div>
-        </div>
-
-        {/* Mobile Navigation */}
-        <AnimatePresence>
-          {isMobileMenuOpen && (
-            <motion.div
-              initial={{ opacity: 0, height: 0 }}
-              animate={{ opacity: 1, height: "auto" }}
-              exit={{ opacity: 0, height: 0 }}
-              transition={{ duration: 0.3 }}
-              className="md:hidden overflow-hidden"
-            >
+          <div className="container mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="flex items-center justify-between h-20 sm:h-24">
+              {/* Enhanced Logo with Animation */}
               <div
-                className={cn(
-                  "px-2 pt-2 pb-3 space-y-1 rounded-b-xl",
-                  variant === "transparent"
-                    ? "bg-white shadow-lg"
-                    : "bg-black/20 backdrop-blur-md"
-                )}
+                className={`flex items-center flex-shrink-0 transition-all duration-500 ${
+                  mounted ? "hover:scale-110" : ""
+                } ${isScrolled ? "scale-100" : "scale-110"}`}
               >
-                {/* Mobile Services Dropdown */}
-                <div>
-                  <button
-                    onClick={() => {
-                      setIsMobileServicesOpen(!isMobileServicesOpen);
-                      setIsMobileAboutOpen(false);
-                    }}
-                    className={cn(
-                      "w-full flex items-center justify-between px-3 py-2 rounded-md text-base font-medium transition-colors duration-200",
-                      isActive("/services")
-                        ? variant === "transparent"
-                          ? "text-[#8B4513] bg-orange-50"
-                          : "text-white bg-white/10"
-                        : variant === "transparent"
-                        ? "text-gray-700 hover:text-[#8B4513] hover:bg-gray-50"
-                        : "text-white/70 hover:text-white hover:bg-white/5"
-                    )}
-                  >
-                    <span>{navContent.mainNav.services}</span>
-                    <ChevronDown
-                      className={cn(
-                        "h-4 w-4 transition-transform duration-200",
-                        isMobileServicesOpen && "rotate-180"
-                      )}
-                    />
-                  </button>
-
-                  <AnimatePresence>
-                    {isMobileServicesOpen && (
-                      <motion.div
-                        initial={{ opacity: 0, height: 0 }}
-                        animate={{ opacity: 1, height: "auto" }}
-                        exit={{ opacity: 0, height: 0 }}
-                        transition={{ duration: 0.2 }}
-                        className="pl-4 mt-1 space-y-1 overflow-hidden"
-                      >
-                        <Link
-                          href={navContent.routes.services}
-                          className={cn(
-                            "block px-3 py-2 rounded-md text-sm font-medium transition-colors duration-200",
-                            variant === "transparent"
-                              ? "text-gray-600 hover:text-[#8B4513] hover:bg-gray-50"
-                              : "text-white/60 hover:text-white hover:bg-white/5"
-                          )}
-                        >
-                          View All Services
-                        </Link>
-                        {navContent.servicesDropdown.map((service) => (
-                          <Link
-                            key={service.href}
-                            href={service.href}
-                            className={cn(
-                              "block px-3 py-2 rounded-md text-sm transition-colors duration-200",
-                              variant === "transparent"
-                                ? "text-gray-600 hover:text-[#8B4513] hover:bg-gray-50"
-                                : "text-white/60 hover:text-white hover:bg-white/5"
-                            )}
-                          >
-                            {service.title}
-                          </Link>
-                        ))}
-                      </motion.div>
-                    )}
-                  </AnimatePresence>
-                </div>
-
-                {/* Other mobile menu items */}
-                <Link
-                  href={navContent.routes.school}
-                  className={cn(
-                    "block px-3 py-2 rounded-md text-base font-medium transition-colors duration-200",
-                    isActive("/school")
-                      ? variant === "transparent"
-                        ? "text-[#8B4513] bg-orange-50"
-                        : "text-white bg-white/10"
-                      : variant === "transparent"
-                      ? "text-gray-700 hover:text-[#8B4513] hover:bg-gray-50"
-                      : "text-white/70 hover:text-white hover:bg-white/5"
-                  )}
+                <a
+                  href="/"
+                  aria-label={`${companyName} - Home`}
+                  className="relative group"
                 >
-                  {navContent.mainNav.school}
-                </Link>
-
-                <Link
-                  href={navContent.routes.shop}
-                  className={cn(
-                    "block px-3 py-2 rounded-md text-base font-medium transition-colors duration-200",
-                    isActive("/shop")
-                      ? variant === "transparent"
-                        ? "text-[#8B4513] bg-orange-50"
-                        : "text-white bg-white/10"
-                      : variant === "transparent"
-                      ? "text-gray-700 hover:text-[#8B4513] hover:bg-gray-50"
-                      : "text-white/70 hover:text-white hover:bg-white/5"
-                  )}
-                >
-                  {navContent.mainNav.shop}
-                </Link>
-
-                <Link
-                  href={navContent.routes.blog}
-                  className={cn(
-                    "block px-3 py-2 rounded-md text-base font-medium transition-colors duration-200",
-                    isActive("/blog")
-                      ? variant === "transparent"
-                        ? "text-[#8B4513] bg-orange-50"
-                        : "text-white bg-white/10"
-                      : variant === "transparent"
-                      ? "text-gray-700 hover:text-[#8B4513] hover:bg-gray-50"
-                      : "text-white/70 hover:text-white hover:bg-white/5"
-                  )}
-                >
-                  {navContent.mainNav.blog}
-                </Link>
-
-                {/* Mobile About Dropdown */}
-                <div>
-                  <button
-                    onClick={() => {
-                      setIsMobileAboutOpen(!isMobileAboutOpen);
-                      setIsMobileServicesOpen(false);
-                    }}
-                    className={cn(
-                      "w-full flex items-center justify-between px-3 py-2 rounded-md text-base font-medium transition-colors duration-200",
-                      isActive("/about-olesea") || isActive("/about-company")
-                        ? variant === "transparent"
-                          ? "text-[#8B4513] bg-orange-50"
-                          : "text-white bg-white/10"
-                        : variant === "transparent"
-                        ? "text-gray-700 hover:text-[#8B4513] hover:bg-gray-50"
-                        : "text-white/70 hover:text-white hover:bg-white/5"
-                    )}
-                  >
-                    {navContent.mainNav.about}
-                    <ChevronDown
-                      className={cn(
-                        "h-4 w-4 transition-transform duration-200",
-                        isMobileAboutOpen && "rotate-180"
-                      )}
-                    />
-                  </button>
-
-                  <AnimatePresence>
-                    {isMobileAboutOpen && (
-                      <motion.div
-                        initial={{ opacity: 0, height: 0 }}
-                        animate={{ opacity: 1, height: "auto" }}
-                        exit={{ opacity: 0, height: 0 }}
-                        transition={{ duration: 0.2 }}
-                        className="pl-6 mt-1 space-y-1 overflow-hidden"
-                      >
-                        <Link
-                          href={navContent.routes.aboutOlesea}
-                          className={cn(
-                            "block px-3 py-2 rounded-md text-sm font-medium transition-colors duration-200",
-                            variant === "transparent"
-                              ? "text-gray-600 hover:text-[#8B4513] hover:bg-gray-50"
-                              : "text-white/60 hover:text-white hover:bg-white/5"
-                          )}
-                        >
-                          {navContent.aboutDropdown.aboutOlesea}
-                        </Link>
-                        <Link
-                          href={navContent.routes.aboutCompany}
-                          className={cn(
-                            "block px-3 py-2 rounded-md text-sm font-medium transition-colors duration-200",
-                            variant === "transparent"
-                              ? "text-gray-600 hover:text-[#8B4513] hover:bg-gray-50"
-                              : "text-white/60 hover:text-white hover:bg-white/5"
-                          )}
-                        >
-                          {navContent.aboutDropdown.aboutCompany}
-                        </Link>
-                      </motion.div>
-                    )}
-                  </AnimatePresence>
-                </div>
-
-                <Link
-                  href={navContent.routes.contact}
-                  className={cn(
-                    "block px-3 py-2 rounded-md text-base font-medium transition-colors duration-200",
-                    isActive("/contact")
-                      ? variant === "transparent"
-                        ? "text-[#8B4513] bg-orange-50"
-                        : "text-white bg-white/10"
-                      : variant === "transparent"
-                      ? "text-gray-700 hover:text-[#8B4513] hover:bg-gray-50"
-                      : "text-white/70 hover:text-white hover:bg-white/5"
-                  )}
-                >
-                  {navContent.mainNav.contact}
-                </Link>
+                  <div className="absolute inset-0 bg-gradient-to-r from-yellow-400/20 to-yellow-600/20 blur-xl group-hover:blur-2xl transition-all duration-500 rounded-full" />
+                  {/* Replace with your logo or text */}
+                  <div className="relative z-10 px-4 py-2">
+                    <h1
+                      className={`text-2xl font-bold ${
+                        isScrolled ? "text-gray-900" : "text-white"
+                      }`}
+                    >
+                      {companyName}
+                    </h1>
+                  </div>
+                </a>
               </div>
-            </motion.div>
-          )}
-        </AnimatePresence>
-      </nav>
-    </header>
+
+              {/* Desktop Navigation with Premium Effects */}
+              <div className="hidden xl:flex items-center gap-8">
+                <ul className="flex items-center gap-6 lg:gap-8" role="menubar">
+                  {navItems.map((item) => (
+                    <li
+                      key={item.id}
+                      role="none"
+                      className="relative"
+                      onMouseEnter={() => setHoveredItem(item.id)}
+                      onMouseLeave={() => setHoveredItem(null)}
+                    >
+                      <button
+                        onClick={() => handleScrollToSection(item.href)}
+                        className={`relative py-3 font-medium text-sm lg:text-base transition-all duration-300 flex items-center gap-2 group ${
+                          activeSection === item.id
+                            ? isScrolled
+                              ? "text-yellow-600"
+                              : "text-yellow-300"
+                            : isScrolled
+                            ? "text-gray-700 hover:text-yellow-600"
+                            : "text-white hover:text-yellow-300"
+                        }`}
+                        role="menuitem"
+                        aria-current={
+                          activeSection === item.id ? "page" : undefined
+                        }
+                        tabIndex={0}
+                        onKeyDown={(e) =>
+                          handleKeyDown(e, () =>
+                            handleScrollToSection(item.href)
+                          )
+                        }
+                      >
+                        <span className="relative">
+                          {item.label}
+                          {/* Premium hover effect */}
+                          <span
+                            className={`absolute -bottom-1 left-0 w-full h-0.5 bg-gradient-to-r from-yellow-400 to-yellow-600 transform origin-left transition-transform duration-300 ${
+                              hoveredItem === item.id ||
+                              activeSection === item.id
+                                ? "scale-x-100"
+                                : "scale-x-0"
+                            }`}
+                          />
+                        </span>
+                        {item.subItems && (
+                          <ChevronDown
+                            size={16}
+                            className={`transition-transform duration-300 ${
+                              hoveredItem === item.id ? "rotate-180" : ""
+                            }`}
+                          />
+                        )}
+                      </button>
+
+                      {/* Premium Dropdown with Enhanced Styling */}
+                      {item.subItems && hoveredItem === item.id && (
+                        <div
+                          className={`absolute top-full left-0 mt-4 w-72 bg-white/95 backdrop-blur-xl rounded-2xl shadow-2xl border border-gray-100 overflow-hidden transition-all duration-300 ${
+                            mounted
+                              ? "opacity-100 translate-y-0"
+                              : "opacity-0 -translate-y-4"
+                          }`}
+                        >
+                          <div className="p-2">
+                            {item.subItems.map((subItem, index) => (
+                              <button
+                                key={index}
+                                onClick={() =>
+                                  handleScrollToSection(subItem.href)
+                                }
+                                className="w-full px-4 py-3 text-left rounded-xl hover:bg-gradient-to-r hover:from-yellow-50 hover:to-yellow-100/50 transition-all duration-300 group flex items-start gap-3"
+                              >
+                                {subItem.icon && (
+                                  <span className="mt-1">{subItem.icon}</span>
+                                )}
+                                <div>
+                                  <div className="font-medium text-gray-900 group-hover:text-yellow-600 transition-colors">
+                                    {subItem.label}
+                                  </div>
+                                  {subItem.description && (
+                                    <div className="text-sm text-gray-500 mt-0.5">
+                                      {subItem.description}
+                                    </div>
+                                  )}
+                                </div>
+                              </button>
+                            ))}
+                          </div>
+                        </div>
+                      )}
+                    </li>
+                  ))}
+                </ul>
+
+                {/* Premium Language Switcher */}
+                <div className="relative" ref={languageRef}>
+                  <button
+                    onClick={() =>
+                      setShowLanguageDropdown(!showLanguageDropdown)
+                    }
+                    className={`flex items-center gap-2 px-4 py-2.5 rounded-xl transition-all duration-300 ${
+                      isScrolled
+                        ? "hover:bg-gray-100 text-gray-700"
+                        : "hover:bg-white/10 text-white backdrop-blur-sm"
+                    }`}
+                    aria-label="Change language"
+                    aria-expanded={showLanguageDropdown}
+                  >
+                    <Globe size={20} />
+                    <span className="text-sm font-medium">
+                      {selectedLanguage}
+                    </span>
+                    <ChevronDown
+                      size={16}
+                      className={`transition-transform duration-300 ${
+                        showLanguageDropdown ? "rotate-180" : ""
+                      }`}
+                    />
+                  </button>
+
+                  {/* Premium Language Dropdown */}
+                  {showLanguageDropdown && (
+                    <div
+                      className={`absolute top-full right-0 mt-3 bg-white/95 backdrop-blur-xl rounded-xl shadow-2xl border border-gray-100 py-2 min-w-[180px] transition-all duration-300 ${
+                        mounted ? "opacity-100 scale-100" : "opacity-0 scale-95"
+                      }`}
+                    >
+                      {languages.map((lang) => (
+                        <button
+                          key={lang.code}
+                          onClick={() => {
+                            setSelectedLanguage(lang.code);
+                            setShowLanguageDropdown(false);
+                          }}
+                          className={`w-full text-left px-5 py-3 hover:bg-gradient-to-r hover:from-yellow-50 hover:to-transparent transition-all duration-300 flex items-center gap-3 ${
+                            selectedLanguage === lang.code ? "bg-yellow-50" : ""
+                          }`}
+                        >
+                          <span className="text-lg">{lang.flag}</span>
+                          <span className="text-sm font-medium">
+                            {lang.label}
+                          </span>
+                        </button>
+                      ))}
+                    </div>
+                  )}
+                </div>
+
+                {/* Premium Desktop CTA Buttons */}
+                <div className="flex items-center gap-4">
+                  <a
+                    href={`tel:${contactInfo.phone.replace(/\s/g, "")}`}
+                    className={`flex items-center gap-2 px-5 py-2.5 rounded-xl font-medium transition-all duration-300 ${
+                      isScrolled
+                        ? "hover:bg-gray-100 text-gray-700"
+                        : "hover:bg-white/10 text-white backdrop-blur-sm"
+                    }`}
+                    aria-label="Call now"
+                  >
+                    <Phone size={20} />
+                    <span className="hidden lg:inline">
+                      {contactInfo.phone}
+                    </span>
+                  </a>
+
+                  <button
+                    onClick={() => handleScrollToSection("#contact")}
+                    className="group relative px-6 py-3 rounded-xl font-semibold text-white overflow-hidden transition-all duration-300 hover:scale-105 hover:shadow-2xl"
+                  >
+                    <div className="absolute inset-0 bg-gradient-to-r from-yellow-500 to-yellow-600 transition-all duration-300 group-hover:scale-110" />
+                    <div className="absolute inset-0 bg-gradient-to-r from-yellow-600 to-yellow-700 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+                    <span className="relative flex items-center gap-2">
+                      <Calendar size={20} />
+                      <span>Get Started</span>
+                    </span>
+                  </button>
+                </div>
+              </div>
+
+              {/* Premium Mobile Menu Button */}
+              <button
+                onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+                className={`xl:hidden relative p-3 rounded-xl transition-all duration-300 ${
+                  isScrolled
+                    ? "text-gray-700 hover:bg-gray-100"
+                    : "text-white hover:bg-white/10 backdrop-blur-sm"
+                }`}
+                aria-label={isMobileMenuOpen ? "Close menu" : "Open menu"}
+                aria-expanded={isMobileMenuOpen}
+              >
+                <div className="relative w-6 h-6">
+                  <span
+                    className={`absolute top-0 left-0 w-6 h-0.5 ${
+                      isScrolled ? "bg-gray-700" : "bg-white"
+                    } transition-all duration-300 ${
+                      isMobileMenuOpen ? "rotate-45 top-[11px]" : ""
+                    }`}
+                  />
+                  <span
+                    className={`absolute top-[11px] left-0 w-6 h-0.5 ${
+                      isScrolled ? "bg-gray-700" : "bg-white"
+                    } transition-all duration-300 ${
+                      isMobileMenuOpen ? "opacity-0" : ""
+                    }`}
+                  />
+                  <span
+                    className={`absolute bottom-0 left-0 w-6 h-0.5 ${
+                      isScrolled ? "bg-gray-700" : "bg-white"
+                    } transition-all duration-300 ${
+                      isMobileMenuOpen ? "-rotate-45 bottom-[11px]" : ""
+                    }`}
+                  />
+                </div>
+              </button>
+            </div>
+          </div>
+        </nav>
+      </header>
+
+      {/* Premium Mobile Menu */}
+      {isMobileMenuOpen && (
+        <>
+          {/* Premium Backdrop with Blur */}
+          <div
+            className={`fixed inset-0 bg-black/60 backdrop-blur-md z-40 xl:hidden transition-all duration-500 ${
+              mobileMenuStage >= 1 ? "opacity-100" : "opacity-0"
+            }`}
+            onClick={() => setIsMobileMenuOpen(false)}
+          />
+
+          {/* Premium Mobile Menu Panel */}
+          <div
+            className={`fixed right-0 top-0 bottom-0 w-full sm:w-96 md:w-[420px] bg-white z-50 xl:hidden overflow-hidden transition-all duration-500 ease-out ${
+              mobileMenuStage >= 2 ? "translate-x-0" : "translate-x-full"
+            }`}
+            style={{
+              boxShadow:
+                mobileMenuStage >= 2 ? "-10px 0 40px rgba(0,0,0,0.1)" : "none",
+            }}
+          >
+            <div className="flex flex-col h-full bg-gradient-to-br from-white via-gray-50/30 to-yellow-50/20">
+              {/* Premium Mobile Menu Header */}
+              <div
+                className={`flex items-center justify-between p-6 border-b border-gray-100 bg-white/80 backdrop-blur-sm transition-all duration-500 delay-100 ${
+                  mobileMenuStage >= 3
+                    ? "opacity-100 translate-y-0"
+                    : "opacity-0 -translate-y-4"
+                }`}
+              >
+                <a
+                  href="/"
+                  onClick={() => setIsMobileMenuOpen(false)}
+                  className="transform hover:scale-105 transition-transform"
+                >
+                  <h1 className="text-xl font-bold text-gray-900">
+                    {companyName}
+                  </h1>
+                </a>
+                <button
+                  onClick={() => setIsMobileMenuOpen(false)}
+                  className="p-3 rounded-xl hover:bg-gray-100 transition-all duration-300 group"
+                  aria-label="Close menu"
+                >
+                  <X
+                    size={24}
+                    className="text-gray-700 group-hover:rotate-90 transition-transform duration-300"
+                  />
+                </button>
+              </div>
+
+              {/* Premium Mobile Nav Items with Staggered Animation */}
+              <nav className="flex-1 overflow-y-auto px-6 py-8">
+                <ul className="space-y-3">
+                  {navItems.map((item, itemIndex) => (
+                    <li
+                      key={item.id}
+                      className={`transition-all duration-500 ${
+                        mobileMenuStage >= 3
+                          ? `opacity-100 translate-x-0`
+                          : "opacity-0 translate-x-8"
+                      }`}
+                      style={{
+                        transitionDelay:
+                          mobileMenuStage >= 3
+                            ? `${200 + itemIndex * 60}ms`
+                            : "0ms",
+                      }}
+                    >
+                      <button
+                        onClick={() => handleScrollToSection(item.href)}
+                        className={`w-full text-left px-5 py-4 rounded-xl font-medium transition-all duration-300 flex items-center justify-between group ${
+                          activeSection === item.id
+                            ? "bg-gradient-to-r from-yellow-100 to-yellow-50 text-yellow-700 shadow-lg"
+                            : "text-gray-700 hover:bg-gray-50"
+                        }`}
+                      >
+                        <span className="text-base">{item.label}</span>
+                        <ArrowRight
+                          size={18}
+                          className={`transition-all duration-300 ${
+                            activeSection === item.id
+                              ? "translate-x-1 text-yellow-600"
+                              : "text-gray-400 group-hover:translate-x-1"
+                          }`}
+                        />
+                      </button>
+
+                      {/* Premium Mobile Subitems */}
+                      {item.subItems && (
+                        <ul className="ml-4 mt-2 space-y-1">
+                          {item.subItems.map((subItem, index) => (
+                            <li key={index}>
+                              <button
+                                onClick={() =>
+                                  handleScrollToSection(subItem.href)
+                                }
+                                className="w-full text-left px-4 py-2.5 text-sm text-gray-600 hover:text-yellow-600 hover:bg-yellow-50/50 rounded-lg transition-all duration-300 flex items-center gap-2"
+                              >
+                                <span className="w-1.5 h-1.5 bg-yellow-400 rounded-full" />
+                                {subItem.label}
+                              </button>
+                            </li>
+                          ))}
+                        </ul>
+                      )}
+                    </li>
+                  ))}
+                </ul>
+
+                {/* Premium Mobile Contact Info */}
+                <div
+                  className={`mt-10 space-y-6 transition-all duration-500 ${
+                    mobileMenuStage >= 3
+                      ? "opacity-100 translate-y-0"
+                      : "opacity-0 translate-y-4"
+                  }`}
+                  style={{
+                    transitionDelay: mobileMenuStage >= 3 ? "600ms" : "0ms",
+                  }}
+                >
+                  <div className="text-sm font-semibold text-gray-900 mb-4 flex items-center gap-2">
+                    <Sparkles size={16} className="text-yellow-500" />
+                    Quick Contact
+                  </div>
+
+                  <div className="space-y-4">
+                    <a
+                      href={`tel:${contactInfo.phone.replace(/\s/g, "")}`}
+                      className="flex items-start gap-4 text-gray-700 hover:text-yellow-600 transition-all duration-300 p-3 rounded-xl hover:bg-yellow-50/50"
+                    >
+                      <div className="p-2 bg-yellow-100 rounded-lg">
+                        <Phone size={20} className="text-yellow-600" />
+                      </div>
+                      <div>
+                        <div className="text-xs text-gray-500 uppercase tracking-wider">
+                          Phone
+                        </div>
+                        <div className="text-base font-semibold mt-1">
+                          {contactInfo.phone}
+                        </div>
+                      </div>
+                    </a>
+
+                    <a
+                      href={`mailto:${contactInfo.email}`}
+                      className="flex items-start gap-4 text-gray-700 hover:text-yellow-600 transition-all duration-300 p-3 rounded-xl hover:bg-yellow-50/50"
+                    >
+                      <div className="p-2 bg-yellow-100 rounded-lg">
+                        <Mail size={20} className="text-yellow-600" />
+                      </div>
+                      <div>
+                        <div className="text-xs text-gray-500 uppercase tracking-wider">
+                          Email
+                        </div>
+                        <div className="text-base mt-1">
+                          {contactInfo.email}
+                        </div>
+                      </div>
+                    </a>
+
+                    <div className="flex items-start gap-4 text-gray-700 p-3">
+                      <div className="p-2 bg-yellow-100 rounded-lg">
+                        <MapPin size={20} className="text-yellow-600" />
+                      </div>
+                      <div>
+                        <div className="text-xs text-gray-500 uppercase tracking-wider">
+                          Address
+                        </div>
+                        <div className="text-base mt-1">
+                          {contactInfo.address}
+                        </div>
+                      </div>
+                    </div>
+
+                    <div className="flex items-start gap-4 text-gray-700 p-3">
+                      <div className="p-2 bg-yellow-100 rounded-lg">
+                        <Clock size={20} className="text-yellow-600" />
+                      </div>
+                      <div>
+                        <div className="text-xs text-gray-500 uppercase tracking-wider">
+                          Business Hours
+                        </div>
+                        <div className="text-base mt-1">
+                          {contactInfo.schedule}
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Premium Mobile Language Switcher */}
+                  <div className="mt-8">
+                    <div className="text-xs text-gray-500 uppercase tracking-wider mb-3">
+                      Select Language
+                    </div>
+                    <div className="grid grid-cols-3 gap-2">
+                      {languages.map((lang) => (
+                        <button
+                          key={lang.code}
+                          onClick={() => setSelectedLanguage(lang.code)}
+                          className={`px-4 py-3 rounded-xl text-sm font-medium transition-all duration-300 ${
+                            selectedLanguage === lang.code
+                              ? "bg-gradient-to-r from-yellow-100 to-yellow-50 text-yellow-700 shadow-md"
+                              : "bg-gray-100 text-gray-700 hover:bg-gray-200"
+                          }`}
+                        >
+                          <span className="text-lg">{lang.flag}</span>
+                          <span className="block mt-1 text-xs">
+                            {lang.code}
+                          </span>
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+                </div>
+              </nav>
+
+              {/* Premium Mobile CTA */}
+              <div
+                className={`p-6 border-t border-gray-100 bg-white/80 backdrop-blur-sm transition-all duration-500 ${
+                  mobileMenuStage >= 3
+                    ? "opacity-100 translate-y-0"
+                    : "opacity-0 translate-y-4"
+                }`}
+                style={{
+                  transitionDelay: mobileMenuStage >= 3 ? "700ms" : "0ms",
+                }}
+              >
+                <button
+                  onClick={() => handleScrollToSection("#contact")}
+                  className="w-full py-4 bg-gradient-to-r from-yellow-500 to-yellow-600 hover:from-yellow-600 hover:to-yellow-700 text-white rounded-xl font-semibold shadow-xl hover:shadow-2xl transition-all duration-300 flex items-center justify-center gap-3 group"
+                >
+                  <Calendar
+                    size={20}
+                    className="group-hover:rotate-12 transition-transform duration-300"
+                  />
+                  <span>Schedule Consultation</span>
+                  <ArrowRight
+                    size={18}
+                    className="group-hover:translate-x-1 transition-transform duration-300"
+                  />
+                </button>
+              </div>
+            </div>
+          </div>
+        </>
+      )}
+
+ 
+    </>
   );
-}
+};
+
+export default NavigationHeader;
