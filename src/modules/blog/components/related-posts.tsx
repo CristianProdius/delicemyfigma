@@ -2,7 +2,7 @@
 "use client";
 
 import { motion } from "motion/react";
-import { useRef } from "react";
+import { useRef, useState, useEffect } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { ArrowRight, Clock, Calendar, ChevronLeft, ChevronRight } from "lucide-react";
@@ -18,6 +18,11 @@ interface RelatedPostsProps {
 
 export const RelatedPosts = ({ posts, className }: RelatedPostsProps) => {
   const scrollContainerRef = useRef<HTMLDivElement>(null);
+  const [isMounted, setIsMounted] = useState(false);
+
+  useEffect(() => {
+    setIsMounted(true);
+  }, []);
 
   const scrollToDirection = (direction: "left" | "right") => {
     if (!scrollContainerRef.current) return;
@@ -53,21 +58,25 @@ export const RelatedPosts = ({ posts, className }: RelatedPostsProps) => {
 
         {/* Posts Carousel */}
         <div className="relative">
-          {/* Navigation Buttons */}
-          <button
-            onClick={() => scrollToDirection("left")}
-            className="absolute left-0 top-1/2 -translate-y-1/2 z-10 p-3 bg-white/90 backdrop-blur-sm rounded-full shadow-lg hover:shadow-xl transition-shadow hidden sm:block"
-            aria-label="Previous posts"
-          >
-            <ChevronLeft className="w-5 h-5 text-[#451C15]" />
-          </button>
-          <button
-            onClick={() => scrollToDirection("right")}
-            className="absolute right-0 top-1/2 -translate-y-1/2 z-10 p-3 bg-white/90 backdrop-blur-sm rounded-full shadow-lg hover:shadow-xl transition-shadow hidden sm:block"
-            aria-label="Next posts"
-          >
-            <ChevronRight className="w-5 h-5 text-[#451C15]" />
-          </button>
+          {/* Navigation Buttons - only show after mount */}
+          {isMounted && (
+            <>
+              <button
+                onClick={() => scrollToDirection("left")}
+                className="absolute left-0 top-1/2 -translate-y-1/2 z-10 p-3 bg-white/90 backdrop-blur-sm rounded-full shadow-lg hover:shadow-xl transition-shadow hidden sm:block"
+                aria-label="Previous posts"
+              >
+                <ChevronLeft className="w-5 h-5 text-[#451C15]" />
+              </button>
+              <button
+                onClick={() => scrollToDirection("right")}
+                className="absolute right-0 top-1/2 -translate-y-1/2 z-10 p-3 bg-white/90 backdrop-blur-sm rounded-full shadow-lg hover:shadow-xl transition-shadow hidden sm:block"
+                aria-label="Next posts"
+              >
+                <ChevronRight className="w-5 h-5 text-[#451C15]" />
+              </button>
+            </>
+          )}
 
           {/* Posts Container */}
           <div
@@ -100,13 +109,13 @@ export const RelatedPosts = ({ posts, className }: RelatedPostsProps) => {
                       <div className="absolute top-4 left-4">
                         <span 
                           className="inline-flex items-center px-3 py-1.5 bg-white/90 backdrop-blur-sm rounded-full text-xs font-medium [font-family:var(--font-inter)]"
-                          style={{ color: post.category.color }}
+                          style={{ color: post.category?.color || '#451C15' }}
                         >
                           <span
                             className="w-2 h-2 rounded-full mr-2"
-                            style={{ backgroundColor: post.category.color }}
+                            style={{ backgroundColor: post.category?.color || '#451C15' }}
                           />
-                          {post.category.name}
+                          {post.category?.name || 'Article'}
                         </span>
                       </div>
                     </div>
@@ -144,7 +153,7 @@ export const RelatedPosts = ({ posts, className }: RelatedPostsProps) => {
                         {/* Arrow Icon */}
                         <motion.div
                           className="p-2 rounded-full bg-[#451C15]/5 group-hover:bg-[#D4A574] transition-colors"
-                          whileHover={{ x: 5 }}
+                          whileHover={isMounted ? { x: 5 } : {}}
                         >
                           <ArrowRight className="w-4 h-4 text-[#451C15] group-hover:text-white transition-colors" />
                         </motion.div>

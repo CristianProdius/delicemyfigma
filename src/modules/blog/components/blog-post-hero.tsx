@@ -1,8 +1,7 @@
-
 "use client";
 
 import { motion, useScroll, useTransform } from "motion/react";
-import { useRef } from "react";
+import { useRef, useState, useEffect } from "react";
 import Image from "next/image";
 import { Calendar, Clock, ChevronDown } from "lucide-react";
 import { cn } from "@/lib/utils";
@@ -15,11 +14,17 @@ interface BlogPostHeroProps {
 
 export const BlogPostHero = ({ post, className }: BlogPostHeroProps) => {
   const heroRef = useRef<HTMLDivElement>(null);
+  const [isMounted, setIsMounted] = useState(false);
   
+  // Initialize scroll hooks without causing hydration issues
   const { scrollY } = useScroll();
   const y = useTransform(scrollY, [0, 500], [0, 150]);
   const opacity = useTransform(scrollY, [0, 300], [1, 0]);
   const scale = useTransform(scrollY, [0, 500], [1, 1.1]);
+
+  useEffect(() => {
+    setIsMounted(true);
+  }, []);
 
   return (
     <section
@@ -29,9 +34,9 @@ export const BlogPostHero = ({ post, className }: BlogPostHeroProps) => {
         className
       )}
     >
-      {/* Background Image with Parallax */}
+      {/* Background Image with Parallax - only apply motion after mount */}
       <motion.div
-        style={{ y, scale }}
+        style={isMounted ? { y, scale } : {}}
         className="absolute inset-0"
       >
         <Image
@@ -47,9 +52,9 @@ export const BlogPostHero = ({ post, className }: BlogPostHeroProps) => {
         <div className="absolute inset-0 bg-gradient-to-r from-[#451C15]/40 to-transparent" />
       </motion.div>
 
-      {/* Content */}
+      {/* Content - only apply opacity animation after mount */}
       <motion.div
-        style={{ opacity }}
+        style={isMounted ? { opacity } : {}}
         className="relative h-full flex items-center justify-center"
       >
         <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
@@ -62,9 +67,9 @@ export const BlogPostHero = ({ post, className }: BlogPostHeroProps) => {
             <span className="inline-flex items-center px-4 py-2 bg-white/10 backdrop-blur-md border border-white/20 rounded-full text-white/90 text-sm font-medium [font-family:var(--font-inter)]">
               <span
                 className="w-2 h-2 rounded-full mr-2"
-                style={{ backgroundColor: post.category.color }}
+                style={{ backgroundColor: post.category?.color || '#D4A574' }}
               />
-              {post.category.name}
+              {post.category?.name || 'Article'}
             </span>
           </motion.div>
 
@@ -129,24 +134,26 @@ export const BlogPostHero = ({ post, className }: BlogPostHeroProps) => {
         </div>
       </motion.div>
 
-      {/* Scroll Indicator */}
-      <motion.div
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ duration: 1, delay: 1 }}
-        className="absolute bottom-8 left-1/2 -translate-x-1/2"
-      >
+      {/* Scroll Indicator - only show after mount */}
+      {isMounted && (
         <motion.div
-          animate={{ y: [0, 10, 0] }}
-          transition={{ duration: 2, repeat: Infinity }}
-          className="flex flex-col items-center gap-2 text-white/60"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ duration: 1, delay: 1 }}
+          className="absolute bottom-8 left-1/2 -translate-x-1/2"
         >
-          <span className="text-xs uppercase tracking-wider [font-family:var(--font-inter)]">
-            Scroll to read
-          </span>
-          <ChevronDown className="w-5 h-5" />
+          <motion.div
+            animate={{ y: [0, 10, 0] }}
+            transition={{ duration: 2, repeat: Infinity }}
+            className="flex flex-col items-center gap-2 text-white/60"
+          >
+            <span className="text-xs uppercase tracking-wider [font-family:var(--font-inter)]">
+              Scroll to read
+            </span>
+            <ChevronDown className="w-5 h-5" />
+          </motion.div>
         </motion.div>
-      </motion.div>
+      )}
 
       {/* Decorative Elements */}
       <div className="absolute top-20 left-10 w-20 h-20 rounded-full bg-gradient-to-br from-[#D4A574]/20 to-transparent blur-2xl" />
