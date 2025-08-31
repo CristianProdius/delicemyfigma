@@ -12,7 +12,6 @@ import {
   Coffee,
 } from "lucide-react";
 
-
 // Import blog components
 import { BlogHero } from "../components/blog-hero";
 import { BlogListing } from "../components/blog-listing";
@@ -60,11 +59,7 @@ const BlogStats = () => {
 
   return (
     <section className="relative py-16 sm:py-20 lg:py-24 bg-gradient-to-b from-white to-[#FFF9F5]">
-      {/* Background decoration */}
-      <div className="absolute inset-0 pointer-events-none overflow-hidden">
-        <div className="absolute top-1/2 left-1/4 w-96 h-96 rounded-full bg-gradient-radial from-[#D4A574]/5 to-transparent blur-3xl" />
-        <div className="absolute bottom-1/2 right-1/4 w-80 h-80 rounded-full bg-gradient-radial from-[#E8B4B8]/5 to-transparent blur-3xl" />
-      </div>
+
 
       <div className="relative z-10 max-w-[95%] xl:max-w-[90%] mx-auto px-4 sm:px-6 lg:px-8">
         <motion.div
@@ -184,24 +179,51 @@ const BlogLoading = () => {
   );
 };
 
+// Parallax Section Component
+const ParallaxSection = ({ children }: { children: React.ReactNode }) => {
+  const ref = useRef<HTMLDivElement>(null);
+  const { scrollYProgress } = useScroll({
+    target: ref,
+    offset: ["start end", "end start"],
+  });
+
+  const backgroundY = useTransform(scrollYProgress, [0, 1], [0, -50]);
+
+  return (
+    <section
+      ref={ref}
+      id="blog-listing"
+      className="relative py-16 sm:py-20 lg:py-24 bg-white"
+    >
+      {/* Background decoration with parallax */}
+      <motion.div
+        style={{ y: backgroundY }}
+        className="absolute inset-0 pointer-events-none"
+      >
+        <div className="absolute inset-0">
+          {/* Subtle gradient */}
+          <div className="absolute inset-0 bg-gradient-to-b from-transparent via-[#FFF9F5]/30 to-transparent" />
+
+          {/* Decorative blobs */}
+          <div className="absolute top-1/3 left-0 w-96 h-96 rounded-full bg-gradient-radial from-[#D4A574]/5 to-transparent blur-3xl" />
+          <div className="absolute bottom-1/3 right-0 w-96 h-96 rounded-full bg-gradient-radial from-[#95A99C]/5 to-transparent blur-3xl" />
+        </div>
+      </motion.div>
+
+      {/* Content */}
+      <div className="relative z-10">{children}</div>
+    </section>
+  );
+};
+
 // Main BlogView Component
 export const BlogView = () => {
-  const containerRef = useRef<HTMLDivElement>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [posts, setPosts] = useState<BlogPost[]>([]);
   const [categories, setCategories] = useState<BlogCategory[]>([]);
   const [featuredPosts, setFeaturedPosts] = useState<BlogPost[]>([]);
   const [, setSearchQuery] = useState("");
   const [activeCategory, setActiveCategory] = useState<string | null>(null);
-
-  // Scroll progress tracking
-  const { scrollYProgress } = useScroll({
-    target: containerRef,
-    offset: ["start start", "end end"],
-  });
-
-  // Parallax transforms
-  const backgroundY = useTransform(scrollYProgress, [0, 1], [0, -50]);
 
   // Fetch blog data (ready for Strapi API)
   useEffect(() => {
@@ -291,7 +313,7 @@ export const BlogView = () => {
   const popularPosts = getRecentPosts(5);
 
   return (
-    <main ref={containerRef} className="flex min-h-screen flex-col">
+    <main className="flex min-h-screen flex-col">
       {/* Hero Section with search and filters */}
       <div className="relative">
         <BlogHero
@@ -305,28 +327,9 @@ export const BlogView = () => {
       {/* Stats Section */}
       <BlogStats />
 
-      {/* Main Blog Content Area */}
-      <section
-        id="blog-listing"
-        className="relative py-16 sm:py-20 lg:py-24 bg-white"
-      >
-        {/* Background decoration with parallax */}
-        <motion.div
-          style={{ y: backgroundY }}
-          className="absolute inset-0 pointer-events-none"
-        >
-          <div className="absolute inset-0">
-            {/* Subtle gradient */}
-            <div className="absolute inset-0 bg-gradient-to-b from-transparent via-[#FFF9F5]/30 to-transparent" />
-
-            {/* Decorative blobs */}
-            <div className="absolute top-1/3 left-0 w-96 h-96 rounded-full bg-gradient-radial from-[#D4A574]/5 to-transparent blur-3xl" />
-            <div className="absolute bottom-1/3 right-0 w-96 h-96 rounded-full bg-gradient-radial from-[#95A99C]/5 to-transparent blur-3xl" />
-          </div>
-        </motion.div>
-
-        {/* Content */}
-        <div className="relative z-10 max-w-[95%] xl:max-w-[90%] mx-auto px-4 sm:px-6 lg:px-8">
+      {/* Main Blog Content Area with Parallax */}
+      <ParallaxSection>
+        <div className="max-w-[95%] xl:max-w-[90%] mx-auto px-4 sm:px-6 lg:px-8">
           {/* Section Header */}
           <motion.div
             initial={{ opacity: 0, y: 30 }}
@@ -412,7 +415,7 @@ export const BlogView = () => {
             </div>
           </motion.div>
         </div>
-      </section>
+      </ParallaxSection>
 
       {/* Newsletter CTA Section */}
       <BlogNewsletter />

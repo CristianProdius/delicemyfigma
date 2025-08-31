@@ -52,7 +52,7 @@ export interface SchoolContent {
 }
 
 export const schoolContent: SchoolContent = {
-  heroTitle: "Shkolla e Čokollatës",
+  heroTitle: "Chocolate School",
   heroSubtitle: "Master the Art of Chocolate Making",
   description:
     "Welcome to Albania's premier chocolate education center, where passion meets precision. Our comprehensive programs combine traditional European techniques with modern innovation, preparing students for successful careers in the world of fine chocolate and confectionery arts.",

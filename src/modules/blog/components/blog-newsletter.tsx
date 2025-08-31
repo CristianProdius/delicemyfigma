@@ -89,36 +89,7 @@ export const BlogNewsletter = () => {
         />
       </motion.div>
 
-      {/* Floating decorations */}
-      <motion.div
-        className="absolute top-10 left-10 text-white/10"
-        animate={{
-          y: [0, -30, 0],
-          rotate: [0, 360],
-        }}
-        transition={{
-          duration: 20,
-          repeat: Infinity,
-          ease: "easeInOut",
-        }}
-      >
-        <Sparkles className="w-16 h-16" />
-      </motion.div>
 
-      <motion.div
-        className="absolute bottom-10 right-10 text-white/10"
-        animate={{
-          y: [0, 30, 0],
-          rotate: [360, 0],
-        }}
-        transition={{
-          duration: 25,
-          repeat: Infinity,
-          ease: "easeInOut",
-        }}
-      >
-        <BookOpen className="w-20 h-20" />
-      </motion.div>
 
       {/* Content */}
       <div className="relative z-10 max-w-[95%] xl:max-w-[90%] mx-auto px-4 sm:px-6 lg:px-8">

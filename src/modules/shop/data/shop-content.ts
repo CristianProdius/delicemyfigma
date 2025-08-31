@@ -65,7 +65,7 @@ export interface ShopContent {
 
 // Main Shop Content Data
 export const shopContent: ShopContent = {
-  heroTitle: "Dyqani Ekskluziv i Čokollatës",
+  heroTitle: "Exclusive Chocolate Boutique",
   heroSubtitle: "Handcrafted Artisan Collections, Delivered with Love",
   luxuryDescription:
     "Each piece is a masterpiece, crafted with Belgian chocolate and adorned with edible gold",

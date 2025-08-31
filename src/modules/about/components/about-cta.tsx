@@ -220,34 +220,7 @@ export const AboutCTA = ({ variant = "personal" }: AboutCTAProps) => {
         </motion.div>
       </div>
 
-      {/* Floating Decorations */}
-      <motion.div
-        className="absolute top-10 right-20 text-[#D4A574]/20"
-        animate={{
-          y: [0, -20, 0],
-          rotate: [0, 360],
-        }}
-        transition={{
-          y: { duration: 4, repeat: Infinity, ease: "easeInOut" },
-          rotate: { duration: 20, repeat: Infinity, ease: "linear" },
-        }}
-      >
-        <Sparkles className="w-12 h-12" />
-      </motion.div>
-
-      <motion.div
-        className="absolute bottom-10 left-20 text-[#D4A574]/20"
-        animate={{
-          y: [0, 20, 0],
-          rotate: [360, 0],
-        }}
-        transition={{
-          y: { duration: 5, repeat: Infinity, ease: "easeInOut" },
-          rotate: { duration: 25, repeat: Infinity, ease: "linear" },
-        }}
-      >
-        <Sparkles className="w-8 h-8" />
-      </motion.div>
+ 
     </section>
   );
 };

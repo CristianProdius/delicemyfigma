@@ -84,36 +84,7 @@ export const CTASection = () => {
         </div>
       </div>
 
-      {/* Enhanced floating elements */}
-      <div className="absolute inset-0 pointer-events-none">
-        {ctaContent.decorativeElements.chocolateChips.map((emoji, index) => (
-          <motion.div
-            key={index}
-            className="absolute hidden sm:block"
-            style={{
-              left: `${15 + index * 22}%`,
-              top: `${8 + index * 18}%`,
-            }}
-          >
-            <motion.div
-              className="text-2xl sm:text-3xl lg:text-4xl xl:text-5xl opacity-10 sm:opacity-15"
-              animate={{
-                y: [0, -40, 0],
-                rotate: [0, 20, -20, 0],
-                scale: [1, 1.2, 1],
-              }}
-              transition={{
-                duration: 6 + index,
-                repeat: Infinity,
-                ease: "easeInOut",
-                delay: index * 0.8,
-              }}
-            >
-              {emoji}
-            </motion.div>
-          </motion.div>
-        ))}
-      </div>
+
 
       <div className="relative z-10 px-4 sm:px-6 lg:px-8 xl:px-12 max-w-11/12 mx-auto">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 sm:gap-12 lg:gap-16 xl:gap-24 items-center">

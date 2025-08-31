@@ -127,9 +127,7 @@ export default function Footer() {
 
   return (
     <footer className="relative bg-gradient-to-b from-[#451C15] via-[#3A1610] to-[#2A100B] overflow-hidden">
-      {/* Decorative transition from CTA */}
-      <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-[#E0D9C9]/20 to-transparent" />
-
+    
       {/* Texture overlay */}
       <div
         className="absolute inset-0 opacity-[0.02]"
@@ -138,34 +136,7 @@ export default function Footer() {
         }}
       />
 
-      {/* Floating decorative elements */}
-      <div className="absolute inset-0 pointer-events-none">
-        <motion.div
-          className="absolute top-20 left-10 text-[#E0D9C9]/5 text-8xl"
-          animate={{
-            y: [0, -30, 0],
-            rotate: [0, 10, 0],
-          }}
-          transition={{ duration: 8, repeat: Infinity, ease: "easeInOut" }}
-        >
-          🍫
-        </motion.div>
-        <motion.div
-          className="absolute bottom-40 right-20 text-[#E0D9C9]/5 text-7xl"
-          animate={{
-            y: [0, 30, 0],
-            rotate: [0, -10, 0],
-          }}
-          transition={{
-            duration: 10,
-            repeat: Infinity,
-            ease: "easeInOut",
-            delay: 1,
-          }}
-        >
-          ✨
-        </motion.div>
-      </div>
+  
 
       <div className="relative z-10 px-4 sm:px-6 lg:px-8 xl:px-12 max-w-[1400px] mx-auto">
         {/* Main Footer Content */}

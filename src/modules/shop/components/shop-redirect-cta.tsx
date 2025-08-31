@@ -1,459 +1,237 @@
 "use client";
+import React from "react";
+import { motion } from "motion/react";
+import { ArrowRight, Lock, Truck, Award, Sparkles, Package, ShoppingBag } from "lucide-react";
 
-import React, { useState, useEffect, useRef } from "react";
-import {
-  ExternalLink,
-  Shield,
-  Lock,
-  Award,
-  Sparkles,
-  CheckCircle,
-  Timer,
-  ArrowRight,
-} from "lucide-react";
+// Mock data
+const shopContent = {
+  externalUrl: "https://shop.chocolaterie.com",
+  ctaButtonText: "Visit Our Boutique",
+  redirectMessage: "Discover our exclusive online boutique where every chocolate tells a story of Swiss excellence and artisan craftsmanship"
+};
 
-interface ShopRedirectCTAProps {
-  headline: string;
-  subtext: string;
-  buttonText: string;
-  externalUrl: string;
-  paymentMethods: string[];
-  securityBadges: string[];
-  isComingSoon: boolean;
-  onNewsletterSubmit?: (email: string) => void;
-}
-
-const ShopRedirectCTA: React.FC<ShopRedirectCTAProps> = ({
-  headline,
-  subtext,
-  buttonText,
-  externalUrl,
-  paymentMethods,
-  securityBadges,
-  isComingSoon,
-  onNewsletterSubmit,
-}) => {
-  const [email, setEmail] = useState("");
-  const [scrollY, setScrollY] = useState(0);
-  const [countdown, setCountdown] = useState({
-    days: 0,
-    hours: 0,
-    minutes: 0,
-    seconds: 0,
-  });
-  const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
-  const [isSubmitting, setIsSubmitting] = useState(false);
-  const [submitSuccess, setSubmitSuccess] = useState(false);
-  const sectionRef = useRef<HTMLDivElement>(null);
-
-  // Countdown timer for coming soon
-  useEffect(() => {
-    if (isComingSoon) {
-      // Set launch date (example: 30 days from now)
-      const launchDate = new Date();
-      launchDate.setDate(launchDate.getDate() + 30);
-
-      const timer = setInterval(() => {
-        const now = new Date().getTime();
-        const distance = launchDate.getTime() - now;
-
-        if (distance > 0) {
-          setCountdown({
-            days: Math.floor(distance / (1000 * 60 * 60 * 24)),
-            hours: Math.floor(
-              (distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)
-            ),
-            minutes: Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60)),
-            seconds: Math.floor((distance % (1000 * 60)) / 1000),
-          });
-        }
-      }, 1000);
-
-      return () => clearInterval(timer);
-    }
-  }, [isComingSoon]);
-
-  // Parallax scroll effect
-  useEffect(() => {
-    const handleScroll = () => {
-      setScrollY(window.scrollY);
-    };
-    window.addEventListener("scroll", handleScroll);
-    return () => window.removeEventListener("scroll", handleScroll);
-  }, []);
-
-  // Mouse move effect for floating elements
-  useEffect(() => {
-    const handleMouseMove = (e: MouseEvent) => {
-      if (sectionRef.current) {
-        const rect = sectionRef.current.getBoundingClientRect();
-        setMousePosition({
-          x: (e.clientX - rect.left - rect.width / 2) / rect.width,
-          y: (e.clientY - rect.top - rect.height / 2) / rect.height,
-        });
-      }
-    };
-    window.addEventListener("mousemove", handleMouseMove);
-    return () => window.removeEventListener("mousemove", handleMouseMove);
-  }, []);
-
-  // Handle newsletter submission
-  const handleNewsletterSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    if (email && onNewsletterSubmit) {
-      setIsSubmitting(true);
-      await onNewsletterSubmit(email);
-      setIsSubmitting(false);
-      setSubmitSuccess(true);
-      setEmail("");
-      setTimeout(() => setSubmitSuccess(false), 3000);
-    }
-  };
-
-  // Payment method icons
-  const getPaymentIcon = (method: string) => {
-    switch (method.toLowerCase()) {
-      case "visa":
-        return "💳";
-      case "mastercard":
-        return "💳";
-      case "amex":
-        return "💳";
-      case "paypal":
-        return "💰";
-      default:
-        return "💳";
-    }
-  };
-
-  // Security badge icons
-  const getSecurityIcon = (badge: string) => {
-    if (badge.includes("Encryption")) return <Lock className="w-4 h-4" />;
-    if (badge.includes("Trusted")) return <Award className="w-4 h-4" />;
-    if (badge.includes("Secure")) return <Shield className="w-4 h-4" />;
-    return <CheckCircle className="w-4 h-4" />;
-  };
-
-  // Generate floating particles
-  const particles = Array.from({ length: 15 }, (_, i) => ({
-    id: i,
-    left: Math.random() * 100,
-    animationDelay: Math.random() * 10,
-    size: Math.random() * 4 + 2,
-  }));
+export const ShopCTA: React.FC = () => {
+  const trustIndicators = [
+    { icon: Lock, text: "Secure Checkout", color: "#D4A574" },
+    { icon: Truck, text: "Worldwide Shipping", color: "#E8B4B8" },
+    { icon: Award, text: "Premium Quality", color: "#A67B5B" },
+    { icon: Package, text: "Luxury Packaging", color: "#F4A460" }
+  ];
 
   return (
-    <section
-      ref={sectionRef}
-      className="relative min-h-[600px] overflow-hidden"
-    >
-      {/* Animated Gradient Background */}
-      <div className="absolute inset-0 bg-gradient-to-br from-amber-950 via-amber-900 to-yellow-900 animate-gradient-shift">
-        {/* Overlay Pattern */}
-        <div
-          className="absolute inset-0 opacity-10"
-          style={{
-            backgroundImage: `radial-gradient(circle at 2px 2px, white 1px, transparent 1px)`,
-            backgroundSize: "30px 30px",
+    <section className="relative py-16 sm:py-20 lg:py-24 xl:py-32 overflow-hidden bg-gradient-to-b from-white to-[#FBFAF8]">
+      {/* Premium background effects */}
+      <div className="absolute inset-0 overflow-hidden pointer-events-none">
+        {/* Animated gradient orbs */}
+        <motion.div 
+          className="absolute top-1/4 -left-48 w-96 h-96 bg-gradient-to-br from-amber-200/15 to-transparent rounded-full blur-3xl"
+          animate={{
+            x: [0, 100, 0],
+            y: [0, -50, 0],
+            scale: [1, 1.2, 1],
+          }}
+          transition={{
+            duration: 30,
+            repeat: Infinity,
+            ease: "easeInOut"
+          }}
+        />
+        <motion.div 
+          className="absolute bottom-1/4 -right-48 w-[500px] h-[500px] bg-gradient-to-tl from-amber-100/15 to-transparent rounded-full blur-3xl"
+          animate={{
+            x: [0, -100, 0],
+            y: [0, 50, 0],
+            scale: [1, 1.3, 1],
+          }}
+          transition={{
+            duration: 35,
+            repeat: Infinity,
+            ease: "easeInOut"
           }}
         />
       </div>
 
-      {/* Floating Chocolate Images */}
-      <div
-        className="absolute left-10 top-20 w-32 h-32 opacity-20 pointer-events-none"
-        style={{
-          transform: `translateX(${mousePosition.x * 20}px) translateY(${
-            mousePosition.y * 20
-          }px) translateY(${scrollY * 0.1}px)`,
-        }}
-      >
-        <div className="w-full h-full bg-gradient-to-br from-amber-700 to-amber-900 rounded-lg shadow-2xl transform rotate-12" />
-      </div>
-      <div
-        className="absolute right-10 bottom-20 w-40 h-40 opacity-20 pointer-events-none"
-        style={{
-          transform: `translateX(${mousePosition.x * -20}px) translateY(${
-            mousePosition.y * -20
-          }px) translateY(${scrollY * 0.1}px)`,
-        }}
-      >
-        <div className="w-full h-full bg-gradient-to-br from-amber-800 to-amber-950 rounded-lg shadow-2xl transform -rotate-12" />
-      </div>
+      <div className="px-4 sm:px-6 lg:px-8 max-w-[91.666667%] mx-auto relative z-10">
+        {/* Main CTA Container */}
+        <motion.div
+          initial={{ opacity: 0, y: 40, scale: 0.95 }}
+          whileInView={{ opacity: 1, y: 0, scale: 1 }}
+          viewport={{ once: true, amount: 0.1 }}
+          transition={{ duration: 0.8, ease: [0.25, 0.46, 0.45, 0.94] }}
+          className="relative"
+        >
+          {/* Gradient border effect */}
+          <div className="absolute inset-0 bg-gradient-to-br from-amber-200/30 via-amber-300/20 to-amber-400/10 rounded-[3rem] blur-xl" />
+          
+          <div className="relative bg-gradient-to-br from-[#451C15] to-[#5A2419] rounded-[36px] shadow-3xl overflow-hidden">
+            {/* Inner gradient overlay */}
+            <div className="absolute inset-0 bg-gradient-to-br from-amber-500/10 via-transparent to-amber-600/10" />
+            
+            {/* Animated accent */}
+            <motion.div
+              className="absolute -top-32 -right-32 w-64 h-64 rounded-full"
+              style={{ background: "radial-gradient(circle, #D4A57430 0%, transparent 70%)" }}
+              animate={{ rotate: 360 }}
+              transition={{ duration: 50, repeat: Infinity, ease: "linear" }}
+            />
+            
+            {/* Sparkle effects */}
+            <motion.div
+              className="absolute top-20 left-20"
+              animate={{
+                opacity: [0, 1, 0],
+                scale: [0.8, 1.2, 0.8],
+              }}
+              transition={{
+                duration: 3,
+                repeat: Infinity,
+                ease: "easeInOut",
+                delay: 0
+              }}
+            >
+              <Sparkles className="w-6 h-6 text-amber-200/20" />
+            </motion.div>
+            <motion.div
+              className="absolute bottom-20 right-32"
+              animate={{
+                opacity: [0, 1, 0],
+                scale: [0.8, 1.2, 0.8],
+              }}
+              transition={{
+                duration: 3,
+                repeat: Infinity,
+                ease: "easeInOut",
+                delay: 1.5
+              }}
+            >
+              <Sparkles className="w-8 h-8 text-amber-300/20" />
+            </motion.div>
 
-      {/* Gold Particles */}
-      {particles.map((particle) => (
-        <div
-          key={particle.id}
-          className="absolute rounded-full bg-gradient-to-br from-yellow-300 to-yellow-600 opacity-40 pointer-events-none animate-float-up"
-          style={{
-            left: `${particle.left}%`,
-            width: `${particle.size}px`,
-            height: `${particle.size}px`,
-            animationDelay: `${particle.animationDelay}s`,
-            boxShadow: "0 0 10px rgba(255, 215, 0, 0.5)",
-          }}
-        />
-      ))}
+            <div className="relative p-10 sm:p-14 lg:p-20 xl:p-24">
+              {/* Header */}
+              <motion.div
+                initial={{ opacity: 0, y: 30 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ delay: 0.2, duration: 0.6 }}
+                className="text-center"
+              >
+                {/* Icon */}
+                <motion.div
+                  initial={{ scale: 0, rotate: -180 }}
+                  whileInView={{ scale: 1, rotate: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ duration: 0.8, delay: 0.3, type: "spring" }}
+                  className="inline-flex items-center justify-center w-16 h-16 sm:w-20 sm:h-20 rounded-2xl bg-gradient-to-br from-white/15 to-white/5 backdrop-blur-md mb-8 shadow-2xl"
+                >
+                  <ShoppingBag className="w-8 h-8 sm:w-10 sm:h-10 text-amber-200" />
+                </motion.div>
 
-      {/* Main Content */}
-      <div className="relative z-10 px-4 py-20">
-        <div className="max-w-4xl mx-auto">
-          {/* Glass Container */}
-          <div className="bg-white/10 backdrop-blur-md rounded-3xl p-8 md:p-12 border border-white/20 shadow-2xl">
-            {isComingSoon ? (
-              /* Coming Soon State */
-              <div className="text-center">
-                {/* Animated Clock Icon */}
-                <div className="mb-6 flex justify-center">
-                  <div className="w-20 h-20 bg-gradient-to-br from-yellow-400 to-amber-500 rounded-full flex items-center justify-center animate-pulse">
-                    <Timer className="w-10 h-10 text-white" />
-                  </div>
-                </div>
-
-                {/* Coming Soon Headline */}
-                <h2 className="text-4xl md:text-5xl font-serif font-bold text-white mb-4">
-                  Boutique Opening Soon
-                </h2>
-                <p className="text-xl text-white/90 mb-8">
-                  Our exclusive chocolate boutique is preparing something
-                  extraordinary for you
-                </p>
-
-                {/* Countdown Timer */}
-                <div className="flex justify-center gap-4 mb-12">
-                  {Object.entries(countdown).map(([unit, value]) => (
-                    <div key={unit} className="text-center">
-                      <div className="bg-white/20 backdrop-blur-sm rounded-xl p-4 border border-white/30">
-                        <div className="text-3xl md:text-4xl font-bold text-amber-400">
-                          {value.toString().padStart(2, "0")}
-                        </div>
-                        <div className="text-xs text-white/80 uppercase tracking-wider mt-1">
-                          {unit}
-                        </div>
-                      </div>
-                    </div>
-                  ))}
-                </div>
-
-                {/* VIP Early Access Signup */}
-                <div className="bg-black/20 rounded-2xl p-6">
-                  <h3 className="text-xl font-serif text-white mb-2">
-                    Join Our VIP List
-                  </h3>
-                  <p className="text-white/80 mb-4">
-                    Be the first to know when we open & receive exclusive early
-                    access
-                  </p>
-                  <form
-                    onSubmit={handleNewsletterSubmit}
-                    className="flex flex-col md:flex-row gap-3 max-w-md mx-auto"
-                  >
-                    <input
-                      type="email"
-                      value={email}
-                      onChange={(e) => setEmail(e.target.value)}
-                      placeholder="Enter your email"
-                      className="flex-1 px-4 py-3 bg-white/20 backdrop-blur-sm border border-white/30 rounded-full text-white placeholder-white/60 focus:outline-none focus:border-amber-400 transition-colors"
-                      required
-                    />
-                    <button
-                      type="submit"
-                      disabled={isSubmitting}
-                      className="px-6 py-3 bg-gradient-to-r from-amber-500 to-yellow-500 text-white font-semibold rounded-full hover:scale-105 transition-transform duration-300 disabled:opacity-50"
-                    >
-                      {isSubmitting ? "Joining..." : "Get Early Access"}
-                    </button>
-                  </form>
-                  {submitSuccess && (
-                    <p className="text-green-400 text-sm mt-3">
-                      Welcome to our VIP list! 🎉
-                    </p>
-                  )}
-                </div>
-              </div>
-            ) : (
-              /* Regular State */
-              <>
                 {/* Headline */}
-                <h2 className="text-4xl md:text-6xl font-serif font-bold text-center mb-6 text-white leading-tight">
-                  {headline}
+                <h2 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-extralight font-serif text-white mb-6 leading-[1.1] tracking-tight">
+                  Experience Chocolate
+                  <span className="block italic font-thin text-transparent bg-clip-text bg-gradient-to-r from-amber-200 to-amber-400 mt-2">
+                    Perfection
+                  </span>
                 </h2>
 
                 {/* Subtext */}
-                <p className="text-xl md:text-2xl text-center text-white/90 mb-10 font-serif">
-                  {subtext}
+                <p className="text-base sm:text-lg lg:text-xl xl:text-2xl text-white/60 max-w-3xl mx-auto mb-10 sm:mb-12 leading-relaxed font-light">
+                  {shopContent.redirectMessage}
                 </p>
 
                 {/* Primary CTA Button */}
-                <div className="flex justify-center mb-12">
-                  <a
-                    href={externalUrl}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="group relative inline-flex items-center space-x-3 px-10 py-5 bg-gradient-to-r from-amber-500 to-yellow-500 text-white rounded-full shadow-2xl hover:scale-105 transform transition-all duration-300 animate-pulse-glow"
-                  >
-                    <span className="text-xl font-bold tracking-wide">
-                      {buttonText}
-                    </span>
-                    <ArrowRight className="w-6 h-6 transform group-hover:translate-x-2 transition-transform duration-300" />
-                    <ExternalLink className="w-4 h-4 opacity-70" />
-                  </a>
-                </div>
+                <motion.a
+                  href={shopContent.externalUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  whileHover={{ scale: 1.05 }}
+                  whileTap={{ scale: 0.98 }}
+                  className="inline-flex items-center gap-4 px-12 sm:px-16 py-5 sm:py-6 bg-gradient-to-r from-white to-amber-50 text-[#451C15] hover:from-amber-50 hover:to-white rounded-full transition-all group shadow-3xl hover:shadow-amber-200/40 text-lg sm:text-xl font-medium relative overflow-hidden"
+                  style={{
+                    boxShadow: "0 20px 50px rgba(212, 165, 116, 0.4)",
+                  }}
+                >
+                  {/* Button shimmer */}
+                  <div className="absolute inset-0 -top-4 bg-gradient-to-r from-transparent via-white/40 to-transparent skew-x-12 translate-x-[-200%] group-hover:translate-x-[200%] transition-transform duration-1000" />
+                  
+                  <ShoppingBag className="relative z-10 w-6 h-6" />
+                  <span className="relative z-10">{shopContent.ctaButtonText}</span>
+                  <ArrowRight className="relative z-10 w-6 h-6 transition-transform group-hover:translate-x-2" />
+                </motion.a>
 
                 {/* Trust Indicators */}
-                <div className="space-y-6">
-                  {/* Payment Methods */}
-                  <div className="flex flex-wrap justify-center gap-3">
-                    {paymentMethods.map((method) => (
-                      <div
-                        key={method}
-                        className="px-4 py-2 bg-white/10 backdrop-blur-sm border border-white/20 rounded-full flex items-center space-x-2"
+                <motion.div
+                  initial={{ opacity: 0, y: 20 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ delay: 0.4, duration: 0.6 }}
+                  className="flex flex-wrap justify-center gap-6 sm:gap-8 lg:gap-10 mt-10 sm:mt-12"
+                >
+                  {trustIndicators.map((indicator, index) => {
+                    const Icon = indicator.icon;
+                    return (
+                      <motion.div
+                        key={indicator.text}
+                        initial={{ opacity: 0, scale: 0.8 }}
+                        whileInView={{ opacity: 1, scale: 1 }}
+                        viewport={{ once: true }}
+                        transition={{ delay: 0.5 + index * 0.05, duration: 0.4 }}
+                        whileHover={{ scale: 1.1, transition: { duration: 0.2 } }}
+                        className="flex items-center gap-2 group"
                       >
-                        <span className="text-lg">
-                          {getPaymentIcon(method)}
-                        </span>
-                        <span className="text-white text-sm font-medium">
-                          {method}
-                        </span>
-                      </div>
-                    ))}
-                    <div className="px-4 py-2 bg-green-500/20 backdrop-blur-sm border border-green-400/30 rounded-full flex items-center space-x-2">
-                      <Lock className="w-4 h-4 text-green-400" />
-                      <span className="text-green-400 text-sm font-medium">
-                        Secure Checkout
-                      </span>
-                    </div>
-                  </div>
-
-                  {/* Security Badges */}
-                  <div className="flex flex-wrap justify-center gap-3">
-                    {securityBadges.map((badge) => (
-                      <div
-                        key={badge}
-                        className="px-3 py-1.5 bg-white/5 backdrop-blur-sm border border-white/10 rounded-full flex items-center space-x-1.5"
-                      >
-                        <span className="text-amber-400">
-                          {getSecurityIcon(badge)}
-                        </span>
-                        <span className="text-white/80 text-xs font-medium">
-                          {badge}
-                        </span>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-
-                {/* Newsletter Section */}
-                {onNewsletterSubmit && (
-                  <div className="mt-12 pt-12 border-t border-white/20">
-                    <h3 className="text-2xl font-serif text-white text-center mb-3">
-                      Join Our Exclusive List
-                    </h3>
-                    <p className="text-white/80 text-center mb-6">
-                      First access to limited editions • Special member pricing
-                      • Chocolate masterclass invitations
-                    </p>
-                    <form
-                      onSubmit={handleNewsletterSubmit}
-                      className="max-w-md mx-auto"
-                    >
-                      <div className="relative">
-                        <input
-                          type="email"
-                          value={email}
-                          onChange={(e) => setEmail(e.target.value)}
-                          placeholder="Enter your email for VIP access"
-                          className="w-full px-6 py-4 pr-32 bg-white/10 backdrop-blur-sm border border-white/20 rounded-full text-white placeholder-white/60 focus:outline-none focus:border-amber-400 transition-colors"
-                          required
-                        />
-                        <button
-                          type="submit"
-                          disabled={isSubmitting}
-                          className="absolute right-2 top-1/2 -translate-y-1/2 px-6 py-2 bg-gradient-to-r from-amber-500 to-yellow-500 text-white font-semibold rounded-full hover:scale-105 transition-transform duration-300 disabled:opacity-50"
+                        <div 
+                          className="p-2 rounded-lg bg-white/10 backdrop-blur-sm group-hover:bg-white/20 transition-all duration-300"
+                          style={{ boxShadow: `0 4px 20px ${indicator.color}20` }}
                         >
-                          {isSubmitting ? "..." : "Join"}
-                        </button>
-                      </div>
-                      {submitSuccess && (
-                        <p className="text-green-400 text-sm text-center mt-3">
-                          Welcome to our exclusive list! ✨
-                        </p>
-                      )}
-                      <p className="text-white/60 text-xs text-center mt-3">
-                        <Lock className="w-3 h-3 inline mr-1" />
-                        Your privacy is protected. Unsubscribe anytime.
-                      </p>
-                    </form>
-                  </div>
-                )}
-              </>
-            )}
-          </div>
+                          <Icon className="w-4 h-4 sm:w-5 sm:h-5 text-amber-200" />
+                        </div>
+                        <span className="text-xs sm:text-sm text-amber-100/70 font-light">
+                          {indicator.text}
+                        </span>
+                      </motion.div>
+                    );
+                  })}
+                </motion.div>
 
-          {/* Decorative Elements */}
-          <div className="absolute -top-10 left-1/2 -translate-x-1/2">
-            <Sparkles className="w-8 h-8 text-yellow-400 opacity-50 animate-pulse" />
+                {/* Additional Trust Text */}
+                <motion.p
+                  initial={{ opacity: 0 }}
+                  whileInView={{ opacity: 1 }}
+                  viewport={{ once: true }}
+                  transition={{ delay: 0.6, duration: 0.6 }}
+                  className="text-xs sm:text-sm text-amber-200/40 mt-8 font-light"
+                >
+                  Established 1987 • Swiss Excellence • 100% Satisfaction Guaranteed
+                </motion.p>
+              </motion.div>
+            </div>
           </div>
-        </div>
+        </motion.div>
+
+        {/* Bottom decorative element */}
+        <motion.div 
+          initial={{ opacity: 0, y: 30 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 1, delay: 0.8, ease: [0.25, 0.46, 0.45, 0.94] }}
+          className="mt-16 sm:mt-20 flex flex-col items-center justify-center"
+        >
+          <div className="flex items-center gap-6">
+            <div className="h-[1px] w-24 bg-gradient-to-r from-transparent to-[#D4A574]/50" />
+            <motion.div
+              animate={{ rotate: 360 }}
+              transition={{ duration: 10, repeat: Infinity, ease: "linear" }}
+              className="w-3 h-3 rounded-full bg-gradient-to-br from-amber-400 to-amber-600 shadow-lg shadow-amber-400/50"
+            />
+            <div className="h-[1px] w-24 bg-gradient-to-l from-transparent to-[#D4A574]/50" />
+          </div>
+          
+          <p className="text-[#451C15]/40 text-sm font-light tracking-wider uppercase mt-6">
+            A Legacy of Excellence
+          </p>
+        </motion.div>
       </div>
-
-      {/* CSS Animations */}
-      <style jsx>{`
-        @keyframes gradient-shift {
-          0%,
-          100% {
-            background-position: 0% 50%;
-          }
-          50% {
-            background-position: 100% 50%;
-          }
-        }
-
-        @keyframes float-up {
-          0% {
-            transform: translateY(100vh) rotate(0deg);
-            opacity: 0;
-          }
-          10% {
-            opacity: 0.4;
-          }
-          90% {
-            opacity: 0.4;
-          }
-          100% {
-            transform: translateY(-100vh) rotate(360deg);
-            opacity: 0;
-          }
-        }
-
-        @keyframes pulse-glow {
-          0%,
-          100% {
-            box-shadow: 0 0 20px rgba(251, 191, 36, 0.5),
-              0 0 40px rgba(251, 191, 36, 0.3);
-          }
-          50% {
-            box-shadow: 0 0 30px rgba(251, 191, 36, 0.7),
-              0 0 60px rgba(251, 191, 36, 0.4);
-          }
-        }
-
-        .animate-gradient-shift {
-          background-size: 200% 200%;
-          animation: gradient-shift 10s ease infinite;
-        }
-
-        .animate-float-up {
-          animation: float-up 15s linear infinite;
-        }
-
-        .animate-pulse-glow {
-          animation: pulse-glow 3s ease-in-out infinite;
-        }
-      `}</style>
     </section>
   );
 };
-
-export default ShopRedirectCTA;

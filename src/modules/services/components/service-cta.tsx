@@ -401,7 +401,7 @@ export const ServiceCTA = ({
                 <Button
                   onClick={onSecondaryClick}
                   variant="outline"
-                  className="group relative border-2 border-[#E0D9C9]/20 text-[#E0D9C9] hover:bg-[#E0D9C9]/10 backdrop-blur-sm px-6 sm:px-8 lg:px-10 py-5 sm:py-6 lg:py-7 rounded-full w-full sm:w-auto transition-all duration-300"
+                  className="group relative border-2 border-[#E0D9C9]/20 text-[#D4A574] hover:text-[#E0D9C9] hover:bg-[#E0D9C9]/10 backdrop-blur-sm px-6 sm:px-8 lg:px-10 py-5 sm:py-6 lg:py-7 rounded-full w-full sm:w-auto transition-all duration-300"
                 >
                   <div className="relative z-10 flex items-center justify-center gap-3">
                     <MessageCircle className="w-5 h-5" />

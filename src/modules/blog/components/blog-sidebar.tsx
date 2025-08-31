@@ -297,20 +297,7 @@ const NewsletterWidget = ({
         />
       </div>
 
-      {/* Floating decorations */}
-      <motion.div
-        className="absolute top-4 right-4 text-white/20"
-        animate={{
-          rotate: 360,
-          scale: [1, 1.2, 1],
-        }}
-        transition={{
-          rotate: { duration: 20, repeat: Infinity, ease: "linear" },
-          scale: { duration: 4, repeat: Infinity, ease: "easeInOut" },
-        }}
-      >
-        <Sparkles className="w-8 h-8" />
-      </motion.div>
+
 
       <div className="relative z-10">
         <div className="flex items-center gap-3 mb-3">

@@ -42,7 +42,7 @@ export const BlogComments = ({ className }: BlogCommentsProps) => {
       id: "1",
       author: {
         name: "Sarah Johnson",
-        avatar: "/images/avatars/avatar-1.jpg"
+        avatar: "/img/bg.jpg"
       },
       content: "This article beautifully captures the essence of artisanal chocolate making. I've always been fascinated by the bean-to-bar process, and your detailed explanation makes me appreciate my favorite chocolates even more!",
       timestamp: "2 hours ago",
@@ -53,7 +53,7 @@ export const BlogComments = ({ className }: BlogCommentsProps) => {
           id: "1-1",
           author: {
             name: "Michael Chen",
-            avatar: "/images/avatars/avatar-2.jpg"
+            avatar: "/img/bg.jpg"
           },
           content: "Couldn't agree more! The section about temperature control during tempering was particularly enlightening.",
           timestamp: "1 hour ago",
@@ -66,7 +66,7 @@ export const BlogComments = ({ className }: BlogCommentsProps) => {
       id: "2",
       author: {
         name: "Emma Wilson",
-        avatar: "/images/avatars/avatar-3.jpg"
+        avatar: "/img/bg.jpg"
       },
       content: "I visited a chocolate factory in Belgium last year, and this article brings back wonderful memories. The attention to detail in every step is what makes artisanal chocolate so special.",
       timestamp: "4 hours ago",

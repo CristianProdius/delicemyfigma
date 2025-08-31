@@ -1,417 +1,229 @@
 "use client";
 
-import React, { useEffect, useRef, useState } from "react";
-import { ShoppingBag, Award, Star, Sparkles } from "lucide-react";
+import React, { useState, useEffect } from "react";
+import { motion, useScroll, useTransform } from "motion/react";
+import { ChevronDown, ShoppingBag, Star, Sparkles, Award, Package } from "lucide-react";
 
-interface ShopHeroProps {
-  title: string;
-  subtitle: string;
-  ctaText: string;
-  ctaUrl: string;
-  secondaryCtaText: string;
-  onSecondaryClick: () => void;
-  specialOffer?: string;
-  trustBadges: Array<string>;
-  backgroundImage: string;
-}
+// Mock data
+const shopContent = {
+  specialOffer: "Limited Edition Collection",
+  heroTitle: "Artisan Chocolate Perfection",
+  heroSubtitle: "Discover our handcrafted collection of premium Swiss chocolates, made with the finest ingredients and generations of expertise",
+  externalUrl: "https://shop.chocolaterie.com",
+  ctaButtonText: "Shop Collection"
+};
 
-const ShopHero: React.FC<ShopHeroProps> = ({
-  title,
-  subtitle,
-  ctaText,
-  ctaUrl,
-  secondaryCtaText,
-  onSecondaryClick,
-  specialOffer,
-  trustBadges,
-  backgroundImage,
-}) => {
-  const [scrollY, setScrollY] = useState(0);
-  const heroRef = useRef<HTMLDivElement>(null);
-  const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
+export const ShopHero: React.FC = () => {
+  const [scrollIndicatorVisible, setScrollIndicatorVisible] = useState(true);
+  const { scrollY } = useScroll();
+  
+  // Parallax effects
+  const backgroundY = useTransform(scrollY, [0, 500], [0, -100]);
+  const contentY = useTransform(scrollY, [0, 300], [0, -50]);
+  const opacity = useTransform(scrollY, [0, 400], [1, 0.3]);
 
-  // Parallax scroll effect
   useEffect(() => {
     const handleScroll = () => {
-      setScrollY(window.scrollY);
+      setScrollIndicatorVisible(window.scrollY < 50);
     };
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
-  // Mouse move effect for floating elements
-  useEffect(() => {
-    const handleMouseMove = (e: MouseEvent) => {
-      if (heroRef.current) {
-        const rect = heroRef.current.getBoundingClientRect();
-        setMousePosition({
-          x: (e.clientX - rect.left - rect.width / 2) / rect.width,
-          y: (e.clientY - rect.top - rect.height / 2) / rect.height,
-        });
-      }
-    };
-    window.addEventListener("mousemove", handleMouseMove);
-    return () => window.removeEventListener("mousemove", handleMouseMove);
-  }, []);
+  const handleExploreClick = () => {
+    document
+      .getElementById("featured-products")
+      ?.scrollIntoView({ behavior: "smooth" });
+  };
 
-  // Generate particles for animation
-  const particles = Array.from({ length: 20 }, (_, i) => ({
-    id: i,
-    left: Math.random() * 100,
-    animationDelay: Math.random() * 10,
-    size: Math.random() * 4 + 2,
-  }));
-
-  // Generate floating chocolate pieces
-  const chocolatePieces = Array.from({ length: 8 }, (_, i) => ({
-    id: i,
-    left: Math.random() * 100,
-    animationDelay: Math.random() * 15,
-    size: Math.random() * 30 + 20,
-    rotation: Math.random() * 360,
-  }));
+  const trustBadges = [
+    { icon: Award, text: "Award Winning", color: "#D4A574" },
+    { icon: Star, text: "Artisan Crafted", color: "#E8B4B8" },
+    { icon: Package, text: "Swiss Quality", color: "#A67B5B" }
+  ];
 
   return (
-    <div
-      ref={heroRef}
-      className="relative min-h-screen w-full overflow-hidden bg-gradient-to-b from-amber-950 via-amber-900 to-amber-950"
-    >
-      {/* Parallax Background Image */}
-      <div
-        className="absolute inset-0 w-full h-[120%]"
-        style={{
-          transform: `translateY(${scrollY * 0.5}px)`,
-        }}
+    <section className="relative min-h-screen flex items-center justify-center overflow-hidden bg-white">
+      {/* Animated background gradient */}
+      <motion.div 
+        className="absolute inset-0"
+        style={{ y: backgroundY }}
       >
-        <div
-          className="absolute inset-0 bg-cover bg-center bg-no-repeat"
-          style={{
-            backgroundImage: `url(${backgroundImage})`,
-            filter: "brightness(0.4)",
-          }}
-        />
+        <div className="absolute inset-0 bg-gradient-to-b from-amber-50/50 via-white to-amber-50/30" />
+      </motion.div>
 
-        {/* Bokeh Lights Overlay */}
-        <div className="absolute inset-0 opacity-30">
-          <div className="absolute top-20 left-10 w-64 h-64 bg-yellow-400 rounded-full filter blur-[100px] animate-pulse" />
-          <div className="absolute top-40 right-20 w-96 h-96 bg-amber-300 rounded-full filter blur-[120px] animate-pulse delay-300" />
-          <div className="absolute bottom-20 left-1/3 w-80 h-80 bg-orange-400 rounded-full filter blur-[110px] animate-pulse delay-700" />
-        </div>
-      </div>
+      {/* Main Container with Glassmorphism */}
+      <motion.div 
+        className="relative w-full max-w-[91.666667%] mx-auto mt-32"
+        style={{ y: contentY, opacity }}
+      >
+        {/* Gradient border effect */}
+        <div className="absolute inset-0 bg-gradient-to-br from-amber-200/30 via-amber-300/20 to-amber-400/10 rounded-[3rem] blur-xl" />
+        
+        <div className="relative bg-gradient-to-br from-amber-950/50 via-amber-900/40 to-amber-950/50 backdrop-blur-2xl rounded-[3rem] border border-white/10 overflow-hidden">
+          {/* Animated gradient orbs */}
+          <motion.div
+            animate={{
+              x: [0, 100, 0],
+              y: [0, -100, 0],
+            }}
+            transition={{ duration: 20, repeat: Infinity, ease: "linear" }}
+            className="absolute top-20 right-20 w-[500px] h-[500px] bg-gradient-radial from-amber-400/20 via-amber-500/10 to-transparent rounded-full blur-3xl pointer-events-none"
+          />
+          <motion.div
+            animate={{
+              x: [0, -100, 0],
+              y: [0, 100, 0],
+            }}
+            transition={{ duration: 25, repeat: Infinity, ease: "linear" }}
+            className="absolute bottom-20 left-20 w-[400px] h-[400px] bg-gradient-radial from-amber-600/15 via-amber-700/10 to-transparent rounded-full blur-3xl pointer-events-none"
+          />
 
-      {/* Floating Chocolate Pieces */}
-      {chocolatePieces.map((piece) => (
-        <div
-          key={piece.id}
-          className="absolute opacity-20 pointer-events-none"
-          style={{
-            left: `${piece.left}%`,
-            animation: `floatUp 15s infinite`,
-            animationDelay: `${piece.animationDelay}s`,
-            transform: `translateX(${mousePosition.x * 20}px) translateY(${
-              mousePosition.y * 20
-            }px) rotate(${piece.rotation}deg)`,
-          }}
-        >
+          {/* Subtle noise texture overlay */}
           <div
-            className="bg-gradient-to-br from-amber-700 to-amber-900 rounded-lg shadow-2xl"
+            className="absolute inset-0 opacity-[0.015] mix-blend-overlay pointer-events-none"
             style={{
-              width: `${piece.size}px`,
-              height: `${piece.size}px`,
+              backgroundImage: 'url("/img/bg.jpg")',
+              backgroundSize: "cover",
+              backgroundPosition: "center",
             }}
           />
-        </div>
-      ))}
 
-      {/* Gold Particles */}
-      {particles.map((particle) => (
-        <div
-          key={particle.id}
-          className="absolute rounded-full bg-gradient-to-br from-yellow-300 to-yellow-600 opacity-60 pointer-events-none animate-fall"
-          style={{
-            left: `${particle.left}%`,
-            width: `${particle.size}px`,
-            height: `${particle.size}px`,
-            animationDelay: `${particle.animationDelay}s`,
-            boxShadow: "0 0 10px rgba(255, 215, 0, 0.5)",
-          }}
-        />
-      ))}
-
-      {/* Glassmorphism Overlay */}
-      <div className="absolute inset-0 bg-gradient-to-b from-black/20 via-transparent to-black/40 backdrop-blur-[2px]" />
-
-      {/* Main Content Container */}
-      <div className="relative z-10 flex flex-col items-center justify-center min-h-screen px-4 py-20">
-        {/* Luxury Cat Mascot */}
-        <div
-          className="absolute top-10 right-10 md:top-20 md:right-20 w-32 md:w-40 opacity-90"
-          style={{
-            transform: `translateX(${mousePosition.x * 10}px) translateY(${
-              mousePosition.y * 10
-            }px)`,
-          }}
-        >
-          <div className="relative">
-            {/* Cat with monocle and top hat */}
-            <div className="text-8xl md:text-9xl filter drop-shadow-2xl">
-              🐱
-            </div>
-            <div className="absolute top-0 right-0 text-4xl animate-bounce">
-              🎩
-            </div>
-            <div className="absolute top-8 left-2 text-2xl">🧐</div>
-            {/* Sparkles around cat */}
-            <Sparkles className="absolute -top-2 -left-2 w-4 h-4 text-yellow-400 animate-pulse" />
-            <Sparkles className="absolute -bottom-2 -right-2 w-4 h-4 text-yellow-400 animate-pulse delay-300" />
-          </div>
-        </div>
-
-        {/* Special Offer Card */}
-        {specialOffer && (
-          <div className="absolute top-10 left-10 md:top-20 md:left-20 animate-float">
-            <div className="relative group">
-              <div className="absolute inset-0 bg-gradient-to-r from-yellow-400 to-amber-400 rounded-2xl blur-xl opacity-50 group-hover:opacity-75 transition-opacity duration-300" />
-              <div className="relative bg-white/10 backdrop-blur-md border border-white/20 rounded-2xl p-4 md:p-6 shadow-2xl">
-                <div className="flex items-center space-x-2 mb-2">
-                  <Star className="w-5 h-5 text-yellow-400 fill-yellow-400" />
-                  <span className="text-xs font-semibold text-yellow-400 uppercase tracking-wider">
-                    Limited Offer
-                  </span>
-                </div>
-                <p className="text-white text-sm md:text-base font-medium max-w-xs">
-                  {specialOffer}
-                </p>
-                <div className="absolute -top-2 -right-2 w-8 h-8 bg-red-500 rounded-full flex items-center justify-center animate-pulse">
-                  <span className="text-white text-xs font-bold">HOT</span>
-                </div>
-              </div>
-            </div>
-          </div>
-        )}
-
-        {/* Trust Badges */}
-        <div className="flex flex-wrap gap-3 mb-8 justify-center">
-          {trustBadges.map((badge, index) => (
-            <div
-              key={index}
-              className="bg-white/10 backdrop-blur-md border border-white/20 rounded-full px-4 py-2 flex items-center space-x-2 hover:bg-white/20 transition-all duration-300 hover:scale-105"
-              style={{
-                animationDelay: `${index * 0.1}s`,
-              }}
-            >
-              <Award className="w-4 h-4 text-yellow-400" />
-              <span className="text-white text-xs md:text-sm font-medium">
-                {badge}
-              </span>
-            </div>
-          ))}
-        </div>
-
-        {/* Main Title with Gold Gradient */}
-        <h1
-          className="text-5xl md:text-7xl lg:text-8xl font-bold text-center mb-6 font-serif animate-fadeInUp"
-          style={{
-            background:
-              "linear-gradient(135deg, #FFD700 0%, #FFA500 50%, #FFD700 100%)",
-            WebkitBackgroundClip: "text",
-            WebkitTextFillColor: "transparent",
-            backgroundClip: "text",
-            textShadow: "0 0 80px rgba(255, 215, 0, 0.5)",
-            letterSpacing: "0.02em",
-          }}
-        >
-          {title}
-        </h1>
-
-        {/* Subtitle */}
-        <p
-          className="text-xl md:text-2xl lg:text-3xl text-white/90 text-center mb-12 font-serif animate-fadeInUp animation-delay-200 max-w-3xl"
-          style={{
-            letterSpacing: "0.05em",
-          }}
-        >
-          {subtitle}
-        </p>
-
-        {/* Decorative Chocolate Swirls */}
-        <div className="absolute left-0 top-1/3 opacity-20">
-          <svg
-            width="200"
-            height="200"
-            viewBox="0 0 200 200"
-            className="animate-spin-slow"
-          >
-            <path
-              d="M50,100 Q100,50 150,100 T250,100"
-              stroke="url(#goldGradient)"
-              strokeWidth="3"
-              fill="none"
-            />
-            <defs>
-              <linearGradient id="goldGradient">
-                <stop offset="0%" stopColor="#FFD700" />
-                <stop offset="100%" stopColor="#FFA500" />
-              </linearGradient>
-            </defs>
-          </svg>
-        </div>
-
-        {/* CTA Buttons */}
-        <div className="flex flex-col md:flex-row gap-4 md:gap-6 animate-fadeInUp animation-delay-400">
-          {/* Primary CTA */}
-          <a
-            href={ctaUrl}
-            className="group relative overflow-hidden rounded-full bg-gradient-to-r from-yellow-400 to-amber-500 p-[2px] hover:scale-105 transition-all duration-300"
-          >
-            <div className="relative flex items-center space-x-3 bg-black/80 backdrop-blur-sm rounded-full px-8 py-4 group-hover:bg-transparent transition-all duration-300">
-              <ShoppingBag className="w-5 h-5 text-white group-hover:rotate-12 transition-transform duration-300" />
-              <span className="text-white font-semibold text-lg">
-                {ctaText}
-              </span>
-            </div>
-            <div className="absolute inset-0 bg-gradient-to-r from-yellow-400 to-amber-500 opacity-0 group-hover:opacity-20 blur-xl transition-opacity duration-300" />
-          </a>
-
-          {/* Secondary CTA */}
-          <button
-            onClick={onSecondaryClick}
-            className="group relative overflow-hidden rounded-full border-2 border-white/30 px-8 py-4 backdrop-blur-sm hover:border-white/50 hover:bg-white/10 transition-all duration-300"
-          >
-            <span className="relative text-white font-semibold text-lg">
-              {secondaryCtaText}
-            </span>
-            <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-1000" />
-          </button>
-        </div>
-
-        {/* Gold Leaf Accents */}
-        <div className="absolute bottom-10 right-10 opacity-30 animate-float animation-delay-500">
-          <svg width="100" height="100" viewBox="0 0 100 100">
-            <path
-              d="M50,10 Q70,30 50,50 Q30,30 50,10"
-              fill="url(#leafGradient)"
-            />
-            <defs>
-              <linearGradient
-                id="leafGradient"
-                x1="0%"
-                y1="0%"
-                x2="100%"
-                y2="100%"
+          <div className="relative p-16 sm:p-20 lg:p-24 xl:p-32">
+            {/* Special offer badge */}
+            {shopContent.specialOffer && (
+              <motion.div
+                initial={{ opacity: 0, y: -20, scale: 0.9 }}
+                animate={{ opacity: 1, y: 0, scale: 1 }}
+                transition={{ duration: 0.6, type: "spring" }}
+                className="flex justify-center mb-8"
               >
-                <stop offset="0%" stopColor="#FFD700" stopOpacity="0.8" />
-                <stop offset="100%" stopColor="#FFA500" stopOpacity="0.4" />
-              </linearGradient>
-            </defs>
-          </svg>
+                <div className="inline-flex items-center gap-3 px-6 py-3 bg-gradient-to-r from-amber-400/20 to-amber-600/20 backdrop-blur-md rounded-full border border-amber-400/20">
+                  <Sparkles className="w-5 h-5 text-amber-200" />
+                  <span className="text-sm font-medium text-amber-200 tracking-[0.15em] uppercase">
+                    {shopContent.specialOffer}
+                  </span>
+                  <Sparkles className="w-5 h-5 text-amber-200" />
+                </div>
+              </motion.div>
+            )}
+
+            {/* Main title with gradient */}
+            <motion.div
+              initial={{ opacity: 0, y: 30 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{
+                delay: 0.2,
+                duration: 1,
+                ease: [0.22, 1, 0.36, 1],
+              }}
+              className="text-center mb-8"
+            >
+              <h1 className="font-serif text-5xl sm:text-6xl md:text-7xl lg:text-8xl xl:text-9xl font-extralight leading-[0.95] tracking-[-0.02em]">
+                <span className="block text-transparent bg-clip-text bg-gradient-to-br from-white via-amber-50/95 to-amber-100/90 drop-shadow-2xl">
+                  {shopContent.heroTitle.split(' ').slice(0, -1).join(' ')}
+                </span>
+                <span className="block mt-4 text-transparent bg-clip-text bg-gradient-to-br from-amber-100/90 via-amber-200/80 to-amber-300/70 italic font-thin">
+                  {shopContent.heroTitle.split(' ').slice(-1)[0]}
+                </span>
+              </h1>
+            </motion.div>
+
+            {/* Subtitle */}
+            <motion.p
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.4, duration: 0.8 }}
+              className="text-lg sm:text-xl lg:text-2xl text-amber-100/60 max-w-3xl mx-auto mb-12 font-light leading-relaxed text-center"
+            >
+              {shopContent.heroSubtitle}
+            </motion.p>
+
+            {/* Trust badges */}
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.5, duration: 0.8 }}
+              className="flex flex-wrap justify-center gap-6 sm:gap-8 lg:gap-12 mb-14"
+            >
+              {trustBadges.map((badge, index) => {
+                const Icon = badge.icon;
+                return (
+                  <motion.div
+                    key={badge.text}
+                    initial={{ opacity: 0, scale: 0.8 }}
+                    animate={{ opacity: 1, scale: 1 }}
+                    transition={{ delay: 0.6 + index * 0.1, duration: 0.5 }}
+                    whileHover={{ scale: 1.1, transition: { duration: 0.2 } }}
+                    className="flex items-center gap-2 group"
+                  >
+                    <div 
+                      className="p-2 rounded-lg bg-white/10 backdrop-blur-sm group-hover:bg-white/20 transition-all duration-300"
+                      style={{ boxShadow: `0 4px 20px ${badge.color}20` }}
+                    >
+                      <Icon className="w-5 h-5 text-amber-200" />
+                    </div>
+                    <span className="text-sm text-amber-100/70 font-light">{badge.text}</span>
+                  </motion.div>
+                );
+              })}
+            </motion.div>
+
+            {/* CTA buttons */}
+            <motion.div
+              initial={{ opacity: 0, y: 20, scale: 0.9 }}
+              animate={{ opacity: 1, y: 0, scale: 1 }}
+              transition={{ delay: 0.7, duration: 0.8, type: "spring" }}
+              className="flex flex-col sm:flex-row gap-6 justify-center"
+            >
+              {/* Primary CTA */}
+              <motion.a
+                href={shopContent.externalUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.98 }}
+                className="group relative inline-flex items-center justify-center gap-3 px-10 sm:px-12 py-4 sm:py-5 bg-gradient-to-r from-amber-100 via-amber-50 to-white text-amber-950 hover:from-white hover:via-amber-50 hover:to-amber-100 rounded-full transition-all duration-500 shadow-2xl hover:shadow-amber-200/40 hover:shadow-3xl overflow-hidden text-base sm:text-lg lg:text-xl font-medium"
+              >
+                {/* Button shimmer effect */}
+                <div className="absolute inset-0 -top-2 bg-gradient-to-r from-transparent via-white/30 to-transparent skew-x-12 translate-x-[-200%] group-hover:translate-x-[200%] transition-transform duration-1000" />
+                
+                <ShoppingBag className="relative z-10 w-5 h-5 sm:w-6 sm:h-6" />
+                <span className="relative z-10">{shopContent.ctaButtonText}</span>
+              </motion.a>
+
+              {/* Secondary CTA */}
+              <motion.button
+                onClick={handleExploreClick}
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.98 }}
+                className="inline-flex items-center justify-center px-10 sm:px-12 py-4 sm:py-5 text-amber-50 border border-amber-400/30 rounded-full hover:border-amber-400/50 hover:bg-amber-400/10 backdrop-blur transition-all text-base sm:text-lg lg:text-xl font-medium"
+              >
+                <span>Explore Collections</span>
+              </motion.button>
+            </motion.div>
+
+
+          </div>
         </div>
-      </div>
+      </motion.div>
 
-      {/* CSS Animations */}
-      <style jsx>{`
-        @keyframes fadeInUp {
-          from {
-            opacity: 0;
-            transform: translateY(30px);
-          }
-          to {
-            opacity: 1;
-            transform: translateY(0);
-          }
-        }
-
-        @keyframes float {
-          0%,
-          100% {
-            transform: translateY(0px) rotate(0deg);
-          }
-          50% {
-            transform: translateY(-20px) rotate(5deg);
-          }
-        }
-
-        @keyframes floatUp {
-          0% {
-            transform: translateY(100vh) rotate(0deg);
-            opacity: 0;
-          }
-          10% {
-            opacity: 0.2;
-          }
-          90% {
-            opacity: 0.2;
-          }
-          100% {
-            transform: translateY(-100vh) rotate(360deg);
-            opacity: 0;
-          }
-        }
-
-        @keyframes fall {
-          0% {
-            transform: translateY(-100vh) rotate(0deg);
-            opacity: 0;
-          }
-          10% {
-            opacity: 0.6;
-          }
-          90% {
-            opacity: 0.6;
-          }
-          100% {
-            transform: translateY(100vh) rotate(360deg);
-            opacity: 0;
-          }
-        }
-
-        @keyframes spin-slow {
-          from {
-            transform: rotate(0deg);
-          }
-          to {
-            transform: rotate(360deg);
-          }
-        }
-
-        .animate-fadeInUp {
-          animation: fadeInUp 1s ease-out forwards;
-        }
-
-        .animate-float {
-          animation: float 6s ease-in-out infinite;
-        }
-
-        .animate-fall {
-          animation: fall 10s linear infinite;
-        }
-
-        .animate-spin-slow {
-          animation: spin-slow 20s linear infinite;
-        }
-
-        .animation-delay-200 {
-          animation-delay: 0.2s;
-        }
-
-        .animation-delay-400 {
-          animation-delay: 0.4s;
-        }
-
-        .animation-delay-500 {
-          animation-delay: 0.5s;
-        }
-
-        .delay-300 {
-          animation-delay: 0.3s;
-        }
-
-        .delay-700 {
-          animation-delay: 0.7s;
-        }
-      `}</style>
-    </div>
+      {/* Elegant scroll indicator */}
+      <motion.div
+        className="absolute bottom-12 left-1/2 transform -translate-x-1/2 z-20"
+        initial={{ opacity: 0 }}
+        animate={{ opacity: scrollIndicatorVisible ? 1 : 0 }}
+        transition={{ duration: 0.3 }}
+      >
+        <motion.div
+          animate={{ y: [0, 10, 0] }}
+          transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
+          className="flex flex-col items-center gap-3"
+        >
+          <span className="text-xs uppercase tracking-[0.2em] text-amber-700/60 font-medium">Scroll</span>
+          <ChevronDown className="w-5 h-5 text-amber-700/40" />
+        </motion.div>
+      </motion.div>
+    </section>
   );
 };
-
-export default ShopHero;

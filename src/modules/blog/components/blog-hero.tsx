@@ -387,34 +387,7 @@ export const BlogHero = ({
             )}
           </div>
 
-          {/* Decorative floating elements */}
-          <motion.div
-            className="absolute top-10 right-10 text-amber-200/20"
-            animate={{
-              rotate: 360,
-              scale: [1, 1.2, 1],
-            }}
-            transition={{
-              rotate: { duration: 20, repeat: Infinity, ease: "linear" },
-              scale: { duration: 4, repeat: Infinity, ease: "easeInOut" },
-            }}
-          >
-            <Sparkles className="w-8 h-8" />
-          </motion.div>
-
-          <motion.div
-            className="absolute bottom-10 left-10 text-amber-300/20"
-            animate={{
-              rotate: -360,
-              scale: [1, 1.3, 1],
-            }}
-            transition={{
-              rotate: { duration: 25, repeat: Infinity, ease: "linear" },
-              scale: { duration: 5, repeat: Infinity, ease: "easeInOut" },
-            }}
-          >
-            <BookOpen className="w-10 h-10" />
-          </motion.div>
+ 
         </div>
       </motion.div>
     </section>
