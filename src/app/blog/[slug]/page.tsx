@@ -1,4 +1,3 @@
-// src/app/blog/[slug]/page.tsx
 
 import { Metadata } from "next";
 import { notFound } from "next/navigation";
@@ -8,7 +7,7 @@ import {
   blogPosts
 } from "@/modules/blog/data/blog-content";
 
-// Define the params type for Next.js 15
+
 interface BlogPostPageProps {
   params: Promise<{
     slug: string;

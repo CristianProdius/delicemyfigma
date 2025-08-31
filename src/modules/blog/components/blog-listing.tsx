@@ -9,7 +9,6 @@ import {
   ChevronLeft,
   ChevronRight,
   BookOpen,
-  
   Coffee,
   X,
 } from "lucide-react";
@@ -40,13 +39,13 @@ const SkeletonCard = ({
   variant?: "default" | "featured";
 }) => {
   const isLarge = variant === "featured";
-
+  
   return (
     <div
       className={cn(
         "relative overflow-hidden bg-white rounded-2xl border border-[#451C15]/10",
         isLarge ? "min-h-[500px]" : "min-h-[400px]",
-        isLarge && "col-span-1 sm:col-span-2 lg:row-span-2"
+        isLarge && "col-span-1 md:col-span-2"
       )}
     >
       <div className="animate-pulse">
@@ -57,25 +56,25 @@ const SkeletonCard = ({
             isLarge ? "h-64 sm:h-72" : "h-48 sm:h-56"
           )}
         />
-
+        
         {/* Content skeleton */}
         <div className="p-6 sm:p-8 space-y-4">
           {/* Category badge */}
           <div className="w-24 h-6 bg-gray-200 rounded-full" />
-
+          
           {/* Title */}
           <div className="space-y-2">
             <div className="h-6 bg-gray-200 rounded w-full" />
             <div className="h-6 bg-gray-200 rounded w-3/4" />
           </div>
-
+          
           {/* Excerpt */}
           <div className="space-y-2">
             <div className="h-4 bg-gray-200 rounded w-full" />
             <div className="h-4 bg-gray-200 rounded w-full" />
             <div className="h-4 bg-gray-200 rounded w-2/3" />
           </div>
-
+          
           {/* Author */}
           <div className="flex items-center gap-3 pt-4 border-t border-gray-100">
             <div className="w-10 h-10 bg-gray-200 rounded-full" />
@@ -86,7 +85,7 @@ const SkeletonCard = ({
           </div>
         </div>
       </div>
-
+      
       {/* Shimmer effect */}
       <div className="absolute inset-0 -translate-x-full animate-[shimmer_2s_infinite]">
         <div className="h-full w-1/2 bg-gradient-to-r from-transparent via-white/20 to-transparent" />
@@ -133,7 +132,7 @@ const EmptyState = ({
           </motion.div>
         </div>
       </motion.div>
-
+      
       {/* Message */}
       <h3 className="text-2xl font-light text-[#451C15] mb-3 [font-family:var(--font-playfair)]">
         No articles found
@@ -147,7 +146,7 @@ const EmptyState = ({
           <>Check back soon for new chocolate stories and recipes</>
         )}
       </p>
-
+      
       {/* Action button */}
       {(searchQuery || category) && (
         <motion.button
@@ -257,7 +256,7 @@ export const BlogListing = ({
   posts = blogPosts,
   categories = blogCategories,
   initialCategory = "all",
-  postsPerPage = 9,
+  postsPerPage = 8, // Changed from 9 to 8 for better 2-column layout
   showSearch = true,
   showFilters = true,
   className,
@@ -314,8 +313,7 @@ export const BlogListing = ({
 
   // Determine featured posts (first post on first page)
   const featuredPost = currentPage === 1 ? paginatedPosts[0] : null;
-  const regularPosts =
-    currentPage === 1 ? paginatedPosts.slice(1) : paginatedPosts;
+  const regularPosts = currentPage === 1 ? paginatedPosts.slice(1) : paginatedPosts;
 
   // Animation variants for staggered children
   const containerVariants = {
@@ -329,17 +327,17 @@ export const BlogListing = ({
     },
   };
 
- const itemVariants = {
-  hidden: { opacity: 0, y: 20 },
-  visible: {
-    opacity: 1,
-    y: 0,
-    transition: {
-      duration: 0.5,
-      ease: "easeInOut" as const,
+  const itemVariants = {
+    hidden: { opacity: 0, y: 20 },
+    visible: {
+      opacity: 1,
+      y: 0,
+      transition: {
+        duration: 0.5,
+        ease: "easeInOut" as const,
+      },
     },
-  },
-};
+  };
 
   return (
     <section className={cn("py-12 sm:py-16 lg:py-20", className)}>
@@ -391,7 +389,6 @@ export const BlogListing = ({
                   >
                     All Articles
                   </motion.button>
-
                   {categories.map((category) => (
                     <motion.button
                       key={category.id}
@@ -468,7 +465,6 @@ export const BlogListing = ({
                           >
                             All Articles
                           </button>
-
                           {categories.map((category) => (
                             <button
                               key={category.id}
@@ -522,20 +518,20 @@ export const BlogListing = ({
           </motion.div>
         )}
 
-        {/* Blog Grid */}
+        {/* Blog Grid - Updated to 2 columns on tablets and above */}
         <LayoutGroup>
           <motion.div
             layout
             variants={containerVariants}
             initial="hidden"
             animate="visible"
-            className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8 lg:gap-10"
+            className="grid grid-cols-1 md:grid-cols-2 gap-6 sm:gap-8 lg:gap-10"
           >
             {/* Loading State */}
             {isLoading ? (
               <>
                 <SkeletonCard variant="featured" />
-                {[...Array(5)].map((_, i) => (
+                {[...Array(3)].map((_, i) => (
                   <SkeletonCard key={i} />
                 ))}
               </>
@@ -548,13 +544,13 @@ export const BlogListing = ({
             ) : (
               // Blog Posts
               <AnimatePresence mode="popLayout">
-                {/* Featured Post (spans 2 columns on desktop) */}
+                {/* Featured Post (spans 2 columns on tablets and above) */}
                 {featuredPost && (
                   <motion.div
                     key={featuredPost.id}
                     layout
                     variants={itemVariants}
-                    className="col-span-1 sm:col-span-2 lg:row-span-1"
+                    className="col-span-1 md:col-span-2"
                   >
                     <BlogPostCard
                       post={featuredPost}
@@ -568,8 +564,8 @@ export const BlogListing = ({
                     />
                   </motion.div>
                 )}
-
-                {/* Regular Posts */}
+                
+                {/* Regular Posts - 2 per row on tablets and above */}
                 {regularPosts.map((post, index) => (
                   <motion.div
                     key={post.id}
@@ -600,8 +596,6 @@ export const BlogListing = ({
             onPageChange={setCurrentPage}
           />
         )}
-
-        
       </div>
 
       {/* Add shimmer animation keyframe */}

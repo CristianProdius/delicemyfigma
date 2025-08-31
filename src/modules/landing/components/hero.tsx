@@ -1,11 +1,10 @@
-
 "use client";
 
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
 import Image from "next/image";
-import { motion } from "motion/react";
+import { motion, useScroll, useTransform } from "motion/react";
 
 const heroContent = {
   heading: {
@@ -32,45 +31,43 @@ const heroContent = {
 };
 
 export const Hero = () => {
+  const { scrollY } = useScroll();
+  
+  // Parallax transforms - Same as BlogHero
+  const backgroundY = useTransform(scrollY, [0, 1000], [0, 200]);
+  const contentY = useTransform(scrollY, [0, 800], [0, -50]);
+  const opacity = useTransform(scrollY, [0, 400], [1, 0.3]);
+  const scale = useTransform(scrollY, [0, 500], [1, 0.95]);
+
   return (
-    <section className="relative z-10 flex flex-col w-full max-w-[91.666667%] mx-auto h-auto mt-32">
-      {/* Ultra premium glassmorphism container */}
-      <div className="relative">
-        {/* Gradient border effect */}
-        <div className="absolute inset-0 bg-gradient-to-br from-amber-200/30 via-amber-300/20 to-amber-400/10 rounded-2xl sm:rounded-[2rem] md:rounded-[2.5rem] lg:rounded-[3rem] blur-xl" />
+    <section className="relative min-h-screen flex items-center justify-center overflow-hidden">
+      {/* Background Image with Parallax - Exactly like BlogHero */}
+      <motion.div className="absolute inset-0" style={{ y: backgroundY }}>
+        <div 
+          className="absolute inset-0 bg-cover bg-center bg-no-repeat"
+          style={{ backgroundImage: "url('/img/bg.jpg')" }}
+        />
+        {/* Dark overlay for better text readability */}
+        <div className="absolute inset-0 bg-gradient-to-br from-black/70 via-black/60 to-black/70" />
+        <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent" />
+      </motion.div>
 
-        <div className="relative bg-gradient-to-br from-amber-950/50 via-amber-900/40 to-amber-950/50 backdrop-blur-2xl rounded-2xl sm:rounded-[2rem] md:rounded-[2.5rem] lg:rounded-[3rem] border border-white/10 overflow-hidden">
-          {/* Animated gradient orbs - responsive sizing */}
-          <motion.div
-            animate={{
-              x: [0, 100, 0],
-              y: [0, -100, 0],
-            }}
-            transition={{ duration: 20, repeat: Infinity, ease: "linear" }}
-            className="absolute top-10 sm:top-20 right-10 sm:right-20 w-[200px] sm:w-[300px] md:w-[400px] lg:w-[500px] h-[200px] sm:h-[300px] md:h-[400px] lg:h-[500px] bg-gradient-radial from-amber-400/20 via-amber-500/10 to-transparent rounded-full blur-3xl pointer-events-none"
-          />
-          <motion.div
-            animate={{
-              x: [0, -100, 0],
-              y: [0, 100, 0],
-            }}
-            transition={{ duration: 25, repeat: Infinity, ease: "linear" }}
-            className="absolute bottom-10 sm:bottom-20 left-10 sm:left-20 w-[150px] sm:w-[250px] md:w-[350px] lg:w-[400px] h-[150px] sm:h-[250px] md:h-[350px] lg:h-[400px] bg-gradient-radial from-amber-600/15 via-amber-700/10 to-transparent rounded-full blur-3xl pointer-events-none"
-          />
-
-          {/* Subtle noise texture overlay */}
+      {/* Glass Morphism Container - Same as BlogHero */}
+      <motion.div
+        style={{ opacity, scale, y: contentY }}
+        className="relative z-10 w-full max-w-[91.666667%] mx-auto px-4 sm:px-6 lg:px-8 py-16 sm:py-20 lg:py-24"
+      >
+        <div className="relative bg-white/10 backdrop-blur-xl rounded-3xl sm:rounded-[2rem] lg:rounded-[3rem] border border-white/20 shadow-2xl overflow-hidden">
+          {/* Noise Texture Overlay - Same as BlogHero */}
           <div
-            className="absolute inset-0 opacity-[0.015] mix-blend-overlay pointer-events-none"
+            className="absolute inset-0 opacity-[0.03] pointer-events-none"
             style={{
-              backgroundImage: 'url("/img/bg.jpg")',
-              backgroundSize: "cover",
-              backgroundPosition: "center",
+              backgroundImage:
+                "url(\"data:image/svg+xml,%3Csvg viewBox='0 0 400 400' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='3.5' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E\")",
             }}
           />
 
           <div className="relative p-6 sm:p-8 md:p-10 lg:p-14 xl:p-20">
-
-
             {/* Main content grid - adjusted for 70/30 split on desktop */}
             <div className="grid grid-cols-1 lg:grid-cols-[70fr_30fr] gap-8 md:gap-10 lg:gap-12 xl:gap-16 items-start lg:items-stretch mt-8 sm:mt-10 lg:mt-16">
               {/* Left Content - Takes 70% on desktop */}
@@ -92,7 +89,7 @@ export const Hero = () => {
                     }}
                   >
                     <h1 className="[font-family:var(--font-playfair)] text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl 2xl:text-8xl font-extralight leading-[0.95] tracking-[-0.02em]">
-                      <span className="block text-transparent bg-clip-text bg-gradient-to-br from-white via-amber-50/95 to-amber-100/90 drop-shadow-2xl">
+                      <span className="block text-transparent bg-clip-text bg-gradient-to-br from-white via-amber-50/95 to-amber-100/90">
                         {heroContent.heading.line1}
                       </span>
                       <span className="block mt-1 sm:mt-2 lg:mt-4 text-transparent bg-clip-text bg-gradient-to-br from-amber-100/90 via-amber-200/80 to-amber-300/70 italic font-thin">
@@ -181,7 +178,7 @@ export const Hero = () => {
                       <p className="text-amber-200/70 text-[10px] sm:text-xs lg:text-sm mb-2 sm:mb-3 font-medium tracking-[0.3em] uppercase [font-family:var(--font-inter)]">
                         {heroContent.quote.author}
                       </p>
-                      <p className="text-white/50 text-xs sm:text-sm lg:text-base xl:text-lg leading-relaxed italic font-light [font-family:var(--font-inter)]">
+                      <p className="text-white/60 text-xs sm:text-sm lg:text-base xl:text-lg leading-relaxed italic font-light [font-family:var(--font-inter)]">
                         {heroContent.quote.text}
                       </p>
                     </div>
@@ -207,20 +204,7 @@ export const Hero = () => {
                   }}
                   className="w-full sm:w-auto sm:flex-1 lg:flex-initial max-w-[280px] sm:max-w-none lg:max-w-[260px] xl:max-w-[280px]"
                 >
-                  <Card className="relative group bg-gradient-to-br from-white/12 via-white/8 to-amber-100/5 backdrop-blur-xl border border-white/15 p-4 sm:p-4 lg:p-5 xl:p-6 rounded-xl sm:rounded-2xl lg:rounded-3xl transition-all duration-500 shadow-2xl hover:shadow-amber-200/30 hover:shadow-3xl overflow-hidden">
-                    {/* Animated background gradient */}
-                    <motion.div
-                      className="absolute inset-0 bg-gradient-to-br from-amber-400/0 via-amber-300/10 to-amber-400/0 opacity-0 group-hover:opacity-100 transition-opacity duration-700"
-                      animate={{
-                        backgroundPosition: ["0% 0%", "100% 100%", "0% 0%"],
-                      }}
-                      transition={{
-                        duration: 10,
-                        repeat: Infinity,
-                        ease: "linear",
-                      }}
-                    />
-
+                  <Card className="relative group bg-white/5 backdrop-blur-md border border-white/10 p-4 sm:p-4 lg:p-5 xl:p-6 rounded-xl sm:rounded-2xl lg:rounded-3xl transition-all duration-500 shadow-xl hover:shadow-2xl hover:bg-white/10 overflow-hidden">
                     <div className="flex items-center justify-between gap-3 sm:gap-4 relative z-10">
                       <div className="flex -space-x-2 sm:-space-x-3">
                         {[1, 2, 3].map((_, i) => (
@@ -229,7 +213,7 @@ export const Hero = () => {
                             whileHover={{ scale: 1.15, zIndex: 10 }}
                             transition={{ type: "spring", stiffness: 400 }}
                           >
-                            <Avatar className="border-2 border-amber-200/40 w-8 h-8 sm:w-9 sm:h-9 lg:w-10 lg:h-10 xl:w-11 xl:h-11 shadow-xl hover:shadow-2xl transition-shadow duration-300">
+                            <Avatar className="border-2 border-white/20 w-8 h-8 sm:w-9 sm:h-9 lg:w-10 lg:h-10 xl:w-11 xl:h-11 shadow-xl hover:shadow-2xl transition-shadow duration-300">
                               <AvatarImage src={`/avatar-${i + 1}.jpg`} />
                               <AvatarFallback className="bg-gradient-to-br from-amber-200 to-amber-400 text-amber-900 text-[10px] sm:text-xs font-medium">
                                 U{i + 1}
@@ -237,7 +221,7 @@ export const Hero = () => {
                             </Avatar>
                           </motion.div>
                         ))}
-                        <Avatar className="border-2 border-amber-200/40 bg-gradient-to-br from-amber-500 to-amber-700 w-8 h-8 sm:w-9 sm:h-9 lg:w-10 lg:h-10 xl:w-11 xl:h-11 shadow-xl">
+                        <Avatar className="border-2 border-white/20 bg-gradient-to-br from-amber-500 to-amber-700 w-8 h-8 sm:w-9 sm:h-9 lg:w-10 lg:h-10 xl:w-11 xl:h-11 shadow-xl">
                           <AvatarFallback className="text-white text-xs sm:text-sm font-semibold">
                             +
                           </AvatarFallback>
@@ -246,7 +230,7 @@ export const Hero = () => {
 
                       <div className="text-right">
                         <motion.p
-                          className="text-xl sm:text-2xl lg:text-3xl xl:text-4xl font-extralight bg-gradient-to-br from-white via-amber-50 to-amber-200 bg-clip-text text-transparent"
+                          className="text-xl sm:text-2xl lg:text-3xl xl:text-4xl font-extralight text-transparent bg-clip-text bg-gradient-to-br from-white via-amber-50 to-amber-200"
                           animate={{ opacity: [0.7, 1, 0.7] }}
                           transition={{
                             duration: 3,
@@ -256,7 +240,7 @@ export const Hero = () => {
                         >
                           {heroContent.stats.count}
                         </motion.p>
-                        <p className="text-[10px] sm:text-xs lg:text-sm text-amber-100/60 font-light mt-0.5 sm:mt-1">
+                        <p className="text-[10px] sm:text-xs lg:text-sm text-white/60 font-light mt-0.5 sm:mt-1">
                           {heroContent.stats.label}
                         </p>
                       </div>
@@ -280,9 +264,7 @@ export const Hero = () => {
                   }}
                   className="w-full sm:w-auto sm:flex-1 lg:flex-initial max-w-[280px] sm:max-w-none lg:max-w-[260px] xl:max-w-[280px]"
                 >
-                  <Card className="relative group bg-gradient-to-br from-white/12 via-white/8 to-amber-100/5 backdrop-blur-xl border border-white/15 p-3 sm:p-4 lg:p-4 xl:p-5 rounded-xl sm:rounded-2xl lg:rounded-3xl transition-all duration-500 shadow-2xl hover:shadow-amber-200/30 hover:shadow-3xl cursor-pointer overflow-hidden">
-                    <motion.div className="absolute inset-0 bg-gradient-to-tr from-amber-400/0 via-amber-300/5 to-amber-200/10 opacity-0 group-hover:opacity-100 transition-all duration-700" />
-
+                  <Card className="relative group bg-white/5 backdrop-blur-md border border-white/10 p-3 sm:p-4 lg:p-4 xl:p-5 rounded-xl sm:rounded-2xl lg:rounded-3xl transition-all duration-500 shadow-xl hover:shadow-2xl hover:bg-white/10 cursor-pointer overflow-hidden">
                     <div className="flex items-center space-x-3 sm:space-x-4 relative z-10">
                       <motion.div
                         className="relative w-14 h-14 sm:w-16 sm:h-16 lg:w-18 lg:h-18 xl:w-20 xl:h-20 rounded-lg sm:rounded-xl lg:rounded-2xl overflow-hidden flex-shrink-0 shadow-xl group-hover:shadow-2xl transition-all duration-500"
@@ -304,7 +286,7 @@ export const Hero = () => {
                           {heroContent.article.title}
                         </h3>
                         <motion.p
-                          className="text-amber-200/50 text-[10px] sm:text-xs lg:text-sm group-hover:text-amber-200/80 transition-all duration-500 inline-flex items-center gap-1 sm:gap-2 mt-0.5 sm:mt-1"
+                          className="text-amber-200/60 text-[10px] sm:text-xs lg:text-sm group-hover:text-amber-200/80 transition-all duration-500 inline-flex items-center gap-1 sm:gap-2 mt-0.5 sm:mt-1"
                           whileHover={{ gap: "12px" }}
                         >
                           <span>{heroContent.article.cta}</span>
@@ -317,7 +299,7 @@ export const Hero = () => {
             </div>
           </div>
         </div>
-      </div>
+      </motion.div>
     </section>
   );
 };

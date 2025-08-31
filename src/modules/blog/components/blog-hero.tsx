@@ -13,31 +13,15 @@ import {
   Filter,
   ChevronRight,
 } from "lucide-react";
-import { blogCategories } from "../data/blog-content";
+import { blogCategories, getFeaturedPosts, blogPosts } from "../data/blog-content";
 
-interface BlogHeroProps {
-  onSearch?: (query: string) => void;
-  onCategoryFilter?: (category: string | null) => void;
-  totalPosts?: number;
-  featuredPost?: {
-    title: string;
-    excerpt: string;
-    category: string;
-    readingTime: number;
-  };
-}
-
-export const BlogHero = ({
-  onSearch,
-  onCategoryFilter,
-  totalPosts = 42,
-  featuredPost,
-}: BlogHeroProps) => {
+export const BlogHero = () => {
   const containerRef = useRef<HTMLDivElement>(null);
   const [searchQuery, setSearchQuery] = useState("");
   const [isSearchFocused, setIsSearchFocused] = useState(false);
   const [activeCategory, setActiveCategory] = useState<string | null>(null);
   const [showAllCategories, setShowAllCategories] = useState(false);
+  const [featuredPosts, setFeaturedPosts] = useState<any[]>([]);
 
   const { scrollY } = useScroll();
 
@@ -47,11 +31,16 @@ export const BlogHero = ({
   const opacity = useTransform(scrollY, [0, 400], [1, 0.3]);
   const scale = useTransform(scrollY, [0, 500], [1, 0.95]);
 
+  useEffect(() => {
+    setFeaturedPosts(getFeaturedPosts());
+  }, []);
+
   // Handle search
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault();
-    if (onSearch) {
-      onSearch(searchQuery);
+    const listingSection = document.getElementById("blog-listing");
+    if (listingSection) {
+      listingSection.scrollIntoView({ behavior: "smooth" });
     }
   };
 
@@ -59,13 +48,16 @@ export const BlogHero = ({
   const handleCategoryClick = (categoryId: string) => {
     const newCategory = activeCategory === categoryId ? null : categoryId;
     setActiveCategory(newCategory);
-    if (onCategoryFilter) {
-      onCategoryFilter(newCategory);
+    const listingSection = document.getElementById("blog-listing");
+    if (listingSection) {
+      listingSection.scrollIntoView({ behavior: "smooth" });
     }
   };
 
   // Animated counter for posts
+  const totalPosts = blogPosts.length;
   const [displayCount, setDisplayCount] = useState(0);
+  
   useEffect(() => {
     const timer = setTimeout(() => {
       if (displayCount < totalPosts) {
@@ -77,15 +69,29 @@ export const BlogHero = ({
     return () => clearTimeout(timer);
   }, [displayCount, totalPosts]);
 
+  const featuredPost = featuredPosts[0]
+    ? {
+        title: featuredPosts[0].title,
+        excerpt: featuredPosts[0].excerpt,
+        category: featuredPosts[0].category.name,
+        readingTime: featuredPosts[0].readingTime,
+      }
+    : undefined;
+
   return (
     <section
       ref={containerRef}
       className="relative min-h-[600px] sm:min-h-[700px] lg:min-h-[800px] flex items-center justify-center overflow-hidden"
     >
-      {/* Gradient Background */}
+      {/* Background Image with Parallax */}
       <motion.div className="absolute inset-0" style={{ y: backgroundY }}>
-        <div className="absolute inset-0 bg-gradient-to-br from-[#451C15] via-[#5A241C] to-[#451C15]" />
-        <div className="absolute inset-0 bg-gradient-to-t from-black/30 via-transparent to-transparent" />
+        <div 
+          className="absolute inset-0 bg-cover bg-center bg-no-repeat"
+          style={{ backgroundImage: "url('/img/bg.jpg')" }}
+        />
+        {/* Dark overlay for better text readability */}
+        <div className="absolute inset-0 bg-gradient-to-br from-black/70 via-black/60 to-black/70" />
+        <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent" />
       </motion.div>
 
       {/* Glass Morphism Container */}
@@ -245,7 +251,7 @@ export const BlogHero = ({
               transition={{ delay: 1, duration: 0.8 }}
               className="flex flex-wrap items-center justify-center gap-3"
             >
-              {/* Show first 4 categories or all if expanded */}
+              {/* Category buttons remain the same */}
               {(showAllCategories
                 ? blogCategories
                 : blogCategories.slice(0, 4)
@@ -331,7 +337,6 @@ export const BlogHero = ({
                   whileTap={{ scale: 0.95 }}
                   onClick={() => {
                     setActiveCategory(null);
-                    if (onCategoryFilter) onCategoryFilter(null);
                   }}
                   className="
                     px-4 py-2.5 rounded-full
@@ -348,7 +353,7 @@ export const BlogHero = ({
               )}
             </motion.div>
 
-            {/* Featured Post Teaser (Optional) */}
+            {/* Featured Post Teaser */}
             {featuredPost && (
               <motion.div
                 initial={{ opacity: 0, y: 30 }}
@@ -386,8 +391,6 @@ export const BlogHero = ({
               </motion.div>
             )}
           </div>
-
- 
         </div>
       </motion.div>
     </section>

@@ -17,10 +17,11 @@ export const ShopHero: React.FC = () => {
   const [scrollIndicatorVisible, setScrollIndicatorVisible] = useState(true);
   const { scrollY } = useScroll();
   
-  // Parallax effects
-  const backgroundY = useTransform(scrollY, [0, 500], [0, -100]);
-  const contentY = useTransform(scrollY, [0, 300], [0, -50]);
+  // Parallax transforms - Same as BlogHero
+  const backgroundY = useTransform(scrollY, [0, 1000], [0, 200]);
+  const contentY = useTransform(scrollY, [0, 800], [0, -50]);
   const opacity = useTransform(scrollY, [0, 400], [1, 0.3]);
+  const scale = useTransform(scrollY, [0, 500], [1, 0.95]);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -43,49 +44,30 @@ export const ShopHero: React.FC = () => {
   ];
 
   return (
-    <section className="relative min-h-screen flex items-center justify-center overflow-hidden bg-white">
-      {/* Animated background gradient */}
-      <motion.div 
-        className="absolute inset-0"
-        style={{ y: backgroundY }}
-      >
-        <div className="absolute inset-0 bg-gradient-to-b from-amber-50/50 via-white to-amber-50/30" />
+    <section className="relative min-h-screen flex items-center justify-center overflow-hidden">
+      {/* Background Image with Parallax - Exactly like BlogHero */}
+      <motion.div className="absolute inset-0" style={{ y: backgroundY }}>
+        <div 
+          className="absolute inset-0 bg-cover bg-center bg-no-repeat"
+          style={{ backgroundImage: "url('/img/bg.jpg')" }}
+        />
+        {/* Dark overlay for better text readability */}
+        <div className="absolute inset-0 bg-gradient-to-br from-black/70 via-black/60 to-black/70" />
+        <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent" />
       </motion.div>
 
-      {/* Main Container with Glassmorphism */}
-      <motion.div 
-        className="relative w-full max-w-[91.666667%] mx-auto mt-32"
-        style={{ y: contentY, opacity }}
+      {/* Glass Morphism Container - Same as BlogHero */}
+      <motion.div
+        style={{ opacity, scale, y: contentY }}
+        className="relative z-10 w-full max-w-[91.666667%] mx-auto px-4 sm:px-6 lg:px-8 py-16 sm:py-20 lg:py-24"
       >
-        {/* Gradient border effect */}
-        <div className="absolute inset-0 bg-gradient-to-br from-amber-200/30 via-amber-300/20 to-amber-400/10 rounded-[3rem] blur-xl" />
-        
-        <div className="relative bg-gradient-to-br from-amber-950/50 via-amber-900/40 to-amber-950/50 backdrop-blur-2xl rounded-[3rem] border border-white/10 overflow-hidden">
-          {/* Animated gradient orbs */}
-          <motion.div
-            animate={{
-              x: [0, 100, 0],
-              y: [0, -100, 0],
-            }}
-            transition={{ duration: 20, repeat: Infinity, ease: "linear" }}
-            className="absolute top-20 right-20 w-[500px] h-[500px] bg-gradient-radial from-amber-400/20 via-amber-500/10 to-transparent rounded-full blur-3xl pointer-events-none"
-          />
-          <motion.div
-            animate={{
-              x: [0, -100, 0],
-              y: [0, 100, 0],
-            }}
-            transition={{ duration: 25, repeat: Infinity, ease: "linear" }}
-            className="absolute bottom-20 left-20 w-[400px] h-[400px] bg-gradient-radial from-amber-600/15 via-amber-700/10 to-transparent rounded-full blur-3xl pointer-events-none"
-          />
-
-          {/* Subtle noise texture overlay */}
+        <div className="relative bg-white/10 backdrop-blur-xl rounded-3xl sm:rounded-[2rem] lg:rounded-[3rem] border border-white/20 shadow-2xl overflow-hidden">
+          {/* Noise Texture Overlay - Same as BlogHero */}
           <div
-            className="absolute inset-0 opacity-[0.015] mix-blend-overlay pointer-events-none"
+            className="absolute inset-0 opacity-[0.03] pointer-events-none"
             style={{
-              backgroundImage: 'url("/img/bg.jpg")',
-              backgroundSize: "cover",
-              backgroundPosition: "center",
+              backgroundImage:
+                "url(\"data:image/svg+xml,%3Csvg viewBox='0 0 400 400' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='3.5' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E\")",
             }}
           />
 
@@ -98,9 +80,9 @@ export const ShopHero: React.FC = () => {
                 transition={{ duration: 0.6, type: "spring" }}
                 className="flex justify-center mb-8"
               >
-                <div className="inline-flex items-center gap-3 px-6 py-3 bg-gradient-to-r from-amber-400/20 to-amber-600/20 backdrop-blur-md rounded-full border border-amber-400/20">
+                <div className="inline-flex items-center gap-3 px-6 py-3 bg-white/10 backdrop-blur-md rounded-full border border-white/20">
                   <Sparkles className="w-5 h-5 text-amber-200" />
-                  <span className="text-sm font-medium text-amber-200 tracking-[0.15em] uppercase">
+                  <span className="text-sm font-medium text-amber-100 tracking-[0.15em] uppercase">
                     {shopContent.specialOffer}
                   </span>
                   <Sparkles className="w-5 h-5 text-amber-200" />
@@ -120,7 +102,7 @@ export const ShopHero: React.FC = () => {
               className="text-center mb-8"
             >
               <h1 className="font-serif text-5xl sm:text-6xl md:text-7xl lg:text-8xl xl:text-9xl font-extralight leading-[0.95] tracking-[-0.02em]">
-                <span className="block text-transparent bg-clip-text bg-gradient-to-br from-white via-amber-50/95 to-amber-100/90 drop-shadow-2xl">
+                <span className="block text-transparent bg-clip-text bg-gradient-to-br from-white via-amber-50/95 to-amber-100/90">
                   {shopContent.heroTitle.split(' ').slice(0, -1).join(' ')}
                 </span>
                 <span className="block mt-4 text-transparent bg-clip-text bg-gradient-to-br from-amber-100/90 via-amber-200/80 to-amber-300/70 italic font-thin">
@@ -134,7 +116,7 @@ export const ShopHero: React.FC = () => {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.4, duration: 0.8 }}
-              className="text-lg sm:text-xl lg:text-2xl text-amber-100/60 max-w-3xl mx-auto mb-12 font-light leading-relaxed text-center"
+              className="text-lg sm:text-xl lg:text-2xl text-white/70 max-w-3xl mx-auto mb-12 font-light leading-relaxed text-center"
             >
               {shopContent.heroSubtitle}
             </motion.p>
@@ -159,11 +141,10 @@ export const ShopHero: React.FC = () => {
                   >
                     <div 
                       className="p-2 rounded-lg bg-white/10 backdrop-blur-sm group-hover:bg-white/20 transition-all duration-300"
-                      style={{ boxShadow: `0 4px 20px ${badge.color}20` }}
                     >
                       <Icon className="w-5 h-5 text-amber-200" />
                     </div>
-                    <span className="text-sm text-amber-100/70 font-light">{badge.text}</span>
+                    <span className="text-sm text-white/70 font-light">{badge.text}</span>
                   </motion.div>
                 );
               })}
@@ -202,8 +183,6 @@ export const ShopHero: React.FC = () => {
                 <span>Explore Collections</span>
               </motion.button>
             </motion.div>
-
-
           </div>
         </div>
       </motion.div>
@@ -220,8 +199,8 @@ export const ShopHero: React.FC = () => {
           transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
           className="flex flex-col items-center gap-3"
         >
-          <span className="text-xs uppercase tracking-[0.2em] text-amber-700/60 font-medium">Scroll</span>
-          <ChevronDown className="w-5 h-5 text-amber-700/40" />
+          <span className="text-xs uppercase tracking-[0.2em] text-white/60 font-medium">Scroll</span>
+          <ChevronDown className="w-5 h-5 text-white/40" />
         </motion.div>
       </motion.div>
     </section>

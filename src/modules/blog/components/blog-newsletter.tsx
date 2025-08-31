@@ -1,47 +1,32 @@
 // src/modules/blog/components/blog-newsletter.tsx
 "use client";
 
-import React, { useState, useRef } from "react";
-import { motion, useScroll, useTransform } from "motion/react";
+import React, { useState } from "react";
+import { motion } from "motion/react";
 import {
   Mail,
   Send,
   CheckCircle,
-  Sparkles,
   Coffee,
   Heart,
-  BookOpen,
   Star,
-  
   Gift,
+  Users,
 } from "lucide-react";
-
 import { Button } from "@/components/ui/button";
 
 export const BlogNewsletter = () => {
-  const containerRef = useRef<HTMLDivElement>(null);
   const [email, setEmail] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSubscribed, setIsSubscribed] = useState(false);
-
-  const { scrollYProgress } = useScroll({
-    target: containerRef,
-    offset: ["start end", "end start"],
-  });
-
-  // Parallax effects
-  const y = useTransform(scrollYProgress, [0, 1], [50, -50]);
-  const opacity = useTransform(scrollYProgress, [0, 0.5, 1], [0.8, 1, 0.8]);
 
   const handleSubmit = async () => {
     if (!email || isSubmitting) return;
 
     setIsSubmitting(true);
-
     try {
       // Simulate API call - replace with actual newsletter API
       await new Promise((resolve) => setTimeout(resolve, 2000));
-
       setIsSubscribed(true);
 
       // Reset after success message
@@ -57,42 +42,15 @@ export const BlogNewsletter = () => {
   };
 
   const benefits = [
-    { icon: Coffee, text: "Weekly chocolate recipes" },
-    { icon: Heart, text: "Exclusive tips & tricks" },
+    { icon: Coffee, text: "Weekly recipes" },
+    { icon: Heart, text: "Exclusive tips" },
     { icon: Gift, text: "Special offers" },
-    { icon: Star, text: "Early access to content" },
+    { icon: Star, text: "Early access" },
   ];
 
   return (
-    <section
-      ref={containerRef}
-      className="relative py-20 sm:py-24 lg:py-32 overflow-hidden bg-gradient-to-br from-[#451C15] via-[#5A241C] to-[#451C15]"
-    >
-      {/* Animated background pattern */}
-      <motion.div style={{ y, opacity }} className="absolute inset-0">
-        {/* Gradient overlays */}
-        <div className="absolute inset-0 bg-gradient-to-t from-black/30 to-transparent" />
-
-        {/* Decorative circles */}
-        <div className="absolute top-1/4 left-1/4 w-96 h-96 rounded-full bg-white/5 blur-3xl" />
-        <div className="absolute bottom-1/4 right-1/4 w-96 h-96 rounded-full bg-amber-400/5 blur-3xl" />
-
-        {/* Pattern overlay */}
-        <div
-          className="absolute inset-0 opacity-5"
-          style={{
-            backgroundImage: `
-              repeating-linear-gradient(45deg, transparent, transparent 40px, rgba(255,255,255,0.05) 40px, rgba(255,255,255,0.05) 80px),
-              repeating-linear-gradient(-45deg, transparent, transparent 40px, rgba(255,255,255,0.05) 40px, rgba(255,255,255,0.05) 80px)
-            `,
-          }}
-        />
-      </motion.div>
-
-
-
-      {/* Content */}
-      <div className="relative z-10 max-w-[95%] xl:max-w-[90%] mx-auto px-4 sm:px-6 lg:px-8">
+    <section className="relative py-16 sm:py-20 lg:py-24 bg-white">
+      <div className="max-w-[95%] xl:max-w-[90%] mx-auto px-4 sm:px-6 lg:px-8">
         <div className="max-w-4xl mx-auto">
           {/* Header */}
           <motion.div
@@ -100,7 +58,7 @@ export const BlogNewsletter = () => {
             whileInView={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8 }}
             viewport={{ once: true }}
-            className="text-center mb-12"
+            className="text-center mb-8 sm:mb-12"
           >
             {/* Icon */}
             <motion.div
@@ -112,31 +70,30 @@ export const BlogNewsletter = () => {
                 stiffness: 200,
               }}
               viewport={{ once: true }}
-              className="inline-flex items-center justify-center w-16 h-16 bg-white/10 backdrop-blur-sm rounded-2xl mb-6"
+              className="inline-flex items-center justify-center w-14 h-14 sm:w-16 sm:h-16 bg-[#451C15]/5 rounded-2xl mb-4 sm:mb-6"
             >
-              <Mail className="w-8 h-8 text-white" />
+              <Mail className="w-6 h-6 sm:w-8 sm:h-8 text-[#D4A574]" />
             </motion.div>
 
             {/* Title */}
-            <h2 className="text-4xl sm:text-5xl lg:text-6xl font-light text-white mb-4 [font-family:var(--font-playfair)]">
+            <h2 className="text-3xl sm:text-4xl lg:text-5xl font-light text-[#451C15] mb-3 sm:mb-4 [font-family:var(--font-playfair)]">
               Sweet Updates, Delivered
             </h2>
 
             {/* Subtitle */}
-            <p className="text-lg sm:text-xl text-white/80 max-w-2xl mx-auto [font-family:var(--font-inter)]">
+            <p className="text-base sm:text-lg text-[#451C15]/70 max-w-2xl mx-auto [font-family:var(--font-inter)] px-4">
               Join our chocolate-loving community and get exclusive recipes,
-              behind-the-scenes stories, and early access to new articles
-              delivered straight to your inbox.
+              behind-the-scenes stories, and early access to new articles.
             </p>
           </motion.div>
 
-          {/* Benefits */}
+          {/* Benefits - Responsive Grid */}
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.3, duration: 0.8 }}
             viewport={{ once: true }}
-            className="grid grid-cols-2 sm:grid-cols-4 gap-4 mb-12"
+            className="grid grid-cols-2 md:grid-cols-4 gap-4 sm:gap-6 mb-8 sm:mb-12"
           >
             {benefits.map((benefit, index) => (
               <motion.div
@@ -151,10 +108,10 @@ export const BlogNewsletter = () => {
                 viewport={{ once: true }}
                 className="flex flex-col items-center text-center"
               >
-                <div className="w-12 h-12 bg-white/10 backdrop-blur-sm rounded-xl flex items-center justify-center mb-3">
-                  <benefit.icon className="w-6 h-6 text-white/80" />
+                <div className="w-10 h-10 sm:w-12 sm:h-12 bg-[#FFF9F5] border border-[#451C15]/10 rounded-xl flex items-center justify-center mb-2 sm:mb-3">
+                  <benefit.icon className="w-5 h-5 sm:w-6 sm:h-6 text-[#D4A574]" />
                 </div>
-                <span className="text-sm text-white/70 [font-family:var(--font-inter)]">
+                <span className="text-xs sm:text-sm text-[#451C15]/60 [font-family:var(--font-inter)]">
                   {benefit.text}
                 </span>
               </motion.div>
@@ -167,59 +124,63 @@ export const BlogNewsletter = () => {
             whileInView={{ opacity: 1, scale: 1 }}
             transition={{ delay: 0.5, duration: 0.8 }}
             viewport={{ once: true }}
-            className="bg-white/10 backdrop-blur-md rounded-3xl p-8 sm:p-10 border border-white/20"
+            className="bg-[#FFF9F5] rounded-2xl sm:rounded-3xl p-6 sm:p-8 lg:p-10 border border-[#451C15]/10"
           >
             {!isSubscribed ? (
               <>
-                <div className="flex flex-col sm:flex-row gap-4 mb-6">
-                  <div className="relative flex-1">
-                    <Mail className="absolute left-5 top-1/2 -translate-y-1/2 w-5 h-5 text-white/60" />
-                    <input
-                      type="email"
-                      value={email}
-                      onChange={(e) => setEmail(e.target.value)}
-                      onKeyPress={(e) => e.key === "Enter" && handleSubmit()}
-                      placeholder="Enter your email address"
-                      className="w-full pl-14 pr-5 py-4 bg-white/10 backdrop-blur-sm border border-white/20 rounded-full text-white placeholder-white/50 focus:outline-none focus:border-white/40 transition-colors [font-family:var(--font-inter)]"
-                      disabled={isSubmitting}
-                    />
+                {/* Form Container with proper alignment */}
+                <div className="max-w-xl mx-auto">
+                  <div className="flex flex-col sm:flex-row gap-3">
+                    {/* Email Input */}
+                    <div className="relative flex-1">
+                      <Mail className="absolute left-4 sm:left-5 top-1/2 -translate-y-1/2 w-4 h-4 sm:w-5 sm:h-5 text-[#451C15]/40" />
+                      <input
+                        type="email"
+                        value={email}
+                        onChange={(e) => setEmail(e.target.value)}
+                        onKeyPress={(e) => e.key === "Enter" && handleSubmit()}
+                        placeholder="Enter your email address"
+                        className="w-full h-12 sm:h-14 pl-11 sm:pl-14 pr-4 sm:pr-5 bg-white border border-[#451C15]/10 rounded-full text-[#451C15] placeholder-[#451C15]/40 focus:outline-none focus:border-[#D4A574] transition-colors [font-family:var(--font-inter)] text-sm sm:text-base"
+                        disabled={isSubmitting}
+                      />
+                    </div>
+                    
+                    {/* Subscribe Button */}
+                    <Button
+                      onClick={handleSubmit}
+                      disabled={isSubmitting || !email}
+                      className="h-12 sm:h-14 px-6 sm:px-8 bg-[#451C15] text-white hover:bg-[#5A241C] rounded-full transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed text-sm sm:text-base [font-family:var(--font-inter)] whitespace-nowrap"
+                    >
+                      <span className="flex items-center justify-center gap-2">
+                        {isSubmitting ? (
+                          <>
+                            <motion.div
+                              animate={{ rotate: 360 }}
+                              transition={{
+                                duration: 1,
+                                repeat: Infinity,
+                                ease: "linear",
+                              }}
+                            >
+                              <Coffee className="w-4 h-4 sm:w-5 sm:h-5" />
+                            </motion.div>
+                            <span className="hidden sm:inline">Subscribing...</span>
+                            <span className="sm:hidden">Wait...</span>
+                          </>
+                        ) : (
+                          <>
+                            <span>Subscribe</span>
+                            <Send className="w-4 h-4 sm:w-5 sm:h-5" />
+                          </>
+                        )}
+                      </span>
+                    </Button>
                   </div>
-
-                  <Button
-                    onClick={handleSubmit}
-                    disabled={isSubmitting || !email}
-                    size="lg"
-                    className="relative overflow-hidden bg-white text-[#451C15] hover:bg-[#F8F5F0] rounded-full px-8 transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed"
-                  >
-                    <span className="relative z-10 flex items-center gap-2">
-                      {isSubmitting ? (
-                        <>
-                          <motion.div
-                            animate={{ rotate: 360 }}
-                            transition={{
-                              duration: 1,
-                              repeat: Infinity,
-                              ease: "linear",
-                            }}
-                          >
-                            <Coffee className="w-5 h-5" />
-                          </motion.div>
-                          <span>Subscribing...</span>
-                        </>
-                      ) : (
-                        <>
-                          <span>Subscribe Now</span>
-                          <Send className="w-5 h-5" />
-                        </>
-                      )}
-                    </span>
-                  </Button>
                 </div>
 
                 {/* Privacy note */}
-                <p className="text-xs text-white/50 text-center [font-family:var(--font-inter)]">
-                  We respect your privacy. Unsubscribe at any time. No spam,
-                  ever.
+                <p className="text-xs text-[#451C15]/50 text-center [font-family:var(--font-inter)] mt-4 sm:mt-6">
+                  We respect your privacy. Unsubscribe at any time. No spam, ever.
                 </p>
               </>
             ) : (
@@ -227,7 +188,7 @@ export const BlogNewsletter = () => {
               <motion.div
                 initial={{ opacity: 0, scale: 0.8 }}
                 animate={{ opacity: 1, scale: 1 }}
-                className="text-center py-8"
+                className="text-center py-6 sm:py-8"
               >
                 <motion.div
                   initial={{ scale: 0 }}
@@ -237,15 +198,14 @@ export const BlogNewsletter = () => {
                     stiffness: 200,
                     delay: 0.2,
                   }}
-                  className="inline-flex items-center justify-center w-16 h-16 bg-green-500/20 rounded-full mb-4"
+                  className="inline-flex items-center justify-center w-14 h-14 sm:w-16 sm:h-16 bg-green-500/10 rounded-full mb-3 sm:mb-4"
                 >
-                  <CheckCircle className="w-8 h-8 text-green-400" />
+                  <CheckCircle className="w-7 h-7 sm:w-8 sm:h-8 text-green-500" />
                 </motion.div>
-
-                <h3 className="text-2xl font-light text-white mb-2 [font-family:var(--font-playfair)]">
+                <h3 className="text-xl sm:text-2xl font-light text-[#451C15] mb-2 [font-family:var(--font-playfair)]">
                   Welcome to the Family!
                 </h3>
-                <p className="text-white/70 [font-family:var(--font-inter)]">
+                <p className="text-sm sm:text-base text-[#451C15]/70 [font-family:var(--font-inter)] px-4">
                   Check your inbox for a sweet welcome message and your first
                   exclusive recipe.
                 </p>
@@ -253,31 +213,35 @@ export const BlogNewsletter = () => {
             )}
           </motion.div>
 
-          {/* Stats */}
+          {/* Stats - Responsive */}
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.6, duration: 0.8 }}
             viewport={{ once: true }}
-            className="mt-12 flex items-center justify-center gap-8 text-white/60"
+            className="mt-8 sm:mt-12 flex flex-wrap items-center justify-center gap-4 sm:gap-8"
           >
             <div className="flex items-center gap-2">
-              <Users className="w-5 h-5" />
-              <span className="text-sm [font-family:var(--font-inter)]">
+              <Users className="w-4 h-4 sm:w-5 sm:h-5 text-[#D4A574]" />
+              <span className="text-xs sm:text-sm text-[#451C15]/60 [font-family:var(--font-inter)]">
                 15K+ Subscribers
               </span>
             </div>
-            <div className="w-px h-6 bg-white/20" />
+            
+            <div className="hidden sm:block w-px h-6 bg-[#451C15]/10" />
+            
             <div className="flex items-center gap-2">
-              <Star className="w-5 h-5" />
-              <span className="text-sm [font-family:var(--font-inter)]">
+              <Star className="w-4 h-4 sm:w-5 sm:h-5 text-[#D4A574]" />
+              <span className="text-xs sm:text-sm text-[#451C15]/60 [font-family:var(--font-inter)]">
                 Weekly Updates
               </span>
             </div>
-            <div className="w-px h-6 bg-white/20 hidden sm:block" />
-            <div className="hidden sm:flex items-center gap-2">
-              <Heart className="w-5 h-5" />
-              <span className="text-sm [font-family:var(--font-inter)]">
+            
+            <div className="hidden md:block w-px h-6 bg-[#451C15]/10" />
+            
+            <div className="flex items-center gap-2">
+              <Heart className="w-4 h-4 sm:w-5 sm:h-5 text-[#D4A574]" />
+              <span className="text-xs sm:text-sm text-[#451C15]/60 [font-family:var(--font-inter)]">
                 100% Free
               </span>
             </div>
@@ -287,8 +251,5 @@ export const BlogNewsletter = () => {
     </section>
   );
 };
-
-// Import for AnimatePresence
-import { Users } from "lucide-react";
 
 export default BlogNewsletter;

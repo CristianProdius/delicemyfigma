@@ -1,7 +1,7 @@
 "use client";
 
 import React from "react";
-import { motion } from "motion/react";
+import { motion, useScroll, useTransform } from "motion/react";
 import { schoolContent } from "../data/school-content";
 
 export const SchoolHero: React.FC = () => {
@@ -11,43 +11,43 @@ export const SchoolHero: React.FC = () => {
       ?.scrollIntoView({ behavior: "smooth" });
   };
 
+  const { scrollY } = useScroll();
+
+  // Parallax transforms - Same as BlogHero
+  const backgroundY = useTransform(scrollY, [0, 1000], [0, 200]);
+  const contentY = useTransform(scrollY, [0, 800], [0, -50]);
+  const opacity = useTransform(scrollY, [0, 400], [1, 0.3]);
+  const scale = useTransform(scrollY, [0, 500], [1, 0.95]);
+
   return (
-    <section className="relative min-h-screen flex items-center justify-center overflow-hidden ">
-      {/* Main Container with Glassmorphism */}
-      <div className="relative w-full max-w-[91.666667%] mx-auto ">
-        {/* Gradient border effect */}
-        <div className="absolute inset-0 bg-gradient-to-br from-amber-200/30 via-amber-300/20 to-amber-400/10 rounded-[3rem] blur-xl" />
+    <section className="relative min-h-screen flex items-center justify-center overflow-hidden">
+      {/* Background Image with Parallax - Exactly like BlogHero */}
+      <motion.div className="absolute inset-0" style={{ y: backgroundY }}>
+        <div 
+          className="absolute inset-0 bg-cover bg-center bg-no-repeat"
+          style={{ backgroundImage: "url('/img/bg.jpg')" }}
+        />
+        {/* Dark overlay for better text readability */}
+        <div className="absolute inset-0 bg-gradient-to-br from-black/70 via-black/60 to-black/70" />
+        <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent" />
+      </motion.div>
 
-        <div className="relative bg-gradient-to-br from-amber-950/50 via-amber-900/40 to-amber-950/50 backdrop-blur-2xl rounded-[3rem] border border-white/10 overflow-hidden">
-          {/* Animated gradient orbs */}
-          <motion.div
-            animate={{
-              x: [0, 100, 0],
-              y: [0, -100, 0],
-            }}
-            transition={{ duration: 20, repeat: Infinity, ease: "linear" }}
-            className="absolute top-20 right-20 w-[500px] h-[500px] bg-gradient-radial from-amber-400/20 via-amber-500/10 to-transparent rounded-full blur-3xl pointer-events-none"
-          />
-          <motion.div
-            animate={{
-              x: [0, -100, 0],
-              y: [0, 100, 0],
-            }}
-            transition={{ duration: 25, repeat: Infinity, ease: "linear" }}
-            className="absolute bottom-20 left-20 w-[400px] h-[400px] bg-gradient-radial from-amber-600/15 via-amber-700/10 to-transparent rounded-full blur-3xl pointer-events-none"
-          />
-
-          {/* Subtle noise texture overlay */}
+      {/* Glass Morphism Container - Same as BlogHero */}
+      <motion.div
+        style={{ opacity, scale, y: contentY }}
+        className="relative z-10 w-full max-w-[91.666667%] mx-auto px-4 sm:px-6 lg:px-8 py-16 sm:py-20 lg:py-24"
+      >
+        <div className="relative bg-white/10 backdrop-blur-xl rounded-3xl sm:rounded-[2rem] lg:rounded-[3rem] border border-white/20 shadow-2xl overflow-hidden">
+          {/* Noise Texture Overlay - Same as BlogHero */}
           <div
-            className="absolute inset-0 opacity-[0.015] mix-blend-overlay pointer-events-none"
+            className="absolute inset-0 opacity-[0.03] pointer-events-none"
             style={{
-              backgroundImage: 'url("/img/bg.jpg")',
-              backgroundSize: "cover",
-              backgroundPosition: "center",
+              backgroundImage:
+                "url(\"data:image/svg+xml,%3Csvg viewBox='0 0 400 400' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='3.5' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E\")",
             }}
           />
 
-          <div className="relative p-20">
+          <div className="relative p-8 sm:p-12 lg:p-16">
             {/* Main content grid */}
             <div className="grid lg:grid-cols-[65fr_35fr] gap-16 items-end">
               {/* Left Content */}
@@ -83,7 +83,7 @@ export const SchoolHero: React.FC = () => {
                     }}
                   >
                     <h1 className="font-serif text-7xl xl:text-8xl font-extralight leading-[0.95] tracking-[-0.02em]">
-                      <span className="block text-transparent bg-clip-text bg-gradient-to-br from-white via-amber-50/95 to-amber-100/90 drop-shadow-2xl">
+                      <span className="block text-transparent bg-clip-text bg-gradient-to-br from-white via-amber-50/95 to-amber-100/90">
                         {schoolContent.heroTitle.split(' ').slice(0, -1).join(' ')}
                       </span>
                       <span className="block mt-4 text-transparent bg-clip-text bg-gradient-to-br from-amber-100/90 via-amber-200/80 to-amber-300/70 italic font-thin">
@@ -112,7 +112,7 @@ export const SchoolHero: React.FC = () => {
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: 0.4, duration: 0.8 }}
-                  className="text-xl text-amber-100/60 leading-relaxed max-w-xl font-light"
+                  className="text-xl text-white/70 leading-relaxed max-w-xl font-light"
                 >
                   {schoolContent.heroSubtitle}
                 </motion.p>
@@ -126,19 +126,19 @@ export const SchoolHero: React.FC = () => {
                 >
                   <div className="flex items-center gap-4 group">
                     <div className="w-2 h-2 bg-gradient-to-br from-amber-400 to-amber-600 rounded-full shadow-lg shadow-amber-400/50" />
-                    <span className="text-amber-50/70 group-hover:text-amber-50/90 transition-colors">
+                    <span className="text-white/70 group-hover:text-white/90 transition-colors">
                       Professional certification programs
                     </span>
                   </div>
                   <div className="flex items-center gap-4 group">
                     <div className="w-2 h-2 bg-gradient-to-br from-amber-400 to-amber-600 rounded-full shadow-lg shadow-amber-400/50" />
-                    <span className="text-amber-50/70 group-hover:text-amber-50/90 transition-colors">
+                    <span className="text-white/70 group-hover:text-white/90 transition-colors">
                       Learn from award-winning chocolatiers
                     </span>
                   </div>
                   <div className="flex items-center gap-4 group">
                     <div className="w-2 h-2 bg-gradient-to-br from-amber-400 to-amber-600 rounded-full shadow-lg shadow-amber-400/50" />
-                    <span className="text-amber-50/70 group-hover:text-amber-50/90 transition-colors">
+                    <span className="text-white/70 group-hover:text-white/90 transition-colors">
                       Hands-on training in our state-of-the-art facility
                     </span>
                   </div>
@@ -199,13 +199,10 @@ export const SchoolHero: React.FC = () => {
                   }}
                   className="w-full max-w-[280px]"
                 >
-                  <div className="relative group bg-gradient-to-br from-white/12 via-white/8 to-amber-100/5 backdrop-blur-xl border border-white/15 p-6 rounded-3xl transition-all duration-500 shadow-2xl hover:shadow-amber-200/30 hover:shadow-3xl overflow-hidden">
-                    <motion.div
-                      className="absolute inset-0 bg-gradient-to-br from-amber-400/0 via-amber-300/10 to-amber-400/0 opacity-0 group-hover:opacity-100 transition-opacity duration-700"
-                    />
+                  <div className="relative group bg-white/5 backdrop-blur-md border border-white/10 p-6 rounded-2xl transition-all duration-500 shadow-xl hover:shadow-2xl hover:bg-white/10 overflow-hidden">
                     <div className="relative z-10">
                       <motion.p
-                        className="text-4xl font-extralight bg-gradient-to-br from-white via-amber-50 to-amber-200 bg-clip-text text-transparent"
+                        className="text-4xl font-extralight text-transparent bg-clip-text bg-gradient-to-br from-white via-amber-50 to-amber-200"
                         animate={{ opacity: [0.7, 1, 0.7] }}
                         transition={{
                           duration: 3,
@@ -215,7 +212,7 @@ export const SchoolHero: React.FC = () => {
                       >
                         500+
                       </motion.p>
-                      <p className="text-sm text-amber-100/60 font-light mt-2">
+                      <p className="text-sm text-white/60 font-light mt-2">
                         Graduates Worldwide
                       </p>
                     </div>
@@ -238,13 +235,10 @@ export const SchoolHero: React.FC = () => {
                   }}
                   className="w-full max-w-[280px]"
                 >
-                  <div className="relative group bg-gradient-to-br from-white/12 via-white/8 to-amber-100/5 backdrop-blur-xl border border-white/15 p-6 rounded-3xl transition-all duration-500 shadow-2xl hover:shadow-amber-200/30 hover:shadow-3xl overflow-hidden">
-                    <motion.div
-                      className="absolute inset-0 bg-gradient-to-br from-amber-400/0 via-amber-300/10 to-amber-400/0 opacity-0 group-hover:opacity-100 transition-opacity duration-700"
-                    />
+                  <div className="relative group bg-white/5 backdrop-blur-md border border-white/10 p-6 rounded-2xl transition-all duration-500 shadow-xl hover:shadow-2xl hover:bg-white/10 overflow-hidden">
                     <div className="relative z-10">
                       <motion.p
-                        className="text-4xl font-extralight bg-gradient-to-br from-white via-amber-50 to-amber-200 bg-clip-text text-transparent"
+                        className="text-4xl font-extralight text-transparent bg-clip-text bg-gradient-to-br from-white via-amber-50 to-amber-200"
                         animate={{ opacity: [0.7, 1, 0.7] }}
                         transition={{
                           duration: 3,
@@ -255,7 +249,7 @@ export const SchoolHero: React.FC = () => {
                       >
                         95%
                       </motion.p>
-                      <p className="text-sm text-amber-100/60 font-light mt-2">
+                      <p className="text-sm text-white/60 font-light mt-2">
                         Job Placement Rate
                       </p>
                     </div>
@@ -278,13 +272,10 @@ export const SchoolHero: React.FC = () => {
                   }}
                   className="w-full max-w-[280px]"
                 >
-                  <div className="relative group bg-gradient-to-br from-white/12 via-white/8 to-amber-100/5 backdrop-blur-xl border border-white/15 p-6 rounded-3xl transition-all duration-500 shadow-2xl hover:shadow-amber-200/30 hover:shadow-3xl overflow-hidden">
-                    <motion.div
-                      className="absolute inset-0 bg-gradient-to-br from-amber-400/0 via-amber-300/10 to-amber-400/0 opacity-0 group-hover:opacity-100 transition-opacity duration-700"
-                    />
+                  <div className="relative group bg-white/5 backdrop-blur-md border border-white/10 p-6 rounded-2xl transition-all duration-500 shadow-xl hover:shadow-2xl hover:bg-white/10 overflow-hidden">
                     <div className="relative z-10">
                       <motion.p
-                        className="text-4xl font-extralight bg-gradient-to-br from-white via-amber-50 to-amber-200 bg-clip-text text-transparent"
+                        className="text-4xl font-extralight text-transparent bg-clip-text bg-gradient-to-br from-white via-amber-50 to-amber-200"
                         animate={{ opacity: [0.7, 1, 0.7] }}
                         transition={{
                           duration: 3,
@@ -295,7 +286,7 @@ export const SchoolHero: React.FC = () => {
                       >
                         12
                       </motion.p>
-                      <p className="text-sm text-amber-100/60 font-light mt-2">
+                      <p className="text-sm text-white/60 font-light mt-2">
                         Master Chocolatiers
                       </p>
                     </div>
@@ -305,7 +296,7 @@ export const SchoolHero: React.FC = () => {
             </div>
           </div>
         </div>
-      </div>
+      </motion.div>
     </section>
   );
 };
