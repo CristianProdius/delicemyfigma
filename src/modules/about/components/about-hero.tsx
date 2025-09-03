@@ -25,7 +25,6 @@ export const AboutHero = ({
   image,
   signature,
   variant = "personal",
-  accentColor = "#D4A574",
 }: AboutHeroProps) => {
   const containerRef = useRef<HTMLDivElement>(null);
   const { scrollY } = useScroll();

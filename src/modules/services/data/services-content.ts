@@ -75,11 +75,11 @@ export const servicesContent: Service[] = [
       "Embark on an extraordinary journey into the world of artisan chocolate making. Our comprehensive adult classes combine traditional European techniques with modern innovation, taught by Master Chocolatier Olesea Kolomiets. Whether you're a passionate home cook, aspiring entrepreneur, or simply a chocolate enthusiast, our classes will transform your understanding and skills in chocolate craftsmanship. From tempering techniques to flavor pairing, from bonbon creation to business development, we cover every aspect of the chocolate arts.",
     heroImage: "/img/adult-classes.jpg",
     galleryImages: [
-      "/img/adult-class-1.jpg",
-      "/img/adult-class-2.jpg",
-      "/img/adult-class-3.jpg",
-      "/img/adult-class-4.jpg",
-      "/img/adult-class-5.jpg",
+      "/img/adult-classes.jpg",
+      "/img/kids-classes.jpg",
+      "/img/restaurant-service.jpg",
+      "/img/custom-desserts.jpg",
+      "/img/parties-events.jpg",
     ],
     features: [
       {
@@ -187,7 +187,7 @@ export const servicesContent: Service[] = [
         content:
           "Olesea's business mentorship transformed my hobby into a thriving boutique chocolate brand. Her techniques are flawless and her business insights invaluable.",
         rating: 5,
-        image: "/img/testimonial-sarah.jpg",
+        image: "/logo.png",
       },
       {
         id: "adult-2",
@@ -197,7 +197,7 @@ export const servicesContent: Service[] = [
         content:
           "The advanced techniques I learned elevated our dessert program. Olesea's attention to detail and passion for perfection is truly inspiring.",
         rating: 5,
-        image: "/img/testimonial-david.jpg",
+        image: "/logo.png",
       },
       {
         id: "adult-3",
@@ -206,7 +206,7 @@ export const servicesContent: Service[] = [
         content:
           "I came as a complete beginner and left feeling like a professional. The small class size meant personalized attention, and the atmosphere was warm and encouraging.",
         rating: 5,
-        image: "/img/testimonial-maria.jpg",
+        image: "/logo.png",
       },
     ],
     ctaText:
@@ -265,11 +265,11 @@ export const servicesContent: Service[] = [
       "Welcome to a magical world where chocolate dreams come true! Our kids' chocolate classes are specially designed to spark creativity, build confidence, and create unforgettable memories. Under careful supervision, young chocolatiers aged 5-14 explore the sweet science of chocolate making through fun, age-appropriate activities. From chocolate painting to truffle rolling, from creating edible sculptures to designing their own candy bars, every session is an adventure in taste and imagination. We maintain the highest safety standards while ensuring maximum fun!",
     heroImage: "/img/kids-classes.jpg",
     galleryImages: [
-      "/img/kids-class-1.jpg",
-      "/img/kids-class-2.jpg",
-      "/img/kids-class-3.jpg",
-      "/img/kids-class-4.jpg",
-      "/img/kids-class-5.jpg",
+      "/img/kids-classes.jpg",
+      "/img/adult-classes.jpg",
+      "/img/parties-events.jpg",
+      "/img/custom-desserts.jpg",
+      "/img/restaurant-service.jpg",
     ],
     features: [
       {
@@ -374,7 +374,7 @@ export const servicesContent: Service[] = [
         content:
           "My daughter's birthday party here was magical! The kids were engaged the entire time, and the staff was incredibly patient and fun. Best party ever!",
         rating: 5,
-        image: "/img/testimonial-jennifer.jpg",
+        image: "/logo.png",
       },
       {
         id: "kids-2",
@@ -384,7 +384,7 @@ export const servicesContent: Service[] = [
         content:
           "Our class field trip exceeded expectations. Educational, fun, and perfectly organized. The kids are still talking about it weeks later!",
         rating: 5,
-        image: "/img/testimonial-michael.jpg",
+        image: "/logo.png",
       },
       {
         id: "kids-3",
@@ -393,7 +393,7 @@ export const servicesContent: Service[] = [
         content:
           "My shy son came out of his shell during the summer camp. He made friends, learned new skills, and can't wait to go back!",
         rating: 5,
-        image: "/img/testimonial-lisa.jpg",
+        image: "/logo.png",
       },
     ],
     ctaText:
@@ -452,11 +452,11 @@ export const servicesContent: Service[] = [
       "Elevate your establishment's dessert program with our professional restaurant and café consulting services. We partner with hospitality businesses to create signature chocolate experiences that delight guests and drive revenue. From menu development and staff training to ongoing supply and seasonal specials, we provide comprehensive support tailored to your unique brand and clientele. Our expertise spans fine dining, boutique cafés, hotels, and catering companies. Let us help you stand out in the competitive culinary landscape with chocolate creations that become your signature.",
     heroImage: "/img/restaurant-service.jpg",
     galleryImages: [
-      "/img/restaurant-1.jpg",
-      "/img/restaurant-2.jpg",
-      "/img/restaurant-3.jpg",
-      "/img/restaurant-4.jpg",
-      "/img/restaurant-5.jpg",
+      "/img/restaurant-service.jpg",
+      "/img/custom-desserts.jpg",
+      "/img/adult-classes.jpg",
+      "/img/kids-classes.jpg",
+      "/img/parties-events.jpg",
     ],
     features: [
       {
@@ -524,7 +524,7 @@ export const servicesContent: Service[] = [
         content:
           "DeliceMy transformed our dessert program. Sales increased 40% and our chocolate soufflé is now our signature dish. Outstanding partnership!",
         rating: 5,
-        image: "/img/testimonial-alessandro.jpg",
+        image: "/logo.png",
       },
       {
         id: "restaurant-2",
@@ -534,7 +534,7 @@ export const servicesContent: Service[] = [
         content:
           "The custom bonbons and seasonal specials keep our customers coming back. Olesea's creativity and professionalism are unmatched.",
         rating: 5,
-        image: "/img/testimonial-emma.jpg",
+        image: "/logo.png",
       },
       {
         id: "restaurant-3",
@@ -544,7 +544,7 @@ export const servicesContent: Service[] = [
         content:
           "Our afternoon tea service is now booked weeks in advance thanks to DeliceMy's exquisite chocolate creations. A game-changer for our business.",
         rating: 5,
-        image: "/img/testimonial-james.jpg",
+        image: "/logo.png",
       },
     ],
     ctaText:
@@ -602,11 +602,11 @@ export const servicesContent: Service[] = [
       "Transform your special occasion into an unforgettable chocolate experience! Our chocolate parties and events bring the magic of artisan chocolate making directly to your celebration. Whether it's a milestone birthday, corporate team building, bridal shower, or holiday party, we create customized experiences that engage, entertain, and delight your guests. From intimate gatherings to large corporate events, our professional team handles everything, ensuring a smooth, fun, and delicious event that your guests will talk about for years to come.",
     heroImage: "/img/parties-events.jpg",
     galleryImages: [
-      "/img/party-1.jpg",
-      "/img/party-2.jpg",
-      "/img/party-3.jpg",
-      "/img/party-4.jpg",
-      "/img/party-5.jpg",
+      "/img/parties-events.jpg",
+      "/img/adult-classes.jpg",
+      "/img/kids-classes.jpg",
+      "/img/custom-desserts.jpg",
+      "/img/restaurant-service.jpg",
     ],
     features: [
       {
@@ -678,7 +678,7 @@ export const servicesContent: Service[] = [
         content:
           "Best team building event we've ever had! The chocolate making brought out creativity and laughter. Our team is still talking about it months later.",
         rating: 5,
-        image: "/img/testimonial-rachel.jpg",
+        image: "/logo.png",
       },
       {
         id: "party-2",
@@ -687,7 +687,7 @@ export const servicesContent: Service[] = [
         content:
           "We did this for my wife's bridal shower and it was perfect! Fun, elegant, and everyone loved taking home their creations. Highly recommend!",
         rating: 5,
-        image: "/img/testimonial-mark.jpg",
+        image: "/logo.png",
       },
       {
         id: "party-3",
@@ -696,7 +696,7 @@ export const servicesContent: Service[] = [
         content:
           "I've booked DeliceMy for multiple client events. They're professional, flexible, and always deliver an amazing experience. My go-to for unique parties!",
         rating: 5,
-        image: "/img/testimonial-patricia.jpg",
+        image: "/logo.png",
       },
     ],
     ctaText:
@@ -755,11 +755,11 @@ export const servicesContent: Service[] = [
       "Bring your wildest chocolate dreams to life with our custom dessert design service. We specialize in creating one-of-a-kind chocolate sculptures, decorations, and molds that capture your vision perfectly. From corporate logos in chocolate to wedding cake toppers, from architectural chocolate models to artistic installations, our design team combines artistic vision with technical expertise to create edible masterpieces. Using state-of-the-art techniques including 3D modeling and precision molding, we ensure every detail is perfect.",
     heroImage: "/img/custom-desserts.jpg",
     galleryImages: [
-      "/img/custom-1.jpg",
-      "/img/custom-2.jpg",
-      "/img/custom-3.jpg",
-      "/img/custom-4.jpg",
-      "/img/custom-5.jpg",
+      "/img/custom-desserts.jpg",
+      "/img/restaurant-service.jpg",
+      "/img/parties-events.jpg",
+      "/img/adult-classes.jpg",
+      "/img/kids-classes.jpg",
     ],
     features: [
       {
@@ -827,7 +827,7 @@ export const servicesContent: Service[] = [
         content:
           "The chocolate replica of our client's yacht was absolutely stunning! Every detail was perfect. It was the highlight of the launch party.",
         rating: 5,
-        image: "/img/testimonial-victoria.jpg",
+        image: "/logo.png",
       },
       {
         id: "custom-2",
@@ -837,7 +837,7 @@ export const servicesContent: Service[] = [
         content:
           "Our logo chocolates for the product launch were incredible. Professional, delicious, and memorable. Exceeded all expectations!",
         rating: 5,
-        image: "/img/testimonial-robert.jpg",
+        image: "/logo.png",
       },
       {
         id: "custom-3",
@@ -846,7 +846,7 @@ export const servicesContent: Service[] = [
         content:
           "The custom chocolate flowers for the royal wedding theme were breathtaking. Guests couldn't believe they were edible!",
         rating: 5,
-        image: "/img/testimonial-isabella.jpg",
+        image: "/logo.png",
       },
     ],
     ctaText:
@@ -905,11 +905,11 @@ export const servicesContent: Service[] = [
       "Express your sentiments in the sweetest way possible with our personalized chocolate gifts. Each piece is crafted with attention to detail and infused with meaning, making every bite a reminder of your thoughtfulness. From elegant corporate gifts that strengthen business relationships to romantic gestures that melt hearts, from celebration favors that guests treasure to sympathy gifts that provide comfort, our personalized chocolates speak when words aren't enough. We offer complete customization including flavors, packaging, messages, and presentation.",
     heroImage: "/img/parties-events.jpg",
     galleryImages: [
-      "/img/gift-1.jpg",
-      "/img/gift-2.jpg",
-      "/img/gift-3.jpg",
-      "/img/gift-4.jpg",
-      "/img/gift-5.jpg",
+      "/img/parties-events.jpg",
+      "/img/custom-desserts.jpg",
+      "/img/adult-classes.jpg",
+      "/img/kids-classes.jpg",
+      "/img/restaurant-service.jpg",
     ],
     features: [
       {
@@ -981,7 +981,7 @@ export const servicesContent: Service[] = [
         content:
           "Our clients were blown away by the personalized chocolate gifts. It's elevated our corporate gifting game entirely. Outstanding quality and service!",
         rating: 5,
-        image: "/img/testimonial-thomas.jpg",
+        image: "/logo.png",
       },
       {
         id: "gift-2",
@@ -990,7 +990,7 @@ export const servicesContent: Service[] = [
         content:
           "Our wedding favors were absolutely perfect! Each guest received a personalized box with our initials. So many compliments, and delicious too!",
         rating: 5,
-        image: "/img/testimonial-sophie.jpg",
+        image: "/logo.png",
       },
       {
         id: "gift-3",
@@ -1000,7 +1000,7 @@ export const servicesContent: Service[] = [
         content:
           "We use DeliceMy's chocolates for VIP welcome gifts. The personalization and quality consistently exceed our five-star standards.",
         rating: 5,
-        image: "/img/testimonial-marcus.jpg",
+        image: "/logo.png",
       },
     ],
     ctaText:

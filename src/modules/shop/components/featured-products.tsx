@@ -2,7 +2,7 @@
 
 import React, { useState } from "react";
 import { motion } from "motion/react";
-import { ArrowRight, ChevronLeft, ChevronRight, Package, Star, Sparkles } from "lucide-react";
+import { ArrowRight, ChevronLeft, ChevronRight, Package, Sparkles } from "lucide-react";
 import Image from "next/image";
 
 // Mock data

@@ -2,7 +2,7 @@
 
 import React, { useState } from "react";
 import { motion } from "motion/react";
-import { ArrowRight, Star, Check, Sparkles, GraduationCap, Award, Users, Clock } from "lucide-react";
+import { ArrowRight, Star, Sparkles, GraduationCap, Award, Users, Clock } from "lucide-react";
 
 // Mock data
 const schoolContent = {
@@ -228,7 +228,7 @@ export const SchoolCTA: React.FC = () => {
                         animate={{ opacity: 1, y: 0 }}
                         className="text-green-400 text-sm text-center mt-6"
                       >
-                        ✓ You're on the list! We'll notify you when enrollment opens.
+                        ✓ You&apos;re on the list! We&apos;ll notify you when enrollment opens.
                       </motion.p>
                     )}
                     

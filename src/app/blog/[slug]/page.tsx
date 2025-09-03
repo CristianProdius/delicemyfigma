@@ -40,7 +40,7 @@ export async function generateMetadata({
   }
 
   // Generate Open Graph image URL
-  const ogImage = post.featuredImage || "/images/og-default.jpg";
+  const ogImage = post.featuredImage || "/logo.png";
 
   return {
     title: `${post.title} | DeliceMy Blog`,

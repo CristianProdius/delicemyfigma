@@ -715,17 +715,17 @@ export const BlogPostContent = ({
         title="Professional Chocolate Making Setup"
         images={[
           {
-            src: "/images/blog/tempering-setup.jpg",
+            src: "/logo.png",
             alt: "Complete tempering setup",
             caption: "A professional chocolate tempering station",
           },
           {
-            src: "/images/blog/thermometer.jpg",
+            src: "/logo.png",
             alt: "Digital thermometer",
             caption: "Precision temperature control is crucial",
           },
           {
-            src: "/images/blog/marble-slab.jpg",
+            src: "/logo.png",
             alt: "Marble slab for tabling",
             caption: "Traditional tabling method on marble",
           },
@@ -815,7 +815,7 @@ White Chocolate:
           description:
             "Everything you need to start tempering chocolate like a pro",
           price: "$149",
-          image: "/images/products/tempering-kit.jpg",
+          image: "/logo.png",
           shopUrl: "/shop/tempering-kit",
           badge: "Bestseller",
         }}

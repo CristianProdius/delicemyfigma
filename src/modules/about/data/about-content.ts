@@ -111,8 +111,8 @@ export const oleseaContent: AboutPerson = {
   tagline: "Where Passion Meets Perfection in Every Creation",
   description:
     "With over a decade of experience in the art of chocolate and pastry making, I bring together traditional techniques and modern innovation to create unforgettable culinary experiences. My journey from a passionate home baker to a renowned chocolatier has been driven by an unwavering commitment to quality, creativity, and the joy of sharing handcrafted delights.",
-  heroImage: "/images/about/olesea-hero.jpg",
-  signature: "/images/about/signature.png",
+  heroImage: "/img/olesea-portrait.jpg",
+  signature: "/logo.png",
   timeline: [
     {
       id: "timeline-1",
@@ -121,7 +121,7 @@ export const oleseaContent: AboutPerson = {
       description:
         "Started my journey with a small home kitchen and a big dream to create artisanal chocolates that tell a story.",
       achievement: "First successful chocolate collection launched",
-      image: "/images/timeline/2012-beginning.jpg",
+      image: "/logo.png",
     },
     {
       id: "timeline-2",
@@ -130,7 +130,7 @@ export const oleseaContent: AboutPerson = {
       description:
         "Completed advanced chocolatier training at the prestigious Callebaut Academy in Belgium.",
       achievement: "Certified Master Chocolatier",
-      image: "/images/timeline/2015-certification.jpg",
+      image: "/logo.png",
     },
     {
       id: "timeline-3",
@@ -139,7 +139,7 @@ export const oleseaContent: AboutPerson = {
       description:
         "Opened our first professional chocolate studio and workshop space in the heart of the city.",
       achievement: "Established Cocoa Dreams Studio",
-      image: "/images/timeline/2018-studio.jpg",
+      image: "/logo.png",
     },
     {
       id: "timeline-4",
@@ -148,7 +148,7 @@ export const oleseaContent: AboutPerson = {
       description:
         "Launched online masterclasses and reached students globally during challenging times.",
       achievement: "Taught over 500 students worldwide",
-      image: "/images/timeline/2020-digital.jpg",
+      image: "/logo.png",
     },
     {
       id: "timeline-5",
@@ -157,7 +157,7 @@ export const oleseaContent: AboutPerson = {
       description:
         "Awarded Best Artisan Chocolatier at the International Chocolate Awards.",
       achievement: "Gold Medal Winner",
-      image: "/images/timeline/2023-award.jpg",
+      image: "/logo.png",
     },
   ],
   philosophy: [
@@ -293,7 +293,7 @@ export const companyContent: AboutCompany = {
     "To create extraordinary chocolate experiences that celebrate craftsmanship, innovation, and the pure joy of indulgence while maintaining sustainable and ethical practices.",
   vision:
     "To become the premier destination for artisanal chocolate education and bespoke confections, inspiring a global community of chocolate enthusiasts and professionals.",
-  heroImage: "/images/about/company-hero.jpg",
+  heroImage: "/img/bg.jpg",
   story: {
     chapters: [
       {
@@ -302,7 +302,7 @@ export const companyContent: AboutCompany = {
         year: "2018",
         content:
           "Born from a passion for chocolate and a dream to share the art of confectionery, Cocoa Dreams opened its doors in a cozy studio space. What started as a one-woman operation quickly grew into a beloved local institution.",
-        image: "/images/story/foundation.jpg",
+        image: "/logo.png",
       },
       {
         id: "chapter-2",
@@ -310,7 +310,7 @@ export const companyContent: AboutCompany = {
         year: "2019",
         content:
           "As word spread about our unique approach to chocolate making, we expanded our team and began offering workshops. The studio became a gathering place for chocolate lovers and aspiring chocolatiers.",
-        image: "/images/story/community.jpg",
+        image: "/logo.png",
       },
       {
         id: "chapter-3",
@@ -318,7 +318,7 @@ export const companyContent: AboutCompany = {
         year: "2021",
         content:
           "We invested in state-of-the-art equipment and launched our signature collection, featuring revolutionary flavor combinations that pushed the boundaries of traditional chocolate making.",
-        image: "/images/story/innovation.jpg",
+        image: "/logo.png",
       },
       {
         id: "chapter-4",
@@ -326,7 +326,7 @@ export const companyContent: AboutCompany = {
         year: "2023",
         content:
           "With online masterclasses and international shipping, we've connected with chocolate enthusiasts worldwide, sharing our passion and expertise across continents.",
-        image: "/images/story/global.jpg",
+        image: "/logo.png",
       },
     ],
   },
@@ -418,7 +418,7 @@ export const companyContent: AboutCompany = {
       name: "Olesea Stamatin",
       role: "Founder & Master Chocolatier",
       bio: "With over 12 years of experience, Olesea leads our creative vision and maintains the highest standards of quality in every creation.",
-      image: "/images/team/olesea.jpg",
+      image: "/img/olesea-portrait.jpg",
       specialties: ["Chocolate Tempering", "Flavor Innovation", "Sugar Art"],
     },
     {
@@ -426,7 +426,7 @@ export const companyContent: AboutCompany = {
       name: "Maria Petrov",
       role: "Head Pastry Chef",
       bio: "Maria brings 8 years of pastry expertise, specializing in French techniques and modern dessert architecture.",
-      image: "/images/team/maria.jpg",
+      image: "/logo.png",
       specialties: ["French Pastry", "Cake Design", "Ganache Mastery"],
     },
     {
@@ -434,7 +434,7 @@ export const companyContent: AboutCompany = {
       name: "David Laurent",
       role: "Chocolate Specialist",
       bio: "Trained in Belgium, David ensures perfect tempering and assists in developing our signature chocolate blends.",
-      image: "/images/team/david.jpg",
+      image: "/logo.png",
       specialties: ["Bean-to-Bar", "Tempering", "Truffle Making"],
     },
     {
@@ -442,7 +442,7 @@ export const companyContent: AboutCompany = {
       name: "Ana Silva",
       role: "Workshop Coordinator",
       bio: "Ana manages our educational programs and ensures every student has an enriching learning experience.",
-      image: "/images/team/ana.jpg",
+      image: "/logo.png",
       specialties: ["Teaching", "Event Planning", "Customer Relations"],
     },
     {
@@ -450,7 +450,7 @@ export const companyContent: AboutCompany = {
       name: "Robert Kim",
       role: "Creative Director",
       bio: "Robert oversees our visual identity, packaging design, and ensures every creation is Instagram-worthy.",
-      image: "/images/team/robert.jpg",
+      image: "/logo.png",
       specialties: ["Design", "Photography", "Brand Development"],
     },
   ],

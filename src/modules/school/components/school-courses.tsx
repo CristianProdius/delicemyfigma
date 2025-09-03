@@ -2,7 +2,7 @@
 
 import React from "react";
 import { motion } from "motion/react";
-import { Clock, Users, ArrowRight, Star, Calendar, Award, Sparkles, GraduationCap } from "lucide-react";
+import { Users, ArrowRight, Star, Calendar, GraduationCap } from "lucide-react";
 
 // Mock data for demonstration
 const schoolContent = {

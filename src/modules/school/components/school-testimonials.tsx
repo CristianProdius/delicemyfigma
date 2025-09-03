@@ -1,7 +1,7 @@
 "use client";
 import React from "react";
 import { motion } from "motion/react";
-import { Star, Quote, Sparkles, Award } from "lucide-react";
+import { Star, Quote, Award } from "lucide-react";
 
 // Mock testimonials data
 const testimonials = [
@@ -251,7 +251,7 @@ export const SchoolTestimonials: React.FC = () => {
                     viewport={{ once: true }}
                     transition={{ delay: index * 0.1 + 0.3, duration: 0.6 }}
                   >
-                    "{testimonial.content}"
+                    &quot;{testimonial.content}&quot;
                   </motion.p>
 
                   {/* Rating */}

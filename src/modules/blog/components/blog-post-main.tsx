@@ -31,9 +31,9 @@ export const BlogPostMain = ({ slug }: BlogPostMainProps) => {
   const [error, setError] = useState<string | null>(null);
   const [post, setPost] = useState<BlogPost | null>(null);
   const [relatedPosts, setRelatedPosts] = useState<BlogPost[]>([]);
-  const [tableOfContents, setTableOfContents] = useState<any[]>([]);
+  const [tableOfContents, setTableOfContents] = useState<{id: string; title: string; level: number}[]>([]);
   const [isMounted, setIsMounted] = useState(false);
-  const [scrollProgress, setScrollProgress] = useState(0);
+  const [, setScrollProgress] = useState(0);
 
   // Track when component is mounted on client
   useEffect(() => {

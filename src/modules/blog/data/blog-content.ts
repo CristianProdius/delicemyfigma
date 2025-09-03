@@ -88,21 +88,21 @@ export const blogAuthors: Author[] = [
     id: "olesea-stamatin",
     name: "Olesea Stamatin",
     bio: "Master Chocolatier and founder of DeliceMy. With over 12 years of experience, I share my passion for chocolate artistry and business insights.",
-    avatar: "/images/authors/olesea.jpg",
+    avatar: "/logo.png",
     role: "Master Chocolatier & Founder",
   },
   {
     id: "maria-popescu",
     name: "Maria Popescu",
     bio: "Senior pastry chef specializing in modern dessert techniques and chocolate innovation. Trained in Paris and passionate about teaching.",
-    avatar: "/images/authors/maria.jpg",
+    avatar: "/logo.png",
     role: "Senior Pastry Chef",
   },
   {
     id: "alex-chen",
     name: "Alex Chen",
     bio: "Business development specialist helping chocolate entrepreneurs build successful brands. MBA with a sweet tooth for strategy.",
-    avatar: "/images/authors/alex.jpg",
+    avatar: "/logo.png",
     role: "Business Consultant",
   },
 ];
@@ -144,7 +144,7 @@ The classic method involves three key temperature stages:
 
 [Content continues with detailed instructions, tips, and troubleshooting...]
     `,
-    featuredImage: "/images/blog/tempering-guide.jpg",
+    featuredImage: "/logo.png",
     category: blogCategories[2], // Techniques
     tags: ["tempering", "tutorial", "professional", "chocolate-making", "advanced"],
     author: blogAuthors[0], // Olesea
@@ -200,7 +200,7 @@ In 2024, successful chocolate businesses need:
 
 [Content continues with detailed business planning...]
     `,
-    featuredImage: "/images/blog/chocolate-business.jpg",
+    featuredImage: "/logo.png",
     category: blogCategories[1], // Business
     tags: ["business", "entrepreneurship", "startup", "2024", "guide"],
     author: blogAuthors[2], // Alex
@@ -249,7 +249,7 @@ Consider these inclusion combinations:
 
 [Content continues with recipes and techniques...]
     `,
-    featuredImage: "/images/blog/ruby-chocolate.jpg",
+    featuredImage: "/logo.png",
     category: blogCategories[2], // Techniques
     tags: ["ruby-chocolate", "innovation", "techniques", "trending", "recipes"],
     author: blogAuthors[1], // Maria
@@ -293,7 +293,7 @@ Achieve vibrant colors naturally:
 
 [Content continues with detailed instructions...]
     `,
-    featuredImage: "/images/blog/easter-collection.jpg",
+    featuredImage: "/logo.png",
     category: blogCategories[3], // Events
     tags: ["easter", "seasonal", "holidays", "tutorial", "collections"],
     author: blogAuthors[0], // Olesea
@@ -343,7 +343,7 @@ Structure your event for maximum enjoyment:
 
 [Content continues with pairing suggestions...]
     `,
-    featuredImage: "/images/blog/wine-pairing.jpg",
+    featuredImage: "/logo.png",
     category: blogCategories[4], // Lifestyle
     tags: ["wine", "pairing", "events", "sophisticated", "guide"],
     author: blogAuthors[1], // Maria
@@ -387,7 +387,7 @@ Each step influences the final product:
 
 [Content continues with origin details...]
     `,
-    featuredImage: "/images/blog/bean-to-bar.jpg",
+    featuredImage: "/logo.png",
     category: blogCategories[2], // Techniques
     tags: ["bean-to-bar", "origins", "education", "craft-chocolate", "sourcing"],
     author: blogAuthors[0], // Olesea
@@ -431,7 +431,7 @@ Mother's Day calls for chocolate gifts that reflect thought, care, and love. Her
 
 [Content continues with gift ideas...]
     `,
-    featuredImage: "/images/blog/mothers-day-gifts.jpg",
+    featuredImage: "/logo.png",
     category: blogCategories[3], // Events
     tags: ["mothers-day", "gifts", "personalization", "seasonal", "ideas"],
     author: blogAuthors[1], // Maria
@@ -482,7 +482,7 @@ Research shows dark chocolate can:
 
 [Content continues with research details...]
     `,
-    featuredImage: "/images/blog/health-benefits.jpg",
+    featuredImage: "/logo.png",
     category: blogCategories[4], // Lifestyle
     tags: ["health", "science", "dark-chocolate", "wellness", "nutrition"],
     author: blogAuthors[2], // Alex
@@ -528,7 +528,7 @@ Exciting vegan combinations:
 
 [Content continues with recipes...]
     `,
-    featuredImage: "/images/blog/vegan-chocolate.jpg",
+    featuredImage: "/logo.png",
     category: blogCategories[0], // Recipes
     tags: ["vegan", "recipes", "plant-based", "innovation", "dietary"],
     author: blogAuthors[1], // Maria
@@ -578,7 +578,7 @@ Proper storage is crucial for maintaining chocolate quality. Whether you're a pr
 
 [Content continues with preservation tips...]
     `,
-    featuredImage: "/images/blog/storage-guide.jpg",
+    featuredImage: "/logo.png",
     category: blogCategories[2], // Techniques
     tags: ["storage", "preservation", "tips", "professional", "guide"],
     author: blogAuthors[0], // Olesea

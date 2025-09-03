@@ -1,9 +1,6 @@
 "use client";
 
 import { Button } from "@/components/ui/button";
-import { Card } from "@/components/ui/card";
-import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
-import Image from "next/image";
 import { motion, useScroll, useTransform } from "motion/react";
 
 const heroContent = {
@@ -68,14 +65,14 @@ export const Hero = () => {
           />
 
           <div className="relative p-6 sm:p-8 md:p-10 lg:p-14 xl:p-20">
-            {/* Main content grid - adjusted for 70/30 split on desktop */}
-            <div className="grid grid-cols-1 lg:grid-cols-[70fr_30fr] gap-8 md:gap-10 lg:gap-12 xl:gap-16 items-start lg:items-stretch mt-8 sm:mt-10 lg:mt-16">
-              {/* Left Content - Takes 70% on desktop */}
+            {/* Main content - centered */}
+            <div className="flex items-center justify-center mt-8 sm:mt-10 lg:mt-16">
+              {/* Centered Content */}
               <motion.div
-                initial={{ opacity: 0, x: -60 }}
-                animate={{ opacity: 1, x: 0 }}
+                initial={{ opacity: 0, y: -60 }}
+                animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 1, ease: [0.22, 1, 0.36, 1] }}
-                className="text-center lg:text-left flex flex-col justify-center lg:justify-center space-y-6 sm:space-y-8 lg:space-y-12 lg:py-8"
+                className="text-center flex flex-col justify-center space-y-6 sm:space-y-8 lg:space-y-12 max-w-4xl"
               >
                 {/* Heading with refined typography - responsive sizing */}
                 <div className="relative">
@@ -107,9 +104,9 @@ export const Hero = () => {
                       duration: 1,
                       ease: [0.22, 1, 0.36, 1],
                     }}
-                    className="absolute -bottom-4 sm:-bottom-6 left-0 lg:left-0 right-0 lg:right-auto w-24 sm:w-32 lg:w-40 h-[1px] mx-auto lg:mx-0 origin-center lg:origin-left"
+                    className="absolute -bottom-4 sm:-bottom-6 left-1/2 transform -translate-x-1/2 w-24 sm:w-32 lg:w-40 h-[1px] origin-center"
                   >
-                    <div className="h-full bg-gradient-to-r from-amber-400 via-amber-300/50 to-transparent" />
+                    <div className="h-full bg-gradient-to-r from-transparent via-amber-300 to-transparent" />
                   </motion.div>
                 </div>
 
@@ -123,7 +120,7 @@ export const Hero = () => {
                       duration: 0.8,
                       ease: [0.22, 1, 0.36, 1],
                     }}
-                    className="mx-auto lg:mx-0 lg:self-start"
+                    className="mx-auto"
                   >
                     <Button
                       onClick={() =>
@@ -167,7 +164,7 @@ export const Hero = () => {
                     initial={{ opacity: 0, y: 30 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ delay: 0.7, duration: 0.8 }}
-                    className="max-w-lg sm:max-w-xl mx-auto lg:mx-0 text-center lg:text-left px-4 sm:px-0"
+                    className="max-w-lg sm:max-w-xl mx-auto text-center px-4 sm:px-0"
                   >
                     <div className="relative pl-6 sm:pl-8 lg:pl-12">
                       {/* Quote mark */}
@@ -185,117 +182,6 @@ export const Hero = () => {
                   </motion.div>
                 </div>
               </motion.div>
-
-              {/* Right Content - Cards positioned at bottom right */}
-              <div className="flex flex-col sm:flex-row lg:flex-col gap-4 sm:gap-4 lg:gap-6 items-center sm:justify-center lg:items-end lg:justify-end mt-6 sm:mt-8 lg:mt-0 lg:self-end lg:pb-8">
-                {/* Happy Clients Card - Floating effect */}
-                <motion.div
-                  initial={{ opacity: 0, x: 60, y: 60 }}
-                  animate={{ opacity: 1, x: 0, y: 0 }}
-                  transition={{
-                    delay: 0.9,
-                    duration: 1,
-                    ease: [0.22, 1, 0.36, 1],
-                  }}
-                  whileHover={{
-                    y: -8,
-                    rotate: -2,
-                    transition: { duration: 0.3, ease: "easeOut" },
-                  }}
-                  className="w-full sm:w-auto sm:flex-1 lg:flex-initial max-w-[280px] sm:max-w-none lg:max-w-[260px] xl:max-w-[280px]"
-                >
-                  <Card className="relative group bg-white/5 backdrop-blur-md border border-white/10 p-4 sm:p-4 lg:p-5 xl:p-6 rounded-xl sm:rounded-2xl lg:rounded-3xl transition-all duration-500 shadow-xl hover:shadow-2xl hover:bg-white/10 overflow-hidden">
-                    <div className="flex items-center justify-between gap-3 sm:gap-4 relative z-10">
-                      <div className="flex -space-x-2 sm:-space-x-3">
-                        {[1, 2, 3].map((_, i) => (
-                          <motion.div
-                            key={i}
-                            whileHover={{ scale: 1.15, zIndex: 10 }}
-                            transition={{ type: "spring", stiffness: 400 }}
-                          >
-                            <Avatar className="border-2 border-white/20 w-8 h-8 sm:w-9 sm:h-9 lg:w-10 lg:h-10 xl:w-11 xl:h-11 shadow-xl hover:shadow-2xl transition-shadow duration-300">
-                              <AvatarImage src={`/avatar-${i + 1}.jpg`} />
-                              <AvatarFallback className="bg-gradient-to-br from-amber-200 to-amber-400 text-amber-900 text-[10px] sm:text-xs font-medium">
-                                U{i + 1}
-                              </AvatarFallback>
-                            </Avatar>
-                          </motion.div>
-                        ))}
-                        <Avatar className="border-2 border-white/20 bg-gradient-to-br from-amber-500 to-amber-700 w-8 h-8 sm:w-9 sm:h-9 lg:w-10 lg:h-10 xl:w-11 xl:h-11 shadow-xl">
-                          <AvatarFallback className="text-white text-xs sm:text-sm font-semibold">
-                            +
-                          </AvatarFallback>
-                        </Avatar>
-                      </div>
-
-                      <div className="text-right">
-                        <motion.p
-                          className="text-xl sm:text-2xl lg:text-3xl xl:text-4xl font-extralight text-transparent bg-clip-text bg-gradient-to-br from-white via-amber-50 to-amber-200"
-                          animate={{ opacity: [0.7, 1, 0.7] }}
-                          transition={{
-                            duration: 3,
-                            repeat: Infinity,
-                            ease: "easeInOut",
-                          }}
-                        >
-                          {heroContent.stats.count}
-                        </motion.p>
-                        <p className="text-[10px] sm:text-xs lg:text-sm text-white/60 font-light mt-0.5 sm:mt-1">
-                          {heroContent.stats.label}
-                        </p>
-                      </div>
-                    </div>
-                  </Card>
-                </motion.div>
-
-                {/* Article Card - Premium feel */}
-                <motion.div
-                  initial={{ opacity: 0, x: 60, y: 60 }}
-                  animate={{ opacity: 1, x: 0, y: 0 }}
-                  transition={{
-                    delay: 1.1,
-                    duration: 1,
-                    ease: [0.22, 1, 0.36, 1],
-                  }}
-                  whileHover={{
-                    y: -8,
-                    rotate: 2,
-                    transition: { duration: 0.3, ease: "easeOut" },
-                  }}
-                  className="w-full sm:w-auto sm:flex-1 lg:flex-initial max-w-[280px] sm:max-w-none lg:max-w-[260px] xl:max-w-[280px]"
-                >
-                  <Card className="relative group bg-white/5 backdrop-blur-md border border-white/10 p-3 sm:p-4 lg:p-4 xl:p-5 rounded-xl sm:rounded-2xl lg:rounded-3xl transition-all duration-500 shadow-xl hover:shadow-2xl hover:bg-white/10 cursor-pointer overflow-hidden">
-                    <div className="flex items-center space-x-3 sm:space-x-4 relative z-10">
-                      <motion.div
-                        className="relative w-14 h-14 sm:w-16 sm:h-16 lg:w-18 lg:h-18 xl:w-20 xl:h-20 rounded-lg sm:rounded-xl lg:rounded-2xl overflow-hidden flex-shrink-0 shadow-xl group-hover:shadow-2xl transition-all duration-500"
-                        whileHover={{ scale: 1.05 }}
-                      >
-                        <Image
-                          src={heroContent.article.image}
-                          alt="Article Thumbnail"
-                          layout="fill"
-                          objectFit="cover"
-                          className="group-hover:scale-110 transition-transform duration-700"
-                        />
-                        {/* Image overlay gradient */}
-                        <div className="absolute inset-0 bg-gradient-to-tr from-amber-900/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
-                      </motion.div>
-
-                      <div className="min-w-0 flex-1">
-                        <h3 className="text-white/90 font-light text-xs sm:text-sm lg:text-base xl:text-lg truncate group-hover:text-amber-50 transition-colors duration-500">
-                          {heroContent.article.title}
-                        </h3>
-                        <motion.p
-                          className="text-amber-200/60 text-[10px] sm:text-xs lg:text-sm group-hover:text-amber-200/80 transition-all duration-500 inline-flex items-center gap-1 sm:gap-2 mt-0.5 sm:mt-1"
-                          whileHover={{ gap: "12px" }}
-                        >
-                          <span>{heroContent.article.cta}</span>
-                        </motion.p>
-                      </div>
-                    </div>
-                  </Card>
-                </motion.div>
-              </div>
             </div>
           </div>
         </div>

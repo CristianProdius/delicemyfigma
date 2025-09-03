@@ -21,7 +21,7 @@ export const BlogHero = () => {
   const [isSearchFocused, setIsSearchFocused] = useState(false);
   const [activeCategory, setActiveCategory] = useState<string | null>(null);
   const [showAllCategories, setShowAllCategories] = useState(false);
-  const [featuredPosts, setFeaturedPosts] = useState<any[]>([]);
+  const [featuredPosts, setFeaturedPosts] = useState<{title: string; excerpt: string; category: {name: string}; readingTime: number}[]>([]);
 
   const { scrollY } = useScroll();
 

@@ -11,7 +11,6 @@ import {
   Clock,
 
   ArrowRight,
-  Sparkles,
   Coffee,
   BookOpen,
   Send,
@@ -495,7 +494,7 @@ const AboutWidget = () => {
           <div className="absolute inset-0 bg-gradient-to-br from-[#D4A574] to-[#A87C5A] rounded-full animate-pulse" />
           <div className="relative w-full h-full rounded-full overflow-hidden border-4 border-white">
             <Image
-              src="/images/authors/olesea.jpg"
+              src="/img/olesea-portrait.jpg"
               alt="Olesea Stamatin"
               fill
               className="object-cover"
