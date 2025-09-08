@@ -95,8 +95,8 @@ export const Services: React.FC<ServicesProps> = ({ serviceSection }) => {
           </motion.div>
         )}
 
-        {/* Services Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8">
+        {/* Services Grid - Responsive masonry layout */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 lg:gap-8 max-w-7xl mx-auto">
           {featuredServices.map((service: FeaturedService, index: number) => {
             const IconComponent = getServiceIcon(service.iconName);
             
@@ -107,7 +107,7 @@ export const Services: React.FC<ServicesProps> = ({ serviceSection }) => {
                 whileInView={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.6, delay: index * 0.1 }}
                 viewport={{ once: true }}
-                className={`group relative ${service.gridClass || ''}`}
+                className={`group relative ${service.gridClass || 'col-span-1'}`}
               >
                 <Link
                   href={service.href}
