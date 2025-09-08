@@ -436,11 +436,11 @@ const NavigationHeader: React.FC = () => {
                         <button
                           key={lang.code}
                           onClick={() => {
-                            setLocale(lang.code);
+                            setLocale(lang.code.toLowerCase());
                             setShowLanguageDropdown(false);
                           }}
                           className={`w-full text-left px-5 py-3 hover:bg-gradient-to-r hover:from-amber-50 hover:to-transparent transition-all duration-300 flex items-center gap-3 ${
-                            locale === lang.code ? "bg-amber-50" : ""
+                            locale === lang.code.toLowerCase() ? "bg-amber-50" : ""
                           }`}
                         >
                           <span className="text-lg">{lang.flag}</span>
@@ -742,9 +742,9 @@ const NavigationHeader: React.FC = () => {
                       {languages.map((lang: { code: string; label: string; flag: string }) => (
                         <button
                           key={lang.code}
-                          onClick={() => setLocale(lang.code)}
+                          onClick={() => setLocale(lang.code.toLowerCase())}
                           className={`px-4 py-3 rounded-xl text-sm font-medium transition-all duration-300 ${
-                            locale === lang.code
+                            locale === lang.code.toLowerCase()
                               ? "bg-gradient-to-r from-amber-100 to-amber-50 text-amber-700 shadow-md"
                               : "bg-gray-100 text-gray-700 hover:bg-gray-200"
                           }`}
