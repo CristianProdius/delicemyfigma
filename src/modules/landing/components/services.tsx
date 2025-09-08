@@ -15,7 +15,15 @@ import {
   ChefHat,
   Sparkles,
   Crown,
-  Gem
+  Gem,
+  GraduationCap,
+  Baby,
+  Store,
+  PartyPopper,
+  Palette,
+  Users,
+  Utensils,
+  Calendar
 } from "lucide-react";
 import type { ServiceSection, FeaturedService } from "@/types/strapi";
 
@@ -34,9 +42,18 @@ const getServiceIcon = (iconName: string) => {
     cookie: Cookie,
     icecream: IceCream,
     chef: ChefHat,
+    chefhat: ChefHat,
     sparkles: Sparkles,
     crown: Crown,
     gem: Gem,
+    graduationcap: GraduationCap,
+    baby: Baby,
+    store: Store,
+    partypopper: PartyPopper,
+    palette: Palette,
+    users: Users,
+    utensils: Utensils,
+    calendar: Calendar,
   };
   
   return iconMap[iconName.toLowerCase()] || Star;

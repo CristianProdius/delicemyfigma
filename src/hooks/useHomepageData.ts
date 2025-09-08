@@ -26,7 +26,11 @@ export function useHomepageData() {
                   }
                 }
               },
-              serviceSection: true,
+              serviceSection: {
+                populate: {
+                  featuredServices: '*'
+                }
+              },
               aboutSection: true,
               testimonialsSection: true,
               ctaSection: true
