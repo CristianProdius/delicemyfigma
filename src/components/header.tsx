@@ -307,9 +307,9 @@ const NavigationHeader: React.FC = () => {
               {/* Desktop Navigation with Premium Effects */}
               <div className="hidden xl:flex items-center gap-8">
                 <ul className="flex items-center gap-6 lg:gap-8" role="menubar">
-                  {navItems.map((item) => (
+                  {navItems.map((item, index) => (
                     <li
-                      key={item.id}
+                      key={item.id || `nav-item-${index}`}
                       role="none"
                       className="relative"
                       onMouseEnter={() => setHoveredItem(item.id)}
@@ -369,9 +369,9 @@ const NavigationHeader: React.FC = () => {
                           }`}
                         >
                           <div className="p-2">
-                            {item.subItems.map((subItem) => (
+                            {item.subItems.map((subItem, subIndex) => (
                               <button
-                                key={subItem.href}
+                                key={subItem.href || `sub-item-${subIndex}`}
                                 onClick={() =>
                                   handleNavigation(subItem.href)
                                 }
@@ -586,7 +586,7 @@ const NavigationHeader: React.FC = () => {
                 <ul className="space-y-3">
                   {navItems.map((item, itemIndex) => (
                     <li
-                      key={item.id}
+                      key={item.id || `mobile-nav-item-${itemIndex}`}
                       className={`transition-all duration-500 ${
                         mobileMenuStage >= 3
                           ? `opacity-100 translate-x-0`
@@ -621,8 +621,8 @@ const NavigationHeader: React.FC = () => {
                       {/* Premium Mobile Subitems */}
                       {item.subItems && (
                         <ul className="ml-4 mt-2 space-y-1">
-                          {item.subItems.map((subItem) => (
-                            <li key={subItem.href}>
+                          {item.subItems.map((subItem, subIndex) => (
+                            <li key={subItem.href || `mobile-sub-item-${subIndex}`}>
                               <button
                                 onClick={() =>
                                   handleNavigation(subItem.href)
