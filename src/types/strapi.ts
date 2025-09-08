@@ -76,20 +76,39 @@ export interface FooterData {
   copyright?: FooterCopyright;
 }
 
+// Homepage component interfaces
+export interface HeroSection {
+  heroTitle?: string;
+  heroSubtitle?: string;
+  heroDescription?: string;
+  heroCtaText?: string;
+  heroCtaUrl?: string;
+  heroImage?: StrapiImage;
+  quote?: string;
+  quoteAuthor?: string;
+  statsNumber?: string;
+  statsLabel?: string;
+}
+
+export interface FeaturedService {
+  title: string;
+  description: string;
+  image?: string;
+  buttonText?: string;
+  href: string;
+  gridClass: string;
+  iconName: string;
+  accentColor: string;
+}
+
+export interface ServiceSection {
+  sectionTitle?: string;
+  featuredServices?: FeaturedService[];
+}
+
 export interface HomepageData {
-  heroSection?: {
-    heroTitle?: string;
-    heroSubtitle?: string;
-    heroDescription?: string;
-    heroCtaText?: string;
-    heroCtaUrl?: string;
-    heroImage?: StrapiImage;
-    quote?: string;
-    quoteAuthor?: string;
-    statsNumber?: string;
-    statsLabel?: string;
-  };
-  serviceSection?: unknown;
+  heroSection?: HeroSection;
+  serviceSection?: ServiceSection;
   aboutSection?: unknown;
   testimonialsSection?: unknown;
   ctaSection?: unknown;
