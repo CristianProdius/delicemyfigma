@@ -8,69 +8,72 @@ export interface StrapiImage {
 }
 
 export interface HeaderData {
-  logo?: StrapiImage;
   companyName?: string;
   companyTagline?: string;
-  navigation?: Array<{
-    label: string;
-    href: string;
-    icon?: string;
-    subItems?: Array<{
-      label: string;
-      href: string;
-      icon?: string;
-      description?: string;
-    }>;
-  }>;
-  ctaText?: string;
-  ctaUrl?: string;
-  primaryCtaText?: string;
-  primaryCtaUrl?: string;
-  topBarEnabled?: boolean;
-  topBarText?: string;
-  topBarHighlight?: string;
-  topBarCtaText?: string;
-  topBarCtaUrl?: string;
+  logo?: StrapiImage;
   contactPhone?: string;
   contactEmail?: string;
   contactAddress?: string;
-  workingHours?: string;
   businessSchedule?: string;
   businessScheduleNote?: string;
-  socialLinks?: Array<{
-    platform: string;
-    url: string;
-    icon?: string;
+  primaryCtaText?: string;
+  primaryCtaUrl?: string;
+  secondaryCtaText?: string;
+  defaultLanguage?: string;
+  navigationData?: unknown; // JSON field
+  languageData?: unknown; // JSON field
+}
+
+// Footer component interfaces
+export interface FooterNavigationSection {
+  title?: string;
+  links?: Array<{
+    text?: string;
+    url?: string;
   }>;
 }
 
-export interface FooterData {
-  companyName?: string;
-  logo?: StrapiImage;
+export interface FooterContactInfo {
+  phone?: string;
+  email?: string;
+  address?: string;
+  workingHours?: string;
+}
+
+export interface FooterSocialLink {
+  platform?: string;
+  url?: string;
+  icon?: string;
+}
+
+export interface FooterNewsletter {
+  title?: string;
   description?: string;
-  sections?: Array<{
-    title: string;
-    links?: Array<{
-      label: string;
-      url: string;
-    }>;
-  }>;
-  social?: Array<{
-    name: string;
-    url: string;
-    icon?: string;
-  }>;
-  newsletterTitle?: string;
-  newsletterPlaceholder?: string;
-  newsletterButtonText?: string;
-  newsletterSuccessMessage?: string;
-  certifications?: string;
-  copyrightText?: string;
+  placeholder?: string;
+  buttonText?: string;
+  successMessage?: string;
+  errorMessage?: string;
+}
+
+export interface FooterCopyright {
+  text?: string;
   developedByText?: string;
   developedByUrl?: string;
-  contactPhone?: string;
-  contactEmail?: string;
-  contactAddress?: string;
+}
+
+export interface FooterData {
+  logo?: StrapiImage;
+  tagline?: string;
+  description?: string;
+  servicesSection?: FooterNavigationSection;
+  learnSection?: FooterNavigationSection;
+  exploreSection?: FooterNavigationSection;
+  connectSection?: FooterNavigationSection;
+  contactInfo?: FooterContactInfo;
+  socialLinks?: FooterSocialLink[];
+  newsletter?: FooterNewsletter;
+  certifications?: unknown; // JSON field
+  copyright?: FooterCopyright;
 }
 
 export interface HomepageData {

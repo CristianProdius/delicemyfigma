@@ -57,12 +57,12 @@ const NavigationHeader: React.FC = () => {
 
   // Parse navigation items from Strapi data
   const navItems = useMemo<NavItem[]>(() => {
-    if (!headerData?.navigation) return [];
+    if (!headerData?.navigationData) return [];
     
     try {
-      const navigationData = typeof headerData.navigation === 'string' 
-        ? JSON.parse(headerData.navigation) 
-        : headerData.navigation;
+      const navigationData = typeof headerData.navigationData === 'string' 
+        ? JSON.parse(headerData.navigationData) 
+        : headerData.navigationData;
       
       return navigationData || [];
     } catch (error) {
@@ -71,14 +71,28 @@ const NavigationHeader: React.FC = () => {
     }
   }, [headerData]);
 
-  // Get language data from Strapi
+  // Get language data from Strapi (fallback to context if not in headerData)
   const languages = useMemo(() => {
+    if (headerData?.languageData) {
+      try {
+        const languageData = typeof headerData.languageData === 'string' 
+          ? JSON.parse(headerData.languageData) 
+          : headerData.languageData;
+        return languageData || availableLocales.map(loc => ({
+          code: loc.code,
+          label: loc.name,
+          flag: loc.code === 'en' ? '🇬🇧' : loc.code === 'ro' ? '🇷🇴' : '🇷🇺'
+        }));
+      } catch (error) {
+        console.error('Failed to parse language data:', error);
+      }
+    }
     return availableLocales.map(loc => ({
       code: loc.code,
       label: loc.name,
       flag: loc.code === 'en' ? '🇬🇧' : loc.code === 'ro' ? '🇷🇴' : '🇷🇺'
     }));
-  }, [availableLocales]);
+  }, [headerData, availableLocales]);
 
   // Get contact info from Strapi
   const contactInfo = useMemo(() => {
@@ -86,7 +100,8 @@ const NavigationHeader: React.FC = () => {
       phone: '',
       email: '',
       address: '',
-      schedule: ''
+      schedule: '',
+      scheduleNote: ''
     };
     
     return {
@@ -417,7 +432,7 @@ const NavigationHeader: React.FC = () => {
                         mounted ? "opacity-100 scale-100" : "opacity-0 scale-95"
                       }`}
                     >
-                      {languages.map((lang) => (
+                      {languages.map((lang: { code: string; label: string; flag: string }) => (
                         <button
                           key={lang.code}
                           onClick={() => {
@@ -724,7 +739,7 @@ const NavigationHeader: React.FC = () => {
                       Select Language
                     </div>
                     <div className="grid grid-cols-3 gap-2">
-                      {languages.map((lang) => (
+                      {languages.map((lang: { code: string; label: string; flag: string }) => (
                         <button
                           key={lang.code}
                           onClick={() => setLocale(lang.code)}

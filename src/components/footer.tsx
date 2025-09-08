@@ -47,7 +47,7 @@ export default function Footer() {
         email: '',
         phone: '',
         address: '',
-        hours: ''
+        workingHours: ''
       },
       
       social: footerData.socialLinks || [],
@@ -56,18 +56,16 @@ export default function Footer() {
         title: '',
         description: '',
         placeholder: '',
-        button: '',
-        success: ''
+        buttonText: '',
+        successMessage: ''
       },
       
       certifications: footerData.certifications || [],
       
       copyright: footerData.copyright || {
-        year: new Date().getFullYear(),
-        company: '',
-        rights: '',
-        madeWith: '',
-        in: ''
+        text: '',
+        developedByText: '',
+        developedByUrl: ''
       }
     };
   }, [footerData]);
@@ -112,7 +110,8 @@ export default function Footer() {
       case 'instagram': return Instagram;
       case 'facebook': return Facebook;
       case 'youtube': return Youtube;
-      case 'twitter': return Twitter;
+      case 'twitter': 
+      case 'x': return Twitter;
       default: return null;
     }
   };
@@ -153,7 +152,7 @@ export default function Footer() {
                 )}
                 <div>
                   <h3 className="text-2xl font-light text-[#E0D9C9] [font-family:var(--font-playfair)]">
-                    {footerContent.copyright?.company || ''}
+                    DeliceMy
                   </h3>
                   {footerContent.tagline && (
                     <p className="text-xs text-[#E0D9C9]/60 italic [font-family:var(--font-playfair)]">
@@ -169,7 +168,7 @@ export default function Footer() {
               )}
 
               {/* Certifications */}
-              {footerContent.certifications && footerContent.certifications.length > 0 && (
+              {footerContent.certifications && (Array.isArray(footerContent.certifications) ? footerContent.certifications.length > 0 : Object.keys(footerContent.certifications).length > 0) && (
                 <div className="flex flex-wrap gap-4 mt-6 justify-center lg:justify-start">
                   {(Array.isArray(footerContent.certifications) 
                     ? footerContent.certifications 
@@ -233,10 +232,10 @@ export default function Footer() {
                           className="flex items-center gap-2"
                         >
                           <Heart className="w-4 h-4 fill-current" />
-                          {footerContent.newsletter.success}
+                          {footerContent.newsletter.successMessage}
                         </motion.span>
                       ) : (
-                        footerContent.newsletter.button
+                        footerContent.newsletter.buttonText
                       )}
                     </Button>
                   </form>
@@ -262,7 +261,7 @@ export default function Footer() {
                         {section.title}
                       </h5>
                       <ul className="space-y-3">
-                        {section.links && section.links.map((link: { label: string; url: string }, linkIndex: number) => (
+                        {section.links && section.links.map((link: { text?: string; url?: string }, linkIndex: number) => (
                           <motion.li
                             key={linkIndex}
                             initial={{ opacity: 0, x: -10 }}
@@ -273,10 +272,10 @@ export default function Footer() {
                             viewport={{ once: true }}
                           >
                             <Link
-                              href={link.href || '#'}
+                              href={link.url || '#'}
                               className="group text-[#E0D9C9]/50 hover:text-[#E0D9C9] transition-colors duration-300 text-sm flex items-center gap-1 [font-family:var(--font-inter)]"
                             >
-                              <span>{link.label}</span>
+                              <span>{link.text}</span>
                               <ArrowUpRight className="w-3 h-3 opacity-0 -translate-y-1 translate-x-1 group-hover:opacity-100 group-hover:translate-y-0 group-hover:translate-x-0 transition-all duration-300" />
                             </Link>
                           </motion.li>
@@ -322,10 +321,10 @@ export default function Footer() {
                       <span>{footerContent.contact.email}</span>
                     </div>
                   )}
-                  {footerContent.contact.hours && (
+                  {footerContent.contact.workingHours && (
                     <div className="flex items-center gap-3 justify-center md:justify-start">
                       <span className="text-[#D4A574]">
-                        {footerContent.contact.hours}
+                        {footerContent.contact.workingHours}
                       </span>
                     </div>
                   )}
@@ -346,20 +345,20 @@ export default function Footer() {
                   Follow Our Journey
                 </h5>
                 <div className="flex gap-3 justify-center md:justify-end">
-                  {footerContent.social.map((social: { name: string; url: string; icon?: string }, index: number) => {
-                    const Icon = getSocialIcon(social.platform || social.label);
+                  {footerContent.social.map((social: { platform?: string; url?: string; icon?: string }, index: number) => {
+                    const Icon = getSocialIcon(social.platform || '');
                     if (!Icon) return null;
                     
                     return (
                       <motion.a
                         key={index}
-                        href={social.href || social.url || '#'}
+                        href={social.url || '#'}
                         target="_blank"
                         rel="noopener noreferrer"
                         whileHover={{ scale: 1.1, y: -2 }}
                         whileTap={{ scale: 0.95 }}
                         className="group relative w-10 h-10 rounded-full bg-[#E0D9C9]/10 backdrop-blur-sm border border-[#E0D9C9]/20 flex items-center justify-center hover:bg-[#E0D9C9]/20 hover:border-[#D4A574]/50 transition-all duration-300"
-                        aria-label={social.label || social.platform}
+                        aria-label={social.platform}
                       >
                         <Icon className="w-4 h-4 text-[#E0D9C9]/60 group-hover:text-[#E0D9C9] transition-colors duration-300" />
                         <div className="absolute inset-0 rounded-full bg-gradient-to-r from-[#D4A574]/0 via-[#D4A574]/20 to-[#D4A574]/0 opacity-0 group-hover:opacity-100 blur-lg transition-opacity duration-300" />
@@ -381,11 +380,17 @@ export default function Footer() {
               className="pt-8 text-center"
             >
               <p className="text-[#E0D9C9]/40 text-xs sm:text-sm [font-family:var(--font-inter)]">
-                © {footerContent.copyright.year} {footerContent.copyright.company}
-                . {footerContent.copyright.rights}.
-                {footerContent.copyright.madeWith && (
+                {footerContent.copyright.text || `© ${new Date().getFullYear()} DeliceMy. All rights reserved.`}
+                {footerContent.copyright.developedByText && (
                   <span className="inline-flex items-center gap-1 ml-2">
-                    {footerContent.copyright.madeWith}
+                    <Link 
+                      href={footerContent.copyright.developedByUrl || '#'} 
+                      className="hover:text-[#D4A574] transition-colors"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    >
+                      {footerContent.copyright.developedByText}
+                    </Link>
                     <motion.span
                       animate={{ scale: [1, 1.2, 1] }}
                       transition={{ duration: 2, repeat: Infinity }}
@@ -393,7 +398,6 @@ export default function Footer() {
                     >
                       <Heart className="w-3 h-3 fill-current" />
                     </motion.span>
-                    {footerContent.copyright.in}
                   </span>
                 )}
               </p>
