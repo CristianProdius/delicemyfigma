@@ -11,15 +11,12 @@ import {
   Mail,
   ArrowRight,
   Sparkles,
-  GraduationCap,
-  Baby,
-  Store,
-  PartyPopper,
-  Palette,
-  Gift,
 } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
+import { useHeaderData } from "@/hooks/useHeaderData";
+import { useLanguage } from "@/contexts/LanguageContext";
+import { getStrapiMediaUrl } from "@/lib/strapi";
 
 // Types
 interface NavItem {
@@ -36,13 +33,11 @@ interface SubNavItem {
   icon?: React.ReactNode;
 }
 
-interface Language {
-  code: string;
-  label: string;
-  flag?: string;
-}
-
 const NavigationHeader: React.FC = () => {
+  // Get data from Strapi
+  const { headerData, isLoading: headerLoading } = useHeaderData();
+  const { locale, setLocale, availableLocales, isLoading: localesLoading } = useLanguage();
+  
   // Track if we're on the client and ready for animations
   const [mounted, setMounted] = useState(false);
 
@@ -51,7 +46,6 @@ const NavigationHeader: React.FC = () => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [activeSection, setActiveSection] = useState("home");
   const [hoveredItem, setHoveredItem] = useState<string | null>(null);
-  const [selectedLanguage, setSelectedLanguage] = useState("EN");
   const [showLanguageDropdown, setShowLanguageDropdown] = useState(false);
   const [headerVisible, setHeaderVisible] = useState(false);
   const [mobileMenuStage, setMobileMenuStage] = useState(0);
@@ -61,120 +55,55 @@ const NavigationHeader: React.FC = () => {
   const languageRef = useRef<HTMLDivElement>(null);
   const headerRef = useRef<HTMLDivElement>(null);
 
-  // ============================================
-  // DELICEMY NAVIGATION ITEMS
-  // ============================================
-  const navItems = useMemo<NavItem[]>(
-    () => [
-      {
-        id: "services",
-        label: "Services",
-        href: "/services",
-        subItems: [
-          {
-            label: "Chocolate Classes for Adults",
-            href: "/services/chocolate-classes-adults",
-            description: "Learn from master chocolatiers",
-            icon: <GraduationCap size={16} className="text-amber-500" />,
-          },
-          {
-            label: "Kids Chocolate Classes",
-            href: "/services/kids-chocolate-classes",
-            description: "Fun workshops for children",
-            icon: <Baby size={16} className="text-amber-500" />,
-          },
-          {
-            label: "Restaurant & Café Services",
-            href: "/services/restaurant-cafe-services",
-            description: "Elevate your dessert menu",
-            icon: <Store size={16} className="text-amber-500" />,
-          },
-          {
-            label: "Chocolate Parties & Events",
-            href: "/services/chocolate-parties-events",
-            description: "Unforgettable celebrations",
-            icon: <PartyPopper size={16} className="text-amber-500" />,
-          },
-          {
-            label: "Custom Dessert Design",
-            href: "/services/custom-dessert-design",
-            description: "Bespoke chocolate creations",
-            icon: <Palette size={16} className="text-amber-500" />,
-          },
-          {
-            label: "Personalized Chocolate Gifts",
-            href: "/services/personalized-chocolate-gifts",
-            description: "Unique gifts for special moments",
-            icon: <Gift size={16} className="text-amber-500" />,
-          },
-        ],
-      },
-      {
-        id: "school",
-        label: "School",
-        href: "/school",
-      },
-      {
-        id: "shop",
-        label: "Shop",
-        href: "/shop",
-      },
-      {
-        id: "blog",
-        label: "Blog",
-        href: "/blog",
-      },
-      {
-        id: "about",
-        label: "About",
-        href: "#",
-        subItems: [
-          {
-            label: "About Olesea",
-            href: "/about-olesea",
-            description: "Meet our master chocolatier",
-            icon: <Sparkles size={16} className="text-amber-500" />,
-          },
-          {
-            label: "About Company",
-            href: "/about-company",
-            description: "Our story and mission",
-            icon: <Store size={16} className="text-amber-500" />,
-          },
-        ],
-      },
-      {
-        id: "contact",
-        label: "Contact",
-        href: "/contact",
-      },
-    ],
-    []
-  );
+  // Parse navigation items from Strapi data
+  const navItems = useMemo<NavItem[]>(() => {
+    if (!headerData?.navigationData) return [];
+    
+    try {
+      const navigationData = typeof headerData.navigationData === 'string' 
+        ? JSON.parse(headerData.navigationData) 
+        : headerData.navigationData;
+      
+      return navigationData || [];
+    } catch (error) {
+      console.error('Failed to parse navigation data:', error);
+      return [];
+    }
+  }, [headerData]);
 
-  // ============================================
-  // DELICEMY LANGUAGES
-  // ============================================
-  const languages: Language[] = [
-    { code: "EN", label: "English", flag: "🇬🇧" },
-    { code: "RO", label: "Română", flag: "🇷🇴" },
-    { code: "RU", label: "Русский", flag: "🇷🇺" },
-  ];
+  // Get language data from Strapi
+  const languages = useMemo(() => {
+    return availableLocales.map(loc => ({
+      code: loc.code,
+      label: loc.name,
+      flag: loc.code === 'en' ? '🇬🇧' : loc.code === 'ro' ? '🇷🇴' : '🇷🇺'
+    }));
+  }, [availableLocales]);
 
-  // ============================================
-  // DELICEMY CONTACT INFO
-  // ============================================
-  const contactInfo = {
-    phone: "+373 61 234 555",
-    email: "hello@delicemy.com",
-    address: "Str. București 45, Chișinău, Moldova",
-    schedule: "Mon-Sat: 10:00 AM - 8:00 PM",
-  };
+  // Get contact info from Strapi
+  const contactInfo = useMemo(() => {
+    if (!headerData) return {
+      phone: '',
+      email: '',
+      address: '',
+      schedule: ''
+    };
+    
+    return {
+      phone: headerData.contactPhone || '',
+      email: headerData.contactEmail || '',
+      address: headerData.contactAddress || '',
+      schedule: headerData.businessSchedule || '',
+      scheduleNote: headerData.businessScheduleNote || ''
+    };
+  }, [headerData]);
 
-  // ============================================
-  // COMPANY NAME
-  // ============================================
-  const companyName = "DeliceMy";
+  // Get company info from Strapi
+  const companyName = headerData?.companyName || '';
+  const companyTagline = headerData?.companyTagline || '';
+  const logoUrl = getStrapiMediaUrl(headerData?.logo);
+  const primaryCtaText = headerData?.primaryCtaText || '';
+  const primaryCtaUrl = headerData?.primaryCtaUrl || '/contact';
 
   // Mount effect - enable animations after hydration
   useEffect(() => {
@@ -268,8 +197,6 @@ const NavigationHeader: React.FC = () => {
 
   // Handle navigation
   const handleNavigation = (href: string) => {
-    // For Next.js routing, you might want to use router.push(href)
-    // For now, using standard navigation
     window.location.href = href;
     setIsMobileMenuOpen(false);
   };
@@ -281,6 +208,25 @@ const NavigationHeader: React.FC = () => {
       action();
     }
   };
+
+  // Show loading state while data is being fetched
+  if (headerLoading || localesLoading) {
+    return (
+      <header className="fixed top-0 left-0 right-0 z-50 w-full">
+        <nav className="relative bg-white/90 backdrop-blur-2xl shadow-lg border-b border-amber-100">
+          <div className="container mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="flex items-center justify-between h-20 sm:h-24">
+              <div className="animate-pulse bg-gray-200 h-12 w-32 rounded"></div>
+              <div className="flex gap-4">
+                <div className="animate-pulse bg-gray-200 h-10 w-24 rounded"></div>
+                <div className="animate-pulse bg-gray-200 h-10 w-24 rounded"></div>
+              </div>
+            </div>
+          </div>
+        </nav>
+      </header>
+    );
+  }
 
   return (
     <>
@@ -322,15 +268,17 @@ const NavigationHeader: React.FC = () => {
                   className="relative group"
                 >
                   <div className="absolute inset-0 bg-gradient-to-r from-amber-400/20 to-amber-600/20 blur-xl group-hover:blur-2xl transition-all duration-500 rounded-full" />
-                  {/* Logo Text */}
-                  <div className="relative z-10 px-4 py-2">
-                    <Image
-                      src="/logo.png"
-                      alt={`${companyName} - Logo`}
-                      width={64}
-                      height={64}
-                      className="object-contain"
-                    />
+                  {/* Logo */}
+                  <div className="relative z-10 px-4 py-2 flex items-center gap-3">
+              
+                      <Image
+                        src={logoUrl}
+                        alt={`${companyName} - Logo`}
+                        width={64}
+                        height={64}
+                        className="object-contain"
+                      />
+                    
                   </div>
                 </Link>
               </div>
@@ -400,9 +348,9 @@ const NavigationHeader: React.FC = () => {
                           }`}
                         >
                           <div className="p-2">
-                            {item.subItems.map((subItem, index) => (
+                            {item.subItems.map((subItem) => (
                               <button
-                                key={index}
+                                key={subItem.href}
                                 onClick={() =>
                                   handleNavigation(subItem.href)
                                 }
@@ -445,8 +393,8 @@ const NavigationHeader: React.FC = () => {
                     aria-expanded={showLanguageDropdown}
                   >
                     <Globe size={20} />
-                    <span className="text-sm font-medium">
-                      {selectedLanguage}
+                    <span className="text-sm font-medium uppercase">
+                      {locale}
                     </span>
                     <ChevronDown
                       size={16}
@@ -467,11 +415,11 @@ const NavigationHeader: React.FC = () => {
                         <button
                           key={lang.code}
                           onClick={() => {
-                            setSelectedLanguage(lang.code);
+                            setLocale(lang.code);
                             setShowLanguageDropdown(false);
                           }}
                           className={`w-full text-left px-5 py-3 hover:bg-gradient-to-r hover:from-amber-50 hover:to-transparent transition-all duration-300 flex items-center gap-3 ${
-                            selectedLanguage === lang.code ? "bg-amber-50" : ""
+                            locale === lang.code ? "bg-amber-50" : ""
                           }`}
                         >
                           <span className="text-lg">{lang.flag}</span>
@@ -486,31 +434,35 @@ const NavigationHeader: React.FC = () => {
 
                 {/* Premium Desktop CTA Buttons */}
                 <div className="flex items-center gap-4">
-                  <a
-                    href={`tel:${contactInfo.phone.replace(/\s/g, "")}`}
-                    className={`flex items-center gap-2 px-5 py-2.5 rounded-xl font-medium transition-all duration-300 ${
-                      isScrolled
-                        ? "hover:bg-amber-50 text-gray-700"
-                        : "hover:bg-white/10 text-white backdrop-blur-sm"
-                    }`}
-                    aria-label="Call now"
-                  >
-                    <Phone size={20} />
-                    <span className="hidden lg:inline">
-                      {contactInfo.phone}
-                    </span>
-                  </a>
+                  {contactInfo.phone && (
+                    <a
+                      href={`tel:${contactInfo.phone.replace(/\s/g, "")}`}
+                      className={`flex items-center gap-2 px-5 py-2.5 rounded-xl font-medium transition-all duration-300 ${
+                        isScrolled
+                          ? "hover:bg-amber-50 text-gray-700"
+                          : "hover:bg-white/10 text-white backdrop-blur-sm"
+                      }`}
+                      aria-label="Call now"
+                    >
+                      <Phone size={20} />
+                      <span className="hidden lg:inline">
+                        {contactInfo.phone}
+                      </span>
+                    </a>
+                  )}
 
-                  <button
-                    onClick={() => handleNavigation("/contact")}
-                    className="group relative px-6 py-3 rounded-xl font-semibold text-white overflow-hidden transition-all duration-300 hover:scale-105 hover:shadow-2xl"
-                    style={{ backgroundColor: "#451C15" }}
-                  >
+                  {primaryCtaText && (
+                    <button
+                      onClick={() => handleNavigation(primaryCtaUrl)}
+                      className="group relative px-6 py-3 rounded-xl font-semibold text-white overflow-hidden transition-all duration-300 hover:scale-105 hover:shadow-2xl"
+                      style={{ backgroundColor: "#451C15" }}
+                    >
                       <span className="relative flex items-center gap-2">
-                      <Calendar size={20} />
-                      <span>Book Workshop</span>
-                    </span>
-                  </button>
+                        <Calendar size={20} />
+                        <span>{primaryCtaText}</span>
+                      </span>
+                    </button>
+                  )}
                 </div>
               </div>
 
@@ -592,7 +544,9 @@ const NavigationHeader: React.FC = () => {
                   <h1 className="text-xl font-bold text-amber-900">
                     {companyName}
                   </h1>
-                  <p className="text-xs text-amber-700">Chocolate Atelier</p>
+                  {companyTagline && (
+                    <p className="text-xs text-amber-700">{companyTagline}</p>
+                  )}
                 </Link>
                 <button
                   onClick={() => setIsMobileMenuOpen(false)}
@@ -646,8 +600,8 @@ const NavigationHeader: React.FC = () => {
                       {/* Premium Mobile Subitems */}
                       {item.subItems && (
                         <ul className="ml-4 mt-2 space-y-1">
-                          {item.subItems.map((subItem, index) => (
-                            <li key={index}>
+                          {item.subItems.map((subItem) => (
+                            <li key={subItem.href}>
                               <button
                                 onClick={() =>
                                   handleNavigation(subItem.href)
@@ -682,70 +636,80 @@ const NavigationHeader: React.FC = () => {
                   </div>
 
                   <div className="space-y-4">
-                    <a
-                      href={`tel:${contactInfo.phone.replace(/\s/g, "")}`}
-                      className="flex items-start gap-4 text-gray-700 hover:text-amber-600 transition-all duration-300 p-3 rounded-xl hover:bg-amber-50/50"
-                    >
-                      <div className="p-2 bg-amber-100 rounded-lg">
-                        <Phone size={20} className="text-amber-600" />
-                      </div>
-                      <div>
-                        <div className="text-xs text-gray-500 uppercase tracking-wider">
-                          Phone
+                    {contactInfo.phone && (
+                      <a
+                        href={`tel:${contactInfo.phone.replace(/\s/g, "")}`}
+                        className="flex items-start gap-4 text-gray-700 hover:text-amber-600 transition-all duration-300 p-3 rounded-xl hover:bg-amber-50/50"
+                      >
+                        <div className="p-2 bg-amber-100 rounded-lg">
+                          <Phone size={20} className="text-amber-600" />
                         </div>
-                        <div className="text-base font-semibold mt-1">
-                          {contactInfo.phone}
+                        <div>
+                          <div className="text-xs text-gray-500 uppercase tracking-wider">
+                            Phone
+                          </div>
+                          <div className="text-base font-semibold mt-1">
+                            {contactInfo.phone}
+                          </div>
                         </div>
-                      </div>
-                    </a>
+                      </a>
+                    )}
 
-                    <a
-                      href={`mailto:${contactInfo.email}`}
-                      className="flex items-start gap-4 text-gray-700 hover:text-amber-600 transition-all duration-300 p-3 rounded-xl hover:bg-amber-50/50"
-                    >
-                      <div className="p-2 bg-amber-100 rounded-lg">
-                        <Mail size={20} className="text-amber-600" />
-                      </div>
-                      <div>
-                        <div className="text-xs text-gray-500 uppercase tracking-wider">
-                          Email
+                    {contactInfo.email && (
+                      <a
+                        href={`mailto:${contactInfo.email}`}
+                        className="flex items-start gap-4 text-gray-700 hover:text-amber-600 transition-all duration-300 p-3 rounded-xl hover:bg-amber-50/50"
+                      >
+                        <div className="p-2 bg-amber-100 rounded-lg">
+                          <Mail size={20} className="text-amber-600" />
                         </div>
-                        <div className="text-base mt-1">
-                          {contactInfo.email}
+                        <div>
+                          <div className="text-xs text-gray-500 uppercase tracking-wider">
+                            Email
+                          </div>
+                          <div className="text-base mt-1">
+                            {contactInfo.email}
+                          </div>
                         </div>
-                      </div>
-                    </a>
+                      </a>
+                    )}
 
-                    <div className="flex items-start gap-4 text-gray-700 p-3">
-                      <div className="p-2 bg-amber-100 rounded-lg">
-                        <MapPin size={20} className="text-amber-600" />
-                      </div>
-                      <div>
-                        <div className="text-xs text-gray-500 uppercase tracking-wider">
-                          Atelier
+                    {contactInfo.address && (
+                      <div className="flex items-start gap-4 text-gray-700 p-3">
+                        <div className="p-2 bg-amber-100 rounded-lg">
+                          <MapPin size={20} className="text-amber-600" />
                         </div>
-                        <div className="text-base mt-1">
-                          {contactInfo.address}
+                        <div>
+                          <div className="text-xs text-gray-500 uppercase tracking-wider">
+                            Atelier
+                          </div>
+                          <div className="text-base mt-1">
+                            {contactInfo.address}
+                          </div>
                         </div>
                       </div>
-                    </div>
+                    )}
 
-                    <div className="flex items-start gap-4 text-gray-700 p-3">
-                      <div className="p-2 bg-amber-100 rounded-lg">
-                        <Clock size={20} className="text-amber-600" />
+                    {contactInfo.schedule && (
+                      <div className="flex items-start gap-4 text-gray-700 p-3">
+                        <div className="p-2 bg-amber-100 rounded-lg">
+                          <Clock size={20} className="text-amber-600" />
+                        </div>
+                        <div>
+                          <div className="text-xs text-gray-500 uppercase tracking-wider">
+                            Business Hours
+                          </div>
+                          <div className="text-base mt-1">
+                            {contactInfo.schedule}
+                          </div>
+                          {contactInfo.scheduleNote && (
+                            <div className="text-sm text-gray-500 mt-0.5">
+                              {contactInfo.scheduleNote}
+                            </div>
+                          )}
+                        </div>
                       </div>
-                      <div>
-                        <div className="text-xs text-gray-500 uppercase tracking-wider">
-                          Business Hours
-                        </div>
-                        <div className="text-base mt-1">
-                          {contactInfo.schedule}
-                        </div>
-                        <div className="text-sm text-gray-500 mt-0.5">
-                          Sun: By appointment
-                        </div>
-                      </div>
-                    </div>
+                    )}
                   </div>
 
                   {/* Premium Mobile Language Switcher */}
@@ -757,15 +721,15 @@ const NavigationHeader: React.FC = () => {
                       {languages.map((lang) => (
                         <button
                           key={lang.code}
-                          onClick={() => setSelectedLanguage(lang.code)}
+                          onClick={() => setLocale(lang.code)}
                           className={`px-4 py-3 rounded-xl text-sm font-medium transition-all duration-300 ${
-                            selectedLanguage === lang.code
+                            locale === lang.code
                               ? "bg-gradient-to-r from-amber-100 to-amber-50 text-amber-700 shadow-md"
                               : "bg-gray-100 text-gray-700 hover:bg-gray-200"
                           }`}
                         >
                           <span className="text-lg">{lang.flag}</span>
-                          <span className="block mt-1 text-xs">
+                          <span className="block mt-1 text-xs uppercase">
                             {lang.code}
                           </span>
                         </button>
@@ -776,31 +740,33 @@ const NavigationHeader: React.FC = () => {
               </nav>
 
               {/* Premium Mobile CTA */}
-              <div
-                className={`p-6 border-t border-amber-100 bg-white/80 backdrop-blur-sm transition-all duration-500 ${
-                  mobileMenuStage >= 3
-                    ? "opacity-100 translate-y-0"
-                    : "opacity-0 translate-y-4"
-                }`}
-                style={{
-                  transitionDelay: mobileMenuStage >= 3 ? "700ms" : "0ms",
-                }}
-              >
-                <button
-                  onClick={() => handleNavigation("/contact")}
-                  className="w-full py-4 bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-600 hover:to-amber-700 text-white rounded-xl font-semibold shadow-xl hover:shadow-2xl transition-all duration-300 flex items-center justify-center gap-3 group"
+              {primaryCtaText && (
+                <div
+                  className={`p-6 border-t border-amber-100 bg-white/80 backdrop-blur-sm transition-all duration-500 ${
+                    mobileMenuStage >= 3
+                      ? "opacity-100 translate-y-0"
+                      : "opacity-0 translate-y-4"
+                  }`}
+                  style={{
+                    transitionDelay: mobileMenuStage >= 3 ? "700ms" : "0ms",
+                  }}
                 >
-                  <Calendar
-                    size={20}
-                    className="group-hover:rotate-12 transition-transform duration-300"
-                  />
-                  <span>Schedule Workshop</span>
-                  <ArrowRight
-                    size={18}
-                    className="group-hover:translate-x-1 transition-transform duration-300"
-                  />
-                </button>
-              </div>
+                  <button
+                    onClick={() => handleNavigation(primaryCtaUrl)}
+                    className="w-full py-4 bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-600 hover:to-amber-700 text-white rounded-xl font-semibold shadow-xl hover:shadow-2xl transition-all duration-300 flex items-center justify-center gap-3 group"
+                  >
+                    <Calendar
+                      size={20}
+                      className="group-hover:rotate-12 transition-transform duration-300"
+                    />
+                    <span>{primaryCtaText}</span>
+                    <ArrowRight
+                      size={18}
+                      className="group-hover:translate-x-1 transition-transform duration-300"
+                    />
+                  </button>
+                </div>
+              )}
             </div>
           </div>
         </>

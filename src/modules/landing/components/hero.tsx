@@ -1,61 +1,72 @@
 "use client";
 
+import React from "react";
 import { Button } from "@/components/ui/button";
 import { motion, useScroll, useTransform } from "motion/react";
-
-const heroContent = {
-  heading: {
-    line1: "The Art of Chocolate",
-    line2: "Perfected",
-  },
-  button: {
-    text: "Begin Your Journey",
-    link: "/services",
-  },
-  quote: {
-    author: "// ALEXA DELL",
-    text: "I believe chocolate is more than confection—it's a medium for connection, creativity, and unforgettable moments.",
-  },
-  stats: {
-    count: "157K",
-    label: "Happy Clients",
-  },
-  article: {
-    title: "The Art of Chocolate Making",
-    cta: "Read More →",
-    image: "/img/adult-classes.jpg",
-  },
-};
+import { useHomepageData } from "@/hooks/useHomepageData";
+import { getStrapiMediaUrl } from "@/lib/strapi";
+import Link from "next/link";
 
 export const Hero = () => {
   const { scrollY } = useScroll();
+  const { homepageData, isLoading, error } = useHomepageData();
   
-  // Parallax transforms - Same as BlogHero
+  // Parallax transforms
   const backgroundY = useTransform(scrollY, [0, 1000], [0, 200]);
   const contentY = useTransform(scrollY, [0, 800], [0, -50]);
   const opacity = useTransform(scrollY, [0, 400], [1, 0.3]);
   const scale = useTransform(scrollY, [0, 500], [1, 0.95]);
 
+
+  // Show error if data fetch failed
+  if (error) {
+    return (
+      <section className="min-h-screen flex items-center justify-center">
+        <div className="text-center">
+          <h2 className="text-2xl font-bold text-red-600 mb-4">Unable to load content</h2>
+          <p className="text-gray-600">{error}</p>
+        </div>
+      </section>
+    );
+  }
+
+  // Show loading state
+  if (isLoading || !homepageData?.heroSection) {
+    return (
+      <section className="min-h-screen flex items-center justify-center">
+        <div className="animate-pulse">
+          <div className="h-96 bg-gray-200 rounded-3xl"></div>
+        </div>
+      </section>
+    );
+  }
+
+  const heroContent = homepageData.heroSection;
+  
+  const backgroundImage = getStrapiMediaUrl(heroContent?.heroImage);
+
   return (
     <section className="relative min-h-screen flex items-center justify-center overflow-hidden">
-      {/* Background Image with Parallax - Exactly like BlogHero */}
+      {/* Background Image with Parallax */}
       <motion.div className="absolute inset-0" style={{ y: backgroundY }}>
-        <div 
-          className="absolute inset-0 bg-cover bg-center bg-no-repeat"
-          style={{ backgroundImage: "url('/img/bg.jpg')" }}
-        />
+        {backgroundImage && (
+          <div 
+            className="absolute inset-0 bg-cover bg-center bg-no-repeat"
+            style={{ backgroundImage: `url('${backgroundImage}')` }}
+          />
+        )}
         {/* Dark overlay for better text readability */}
         <div className="absolute inset-0 bg-gradient-to-br from-black/70 via-black/60 to-black/70" />
         <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent" />
       </motion.div>
 
-      {/* Glass Morphism Container - Same as BlogHero */}
+      {/* Glass Morphism Container */}
       <motion.div
         style={{ opacity, scale, y: contentY }}
         className="relative z-10 w-full max-w-[91.666667%] mx-auto px-4 sm:px-6 lg:px-8 py-16 sm:py-20 lg:py-24"
       >
         <div className="relative bg-white/10 backdrop-blur-xl rounded-3xl sm:rounded-[2rem] lg:rounded-[3rem] border border-white/20 shadow-2xl overflow-hidden">
-          {/* Noise Texture Overlay - Same as BlogHero */}
+          {/* Noise Texture Overlay */}
           <div
             className="absolute inset-0 opacity-[0.03] pointer-events-none"
             style={{
@@ -74,7 +85,7 @@ export const Hero = () => {
                 transition={{ duration: 1, ease: [0.22, 1, 0.36, 1] }}
                 className="text-center flex flex-col justify-center space-y-6 sm:space-y-8 lg:space-y-12 max-w-4xl"
               >
-                {/* Heading with refined typography - responsive sizing */}
+                {/* Heading with refined typography */}
                 <div className="relative">
                   <motion.div
                     initial={{ opacity: 0, y: 30 }}
@@ -87,11 +98,13 @@ export const Hero = () => {
                   >
                     <h1 className="[font-family:var(--font-playfair)] text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl 2xl:text-8xl font-extralight leading-[0.95] tracking-[-0.02em]">
                       <span className="block text-transparent bg-clip-text bg-gradient-to-br from-white via-amber-50/95 to-amber-100/90">
-                        {heroContent.heading.line1}
+                        {heroContent.heroTitle || heroContent.title}
                       </span>
-                      <span className="block mt-1 sm:mt-2 lg:mt-4 text-transparent bg-clip-text bg-gradient-to-br from-amber-100/90 via-amber-200/80 to-amber-300/70 italic font-thin">
-                        {heroContent.heading.line2}
-                      </span>
+                      {(heroContent.heroSubtitle || heroContent.subtitle) && (
+                        <span className="block mt-1 sm:mt-2 lg:mt-4 text-transparent bg-clip-text bg-gradient-to-br from-amber-100/90 via-amber-200/80 to-amber-300/70 italic font-thin">
+                          {heroContent.heroSubtitle || heroContent.subtitle}
+                        </span>
+                      )}
                     </h1>
                   </motion.div>
 
@@ -101,86 +114,89 @@ export const Hero = () => {
                     animate={{ scaleX: 1, opacity: 1 }}
                     transition={{
                       delay: 0.8,
+                      duration: 1.2,
+                      ease: [0.22, 1, 0.36, 1],
+                    }}
+                    className="mx-auto mt-6 sm:mt-8 lg:mt-10 h-px w-24 sm:w-32 lg:w-40 bg-gradient-to-r from-transparent via-amber-200/50 to-transparent"
+                  />
+                </div>
+
+                {/* CTA Button */}
+                {(heroContent.heroCtaText || heroContent.ctaText) && (heroContent.heroCtaUrl || heroContent.ctaUrl) && (
+                  <motion.div
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{
+                      delay: 0.6,
                       duration: 1,
                       ease: [0.22, 1, 0.36, 1],
                     }}
-                    className="absolute -bottom-4 sm:-bottom-6 left-1/2 transform -translate-x-1/2 w-24 sm:w-32 lg:w-40 h-[1px] origin-center"
+                    className="flex justify-center"
                   >
-                    <div className="h-full bg-gradient-to-r from-transparent via-amber-300 to-transparent" />
+                    <Link href={heroContent.heroCtaUrl || heroContent.ctaUrl}>
+                      <Button
+                        size="lg"
+                        className="group relative px-6 sm:px-8 lg:px-10 py-3 sm:py-4 lg:py-5 bg-white/10 hover:bg-white/20 backdrop-blur-md border border-white/30 hover:border-white/50 text-white rounded-full transition-all duration-500 shadow-xl hover:shadow-2xl hover:scale-105 text-sm sm:text-base lg:text-lg"
+                      >
+                        <span className="relative z-10 flex items-center gap-2 sm:gap-3">
+                          {heroContent.heroCtaText || heroContent.ctaText}
+                          <span className="transform transition-transform group-hover:translate-x-1">
+                            →
+                          </span>
+                        </span>
+                        <div className="absolute inset-0 rounded-full bg-gradient-to-r from-amber-400/0 via-amber-400/10 to-amber-400/0 opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+                      </Button>
+                    </Link>
                   </motion.div>
-                </div>
+                )}
 
-                {/* CTA and Quote with improved spacing */}
-                <div className="flex flex-col space-y-6 sm:space-y-8 lg:space-y-10">
+                {/* Quote */}
+                {heroContent.quote && (
                   <motion.div
-                    initial={{ opacity: 0, scale: 0.8 }}
-                    animate={{ opacity: 1, scale: 1 }}
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
                     transition={{
-                      delay: 0.5,
-                      duration: 0.8,
+                      delay: 1,
+                      duration: 1.2,
                       ease: [0.22, 1, 0.36, 1],
                     }}
-                    className="mx-auto"
+                    className="mt-8 sm:mt-12 lg:mt-16 mx-auto max-w-2xl"
                   >
-                    <Button
-                      onClick={() =>
-                        (window.location.href = heroContent.button.link)
-                      }
-                      size="lg"
-                      className="relative group bg-gradient-to-r from-amber-100 via-amber-50 to-white text-amber-950 hover:from-white hover:via-amber-50 hover:to-amber-100 rounded-full px-6 sm:px-8 py-3 sm:py-4 lg:px-12 lg:py-6 text-sm sm:text-base lg:text-lg xl:text-xl font-medium transition-all duration-500 shadow-2xl hover:shadow-amber-200/40 hover:shadow-3xl overflow-hidden"
-                    >
-                      {/* Button shimmer effect */}
-                      <div className="absolute inset-0 -top-2 bg-gradient-to-r from-transparent via-white/30 to-transparent skew-x-12 translate-x-[-200%] group-hover:translate-x-[200%] transition-transform duration-1000" />
-
-                      <span className="relative z-10 flex items-center gap-2 sm:gap-3">
-                        {heroContent.button.text}
-                        <motion.svg
-                          width="16"
-                          height="16"
-                          className="sm:w-5 sm:h-5"
-                          viewBox="0 0 24 24"
-                          fill="none"
-                          animate={{ x: [0, 8, 0] }}
-                          transition={{
-                            duration: 2,
-                            repeat: Infinity,
-                            ease: "easeInOut",
-                          }}
-                        >
-                          <path
-                            d="M5 12H19M19 12L12 5M19 12L12 19"
-                            stroke="currentColor"
-                            strokeWidth="2"
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                          />
-                        </motion.svg>
-                      </span>
-                    </Button>
+                    <blockquote className="relative">
+                      <p className="text-sm sm:text-base lg:text-lg text-white/70 italic leading-relaxed">
+                        &ldquo;{heroContent.quote}&rdquo;
+                      </p>
+                      {heroContent.quoteAuthor && (
+                        <cite className="block mt-3 sm:mt-4 text-xs sm:text-sm text-amber-200/60 font-medium tracking-wider">
+                          — {heroContent.quoteAuthor}
+                        </cite>
+                      )}
+                    </blockquote>
                   </motion.div>
+                )}
 
-                  {/* Enhanced Quote with better styling */}
+                {/* Stats */}
+                {heroContent.statsNumber && heroContent.statsLabel && (
                   <motion.div
-                    initial={{ opacity: 0, y: 30 }}
+                    initial={{ opacity: 0, y: 20 }}
                     animate={{ opacity: 1, y: 0 }}
-                    transition={{ delay: 0.7, duration: 0.8 }}
-                    className="max-w-lg sm:max-w-xl mx-auto text-center px-4 sm:px-0"
+                    transition={{
+                      delay: 1.2,
+                      duration: 1,
+                      ease: [0.22, 1, 0.36, 1],
+                    }}
+                    className="flex justify-center mt-8 sm:mt-12"
                   >
-                    <div className="relative pl-6 sm:pl-8 lg:pl-12">
-                      {/* Quote mark */}
-                      <div className="absolute left-0 -top-2 sm:-top-4 text-amber-300/20 text-4xl sm:text-6xl lg:text-7xl font-serif leading-none select-none">
-                        &apos;
+                    <div className="text-center">
+                      <div className="text-3xl sm:text-4xl lg:text-5xl font-light text-amber-200/90">
+                        {heroContent.statsNumber}
                       </div>
-
-                      <p className="text-amber-200/70 text-[10px] sm:text-xs lg:text-sm mb-2 sm:mb-3 font-medium tracking-[0.3em] uppercase [font-family:var(--font-inter)]">
-                        {heroContent.quote.author}
-                      </p>
-                      <p className="text-white/60 text-xs sm:text-sm lg:text-base xl:text-lg leading-relaxed italic font-light [font-family:var(--font-inter)]">
-                        {heroContent.quote.text}
-                      </p>
+                      <div className="text-xs sm:text-sm text-white/60 uppercase tracking-wider mt-2">
+                        {heroContent.statsLabel}
+                      </div>
                     </div>
                   </motion.div>
-                </div>
+                )}
               </motion.div>
             </div>
           </div>
