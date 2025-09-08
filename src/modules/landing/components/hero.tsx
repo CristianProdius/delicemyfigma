@@ -98,11 +98,11 @@ export const Hero = () => {
                   >
                     <h1 className="[font-family:var(--font-playfair)] text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl 2xl:text-8xl font-extralight leading-[0.95] tracking-[-0.02em]">
                       <span className="block text-transparent bg-clip-text bg-gradient-to-br from-white via-amber-50/95 to-amber-100/90">
-                        {heroContent.heroTitle || heroContent.title}
+                        {heroContent.heroTitle}
                       </span>
-                      {(heroContent.heroSubtitle || heroContent.subtitle) && (
+                      {heroContent.heroSubtitle && (
                         <span className="block mt-1 sm:mt-2 lg:mt-4 text-transparent bg-clip-text bg-gradient-to-br from-amber-100/90 via-amber-200/80 to-amber-300/70 italic font-thin">
-                          {heroContent.heroSubtitle || heroContent.subtitle}
+                          {heroContent.heroSubtitle}
                         </span>
                       )}
                     </h1>
@@ -122,7 +122,7 @@ export const Hero = () => {
                 </div>
 
                 {/* CTA Button */}
-                {(heroContent.heroCtaText || heroContent.ctaText) && (heroContent.heroCtaUrl || heroContent.ctaUrl) && (
+                {heroContent.heroCtaText && heroContent.heroCtaUrl && (
                   <motion.div
                     initial={{ opacity: 0, y: 20 }}
                     animate={{ opacity: 1, y: 0 }}
@@ -133,13 +133,13 @@ export const Hero = () => {
                     }}
                     className="flex justify-center"
                   >
-                    <Link href={heroContent.heroCtaUrl || heroContent.ctaUrl}>
+                    <Link href={heroContent.heroCtaUrl}>
                       <Button
                         size="lg"
                         className="group relative px-6 sm:px-8 lg:px-10 py-3 sm:py-4 lg:py-5 bg-white/10 hover:bg-white/20 backdrop-blur-md border border-white/30 hover:border-white/50 text-white rounded-full transition-all duration-500 shadow-xl hover:shadow-2xl hover:scale-105 text-sm sm:text-base lg:text-lg"
                       >
                         <span className="relative z-10 flex items-center gap-2 sm:gap-3">
-                          {heroContent.heroCtaText || heroContent.ctaText}
+                          {heroContent.heroCtaText}
                           <span className="transform transition-transform group-hover:translate-x-1">
                             →
                           </span>

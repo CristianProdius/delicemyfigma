@@ -72,7 +72,9 @@ export async function getLocales() {
 }
 
 // Helper to get image URL from Strapi media
-export function getStrapiMediaUrl(media: { url?: string } | null | undefined) {
+import type { StrapiImage } from '@/types/strapi';
+
+export function getStrapiMediaUrl(media: StrapiImage | null | undefined) {
   if (!media) return null;
   
   const imageUrl = media.url;

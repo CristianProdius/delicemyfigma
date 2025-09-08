@@ -1,10 +1,11 @@
 import { useState, useEffect } from 'react';
 import { getFooter } from '@/lib/strapi';
 import { useLanguage } from '@/contexts/LanguageContext';
+import type { FooterData } from '@/types/strapi';
 
 export function useFooterData() {
   const { locale } = useLanguage();
-  const [footerData, setFooterData] = useState<Record<string, unknown> | null>(null);
+  const [footerData, setFooterData] = useState<FooterData | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 

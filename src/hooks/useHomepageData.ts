@@ -1,10 +1,11 @@
 import { useState, useEffect } from 'react';
 import { strapiApi } from '@/lib/strapi';
 import { useLanguage } from '@/contexts/LanguageContext';
+import type { HomepageData } from '@/types/strapi';
 
 export function useHomepageData() {
   const { locale } = useLanguage();
-  const [homepageData, setHomepageData] = useState<Record<string, unknown> | null>(null);
+  const [homepageData, setHomepageData] = useState<HomepageData | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 

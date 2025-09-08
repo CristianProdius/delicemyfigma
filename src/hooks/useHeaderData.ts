@@ -1,10 +1,11 @@
 import { useState, useEffect } from 'react';
 import { getHeader } from '@/lib/strapi';
 import { useLanguage } from '@/contexts/LanguageContext';
+import type { HeaderData } from '@/types/strapi';
 
 export function useHeaderData() {
   const { locale } = useLanguage();
-  const [headerData, setHeaderData] = useState<Record<string, unknown> | null>(null);
+  const [headerData, setHeaderData] = useState<HeaderData | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 

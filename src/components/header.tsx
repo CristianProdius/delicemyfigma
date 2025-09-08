@@ -57,12 +57,12 @@ const NavigationHeader: React.FC = () => {
 
   // Parse navigation items from Strapi data
   const navItems = useMemo<NavItem[]>(() => {
-    if (!headerData?.navigationData) return [];
+    if (!headerData?.navigation) return [];
     
     try {
-      const navigationData = typeof headerData.navigationData === 'string' 
-        ? JSON.parse(headerData.navigationData) 
-        : headerData.navigationData;
+      const navigationData = typeof headerData.navigation === 'string' 
+        ? JSON.parse(headerData.navigation) 
+        : headerData.navigation;
       
       return navigationData || [];
     } catch (error) {
@@ -270,7 +270,7 @@ const NavigationHeader: React.FC = () => {
                   <div className="absolute inset-0 bg-gradient-to-r from-amber-400/20 to-amber-600/20 blur-xl group-hover:blur-2xl transition-all duration-500 rounded-full" />
                   {/* Logo */}
                   <div className="relative z-10 px-4 py-2 flex items-center gap-3">
-              
+                    {logoUrl ? (
                       <Image
                         src={logoUrl}
                         alt={`${companyName} - Logo`}
@@ -278,7 +278,13 @@ const NavigationHeader: React.FC = () => {
                         height={64}
                         className="object-contain"
                       />
-                    
+                    ) : (
+                      <div className="w-16 h-16 bg-amber-500/20 rounded-lg flex items-center justify-center">
+                        <span className="text-amber-600 font-bold text-xl">
+                          {companyName?.charAt(0) || 'L'}
+                        </span>
+                      </div>
+                    )}
                   </div>
                 </Link>
               </div>
