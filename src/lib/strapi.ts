@@ -51,7 +51,38 @@ export async function getHeader(locale: string = 'ru') {
 export async function getFooter(locale: string = 'ru') {
   try {
     const response = await strapiApi.get('/footer', {
-      params: buildStrapiQuery('*', undefined, locale),
+      params: {
+        populate: {
+          logo: {
+            fields: ['url', 'alternativeText', 'width', 'height']
+          },
+          servicesSection: {
+            populate: {
+              links: true
+            }
+          },
+          learnSection: {
+            populate: {
+              links: true
+            }
+          },
+          exploreSection: {
+            populate: {
+              links: true
+            }
+          },
+          connectSection: {
+            populate: {
+              links: true
+            }
+          },
+          contactInfo: true,
+          socialLinks: true,
+          newsletter: true,
+          copyright: true
+        },
+        locale,
+      },
     });
     return response.data.data;
   } catch (error) {

@@ -1,43 +1,20 @@
 "use client";
 
+import React from "react";
 import { motion, useScroll, useTransform } from "motion/react";
 import Image from "next/image";
 import { Button } from "@/components/ui/button";
 import { useRef } from "react";
 import { Sparkles, Mail, Phone, MapPin, ArrowRight } from "lucide-react";
+import type { CTASection as CTASectionType } from "@/types/strapi";
+import { getStrapiMediaUrl } from "@/lib/strapi";
 
-const ctaContent = {
-  preheading: "Sweet Beginnings Await",
-  heading: "Let's Create Something",
-  headingAccent: "Extraordinary Together",
-  description:
-    "Whether you're dreaming of custom chocolates for your special event or eager to master the art yourself, our doors are always open to fellow chocolate enthusiasts.",
-  buttons: {
-    primary: {
-      text: "Start Your Journey",
-      subtext: "Book a Consultation",
-    },
-    secondary: {
-      text: "Visit Our Atelier",
-      subtext: "See the Magic Happen",
-    },
-  },
-  contact: {
-    email: "hello@delicemy.com",
-    phone: "+373 123 456 789",
-    address: "Chisinau, Moldova",
-  },
-  mascot: {
-    image: "/img/cat-mascot.png",
-    alt: "Lady Whiskers - DeliceMy Mascot",
-    quote: "Every masterpiece begins with a single, sweet idea...",
-  },
-  decorativeElements: {
-    chocolateChips: ["🍫", "🌰", "🍓", "✨"],
-  },
-};
+interface CTASectionProps {
+  ctaSection?: CTASectionType;
+}
 
-export const CTASection = () => {
+export const CTASection: React.FC<CTASectionProps> = ({ ctaSection }) => {
+  // React hooks must be called before any early returns
   const containerRef = useRef<HTMLDivElement>(null);
   const { scrollYProgress } = useScroll({
     target: containerRef,
@@ -47,6 +24,29 @@ export const CTASection = () => {
   const mascotY = useTransform(scrollYProgress, [0, 1], [30, -30]);
   const mascotRotate = useTransform(scrollYProgress, [0, 1], [-3, 3]);
   const floatY = useTransform(scrollYProgress, [0, 0.5, 1], [0, -20, 0]);
+
+  // Don't render if no CTA section data
+  if (!ctaSection) {
+    return null;
+  }
+
+  const {
+    preheading = "Sweet Beginnings Await",
+    ctaTitle,
+    ctaDescription,
+    ctaButtonText,
+    primaryButtonSubtext = "Book a Consultation",
+    secondaryButtonText = "Visit Our Atelier",
+    secondaryButtonSubtext = "See the Magic Happen",
+    contactEmail = "hello@delicemy.com",
+    contactPhone = "+373 123 456 789",
+    contactAddress = "Chisinau, Moldova",
+    mascotImage,
+    mascotAlt = "Lady Whiskers - DeliceMy Mascot",
+    mascotQuote = "Every masterpiece begins with a single, sweet idea..."
+  } = ctaSection;
+
+  const mascotImageUrl = getStrapiMediaUrl(mascotImage);
 
   return (
     <section
@@ -84,8 +84,6 @@ export const CTASection = () => {
         </div>
       </div>
 
-
-
       <div className="relative z-10 px-4 sm:px-6 lg:px-8 xl:px-12 max-w-11/12 mx-auto">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 sm:gap-12 lg:gap-16 xl:gap-24 items-center">
           {/* Left Content - Dark text for white background */}
@@ -111,7 +109,7 @@ export const CTASection = () => {
                 <Sparkles className="w-4 h-4 sm:w-5 sm:h-5 text-[#D4A574]" />
               </motion.div>
               <span className="text-[#451C15]/70 text-xs sm:text-sm font-light tracking-[0.2em] uppercase [font-family:var(--font-inter)]">
-                {ctaContent.preheading}
+                {preheading}
               </span>
               <motion.div
                 animate={{ rotate: -360 }}
@@ -129,11 +127,9 @@ export const CTASection = () => {
               viewport={{ once: true }}
               className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl 2xl:text-8xl font-light text-[#451C15] mb-6 leading-[1.1] [font-family:var(--font-playfair)]"
             >
-              {ctaContent.heading}
-              <br />
-              <span className="relative inline-block mt-2">
+              <span className="relative inline-block">
                 <span className="relative z-10 italic font-extralight text-transparent bg-clip-text bg-gradient-to-r from-[#A67B5B] via-[#451C15] to-[#D4A574]">
-                  {ctaContent.headingAccent}
+                  {ctaTitle}
                 </span>
                 <motion.div
                   className="absolute -bottom-2 left-0 right-0 h-[1px] bg-gradient-to-r from-transparent via-[#D4A574] to-transparent"
@@ -153,7 +149,7 @@ export const CTASection = () => {
               viewport={{ once: true }}
               className="text-[#451C15]/60 text-sm sm:text-base lg:text-lg xl:text-xl mb-10 sm:mb-12 font-light leading-relaxed max-w-xl mx-auto lg:mx-0 [font-family:var(--font-inter)]"
             >
-              {ctaContent.description}
+              {ctaDescription}
             </motion.p>
 
             {/* Premium CTA Buttons */}
@@ -175,10 +171,10 @@ export const CTASection = () => {
                   <div className="relative z-10 flex items-center justify-center gap-3">
                     <div className="text-left">
                       <span className="block text-base sm:text-lg font-medium [font-family:var(--font-inter)]">
-                        {ctaContent.buttons.primary.text}
+                        {ctaButtonText}
                       </span>
                       <span className="block text-xs sm:text-sm opacity-70 font-light [font-family:var(--font-inter)]">
-                        {ctaContent.buttons.primary.subtext}
+                        {primaryButtonSubtext}
                       </span>
                     </div>
                     <ArrowRight className="w-5 h-5 ml-2 group-hover:translate-x-1 transition-transform duration-300" />
@@ -197,10 +193,10 @@ export const CTASection = () => {
                 >
                   <div className="relative z-10">
                     <span className="block text-base sm:text-lg font-medium [font-family:var(--font-inter)]">
-                      {ctaContent.buttons.secondary.text}
+                      {secondaryButtonText}
                     </span>
                     <span className="block text-xs sm:text-sm opacity-70 font-light [font-family:var(--font-inter)]">
-                      {ctaContent.buttons.secondary.subtext}
+                      {secondaryButtonSubtext}
                     </span>
                   </div>
                   <div className="absolute inset-0 rounded-full bg-gradient-to-r from-[#451C15]/0 via-[#451C15]/5 to-[#451C15]/0 opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
@@ -217,12 +213,12 @@ export const CTASection = () => {
               className="space-y-4"
             >
               {[
-                { icon: Mail, text: ctaContent.contact.email },
-                { icon: Phone, text: ctaContent.contact.phone },
-                { icon: MapPin, text: ctaContent.contact.address },
+                { icon: Mail, text: contactEmail },
+                { icon: Phone, text: contactPhone },
+                { icon: MapPin, text: contactAddress },
               ].map((item, index) => (
                 <motion.div
-                  key={index}
+                  key={`${item.text}-${index}`}
                   initial={{ opacity: 0, x: -20 }}
                   whileInView={{ opacity: 1, x: 0 }}
                   transition={{ delay: 0.6 + index * 0.1, duration: 0.5 }}
@@ -317,7 +313,7 @@ export const CTASection = () => {
                 >
                   <div className="relative bg-gradient-to-br from-[#451C15] to-[#5A241C] backdrop-blur-xl rounded-3xl p-4 sm:p-5 lg:p-6 shadow-2xl max-w-[180px] sm:max-w-[220px] lg:max-w-[280px] border border-[#451C15]/10">
                     <p className="text-[#E0D9C9] text-xs sm:text-sm lg:text-base italic font-light [font-family:var(--font-playfair)] leading-relaxed">
-                      &quot;{ctaContent.mascot.quote}&quot;
+                      &quot;{mascotQuote}&quot;
                     </p>
                     <div className="absolute -bottom-3 left-12 sm:left-16 w-6 h-6 bg-gradient-to-br from-[#451C15] to-[#5A241C] rotate-45 border-r border-b border-[#451C15]/10" />
                   </div>
@@ -325,13 +321,15 @@ export const CTASection = () => {
 
                 {/* Cat illustration container */}
                 <div className="relative w-56 h-72 sm:w-72 sm:h-96 lg:w-96 lg:h-[480px] xl:w-[420px] xl:h-[520px]">
-                  <Image
-                    src={ctaContent.mascot.image}
-                    alt={ctaContent.mascot.alt}
-                    fill
-                    className="object-contain drop-shadow-2xl"
-                    priority
-                  />
+                  {mascotImageUrl && (
+                    <Image
+                      src={mascotImageUrl}
+                      alt={mascotAlt}
+                      fill
+                      className="object-contain drop-shadow-2xl"
+                      priority
+                    />
+                  )}
 
                   {/* Animated sparkles with premium styling */}
                   <motion.div

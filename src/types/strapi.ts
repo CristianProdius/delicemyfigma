@@ -25,40 +25,43 @@ export interface HeaderData {
 }
 
 // Footer component interfaces
+export interface FooterNavigationLink {
+  label: string;
+  href: string;
+}
+
 export interface FooterNavigationSection {
-  title?: string;
-  links?: Array<{
-    text?: string;
-    url?: string;
-  }>;
+  title: string;
+  links?: FooterNavigationLink[];
 }
 
 export interface FooterContactInfo {
-  phone?: string;
-  email?: string;
-  address?: string;
-  workingHours?: string;
+  email: string;
+  phone: string;
+  address: string;
+  hours?: string;
+  title?: string;
 }
 
 export interface FooterSocialLink {
-  platform?: string;
-  url?: string;
-  icon?: string;
+  label: string;
+  href: string;
+  iconName: string;
 }
 
 export interface FooterNewsletter {
-  title?: string;
+  title: string;
   description?: string;
   placeholder?: string;
   buttonText?: string;
   successMessage?: string;
-  errorMessage?: string;
 }
 
 export interface FooterCopyright {
-  text?: string;
-  developedByText?: string;
-  developedByUrl?: string;
+  companyName: string;
+  rightsText?: string;
+  madeWithText?: string;
+  locationText?: string;
 }
 
 export interface FooterData {
@@ -71,6 +74,7 @@ export interface FooterData {
   connectSection?: FooterNavigationSection;
   contactInfo?: FooterContactInfo;
   socialLinks?: FooterSocialLink[];
+  socialTitle?: string;
   newsletter?: FooterNewsletter;
   certifications?: unknown; // JSON field
   copyright?: FooterCopyright;
@@ -106,11 +110,67 @@ export interface ServiceSection {
   featuredServices?: FeaturedService[];
 }
 
+export interface AboutStat {
+  number: string;
+  label: string;
+}
+
+export interface AboutKeyPoint {
+  icon: string;
+  title: string;
+  description: string;
+}
+
+export interface AboutSection {
+  sectionLabel?: string;
+  sectionTitle?: string;
+  ownerName: string;
+  ownerTitle: string;
+  ownerSubtitle?: string;
+  ownerHighlight?: string;
+  ownerQuote: string;
+  ownerImage?: StrapiImage;
+  stats?: AboutStat[];
+  keyPoints?: AboutKeyPoint[];
+  ctaText?: string;
+  ctaUrl?: string;
+}
+
+export interface Testimonial {
+  name: string;
+  role?: string;
+  company?: string;
+  content: string;
+  rating: number;
+  image?: StrapiImage;
+}
+
+export interface TestimonialsSection {
+  sectionTitle?: string;
+  testimonials?: Testimonial[];
+}
+
+export interface CTASection {
+  ctaTitle: string;
+  ctaDescription: string;
+  ctaButtonText: string;
+  preheading?: string;
+  primaryButtonSubtext?: string;
+  secondaryButtonText?: string;
+  secondaryButtonSubtext?: string;
+  contactEmail?: string;
+  contactPhone?: string;
+  contactAddress?: string;
+  mascotImage?: StrapiImage;
+  mascotAlt?: string;
+  mascotQuote?: string;
+}
+
 export interface HomepageData {
   heroSection?: HeroSection;
   serviceSection?: ServiceSection;
-  aboutSection?: unknown;
-  testimonialsSection?: unknown;
-  ctaSection?: unknown;
+  aboutSection?: AboutSection;
+  testimonialsSection?: TestimonialsSection;
+  ctaSection?: CTASection;
   seo?: unknown;
 }

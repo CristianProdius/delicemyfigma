@@ -37,9 +37,33 @@ export function useHomepageData() {
                   }
                 }
               },
-              aboutSection: true,
-              testimonialsSection: true,
-              ctaSection: true
+              aboutSection: {
+                populate: {
+                  ownerImage: {
+                    fields: ['url', 'alternativeText', 'width', 'height']
+                  },
+                  stats: true,
+                  keyPoints: true
+                }
+              },
+              testimonialsSection: {
+                populate: {
+                  testimonials: {
+                    populate: {
+                      image: {
+                        fields: ['url', 'alternativeText', 'width', 'height']
+                      }
+                    }
+                  }
+                }
+              },
+              ctaSection: {
+                populate: {
+                  mascotImage: {
+                    fields: ['url', 'alternativeText', 'width', 'height']
+                  }
+                }
+              }
             },
             locale,
           },

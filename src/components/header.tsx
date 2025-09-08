@@ -49,6 +49,7 @@ const NavigationHeader: React.FC = () => {
   const [showLanguageDropdown, setShowLanguageDropdown] = useState(false);
   const [headerVisible, setHeaderVisible] = useState(false);
   const [mobileMenuStage, setMobileMenuStage] = useState(0);
+  const [currentPath, setCurrentPath] = useState("/");
 
   // Refs
   const navRef = useRef<HTMLElement>(null);
@@ -123,6 +124,8 @@ const NavigationHeader: React.FC = () => {
   // Mount effect - enable animations after hydration
   useEffect(() => {
     setMounted(true);
+    // Set current path
+    setCurrentPath(window.location.pathname);
     // Trigger header animation after mount
     setTimeout(() => setHeaderVisible(true), 100);
   }, []);
@@ -210,8 +213,29 @@ const NavigationHeader: React.FC = () => {
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, [mounted]);
 
+  // Helper function to check if a navigation item is active
+  const isNavItemActive = (item: NavItem) => {
+    if (item.href.startsWith('#')) {
+      // For hash links, use scroll-based active section
+      return activeSection === item.id;
+    } else {
+      // For regular page links, check if current path matches
+      return currentPath === item.href;
+    }
+  };
+
   // Handle navigation
-  const handleNavigation = (href: string) => {
+  const handleNavigation = (href: string, itemId?: string) => {
+    // Clear hover states when navigating
+    setHoveredItem(null);
+    
+    // If it's a hash link to a section on the same page, update active section
+    if (href.startsWith('#') && itemId) {
+      setActiveSection(itemId);
+    } else {
+      // For regular navigation, update current path
+      setCurrentPath(href);
+    }
     window.location.href = href;
     setIsMobileMenuOpen(false);
   };
@@ -312,13 +336,23 @@ const NavigationHeader: React.FC = () => {
                       key={item.id || `nav-item-${index}`}
                       role="none"
                       className="relative"
-                      onMouseEnter={() => setHoveredItem(item.id)}
+                      onMouseEnter={() => {
+                        // Only set hover if this item has subItems, otherwise clear hover
+                        if (item.subItems && item.subItems.length > 0) {
+                          setHoveredItem(item.id || `nav-item-${index}`);
+                        } else {
+                          setHoveredItem(null);
+                        }
+                      }}
                       onMouseLeave={() => setHoveredItem(null)}
                     >
                       <button
-                        onClick={() => handleNavigation(item.href)}
+                        onClick={(e) => {
+                          e.preventDefault();
+                          handleNavigation(item.href, item.id);
+                        }}
                         className={`relative py-3 font-medium text-sm lg:text-base transition-all duration-300 flex items-center gap-2 group ${
-                          activeSection === item.id
+                          isNavItemActive(item)
                             ? isScrolled
                               ? "text-amber-600"
                               : "text-amber-300"
@@ -328,12 +362,12 @@ const NavigationHeader: React.FC = () => {
                         }`}
                         role="menuitem"
                         aria-current={
-                          activeSection === item.id ? "page" : undefined
+                          isNavItemActive(item) ? "page" : undefined
                         }
                         tabIndex={0}
                         onKeyDown={(e) =>
                           handleKeyDown(e, () =>
-                            handleNavigation(item.href)
+                            handleNavigation(item.href, item.id)
                           )
                         }
                       >
@@ -342,8 +376,8 @@ const NavigationHeader: React.FC = () => {
                           {/* Premium hover effect */}
                           <span
                             className={`absolute -bottom-1 left-0 w-full h-0.5 bg-gradient-to-r from-amber-400 to-amber-600 transform origin-left transition-transform duration-300 ${
-                              hoveredItem === item.id ||
-                              activeSection === item.id
+                              (hoveredItem === (item.id || `nav-item-${index}`) && item.subItems && item.subItems.length > 0) ||
+                              isNavItemActive(item)
                                 ? "scale-x-100"
                                 : "scale-x-0"
                             }`}
@@ -353,28 +387,35 @@ const NavigationHeader: React.FC = () => {
                           <ChevronDown
                             size={16}
                             className={`transition-transform duration-300 ${
-                              hoveredItem === item.id ? "rotate-180" : ""
+                              hoveredItem === (item.id || `nav-item-${index}`) ? "rotate-180" : ""
                             }`}
                           />
                         )}
                       </button>
 
                       {/* Premium Dropdown for Services */}
-                      {item.subItems && hoveredItem === item.id && (
-                        <div
-                          className={`absolute top-full left-0 mt-4 w-80 bg-white/95 backdrop-blur-xl rounded-2xl shadow-2xl border border-amber-100 overflow-hidden transition-all duration-300 ${
-                            mounted
-                              ? "opacity-100 translate-y-0"
-                              : "opacity-0 -translate-y-4"
-                          }`}
-                        >
+                      {item.subItems && hoveredItem === (item.id || `nav-item-${index}`) && (
+                        <div className="absolute top-full left-0 pt-4">
+                          {/* Invisible bridge to fill the gap */}
+                          <div className="absolute top-0 left-0 right-0 h-4 bg-transparent" />
+                          <div
+                            className={`w-80 bg-white/95 backdrop-blur-xl rounded-2xl shadow-2xl border border-amber-100 overflow-hidden transition-all duration-300 ${
+                              mounted
+                                ? "opacity-100 translate-y-0"
+                                : "opacity-0 -translate-y-4"
+                            }`}
+                            onMouseEnter={() => setHoveredItem(item.id || `nav-item-${index}`)}
+                            onMouseLeave={() => setHoveredItem(null)}
+                          >
                           <div className="p-2">
                             {item.subItems.map((subItem, subIndex) => (
                               <button
                                 key={subItem.href || `sub-item-${subIndex}`}
-                                onClick={() =>
-                                  handleNavigation(subItem.href)
-                                }
+                                onClick={(e) => {
+                                  e.preventDefault();
+                                  e.stopPropagation();
+                                  handleNavigation(subItem.href);
+                                }}
                                 className="w-full px-4 py-3 text-left rounded-xl hover:bg-gradient-to-r hover:from-amber-50 hover:to-amber-100/50 transition-all duration-300 group flex items-start gap-3"
                               >
                                 {subItem.icon && (
@@ -393,6 +434,7 @@ const NavigationHeader: React.FC = () => {
                               </button>
                             ))}
                           </div>
+                        </div>
                         </div>
                       )}
                     </li>
@@ -600,9 +642,9 @@ const NavigationHeader: React.FC = () => {
                       }}
                     >
                       <button
-                        onClick={() => handleNavigation(item.href)}
+                        onClick={() => handleNavigation(item.href, item.id)}
                         className={`w-full text-left px-5 py-4 rounded-xl font-medium transition-all duration-300 flex items-center justify-between group ${
-                          activeSection === item.id
+                          isNavItemActive(item)
                             ? "bg-gradient-to-r from-amber-100 to-amber-50 text-amber-700 shadow-lg"
                             : "text-gray-700 hover:bg-amber-50"
                         }`}
@@ -611,7 +653,7 @@ const NavigationHeader: React.FC = () => {
                         <ArrowRight
                           size={18}
                           className={`transition-all duration-300 ${
-                            activeSection === item.id
+                            isNavItemActive(item)
                               ? "translate-x-1 text-amber-600"
                               : "text-gray-400 group-hover:translate-x-1"
                           }`}
@@ -624,9 +666,11 @@ const NavigationHeader: React.FC = () => {
                           {item.subItems.map((subItem, subIndex) => (
                             <li key={subItem.href || `mobile-sub-item-${subIndex}`}>
                               <button
-                                onClick={() =>
-                                  handleNavigation(subItem.href)
-                                }
+                                onClick={(e) => {
+                                  e.preventDefault();
+                                  e.stopPropagation();
+                                  handleNavigation(subItem.href);
+                                }}
                                 className="w-full text-left px-4 py-2.5 text-sm text-gray-600 hover:text-amber-600 hover:bg-amber-50/50 rounded-lg transition-all duration-300 flex items-center gap-2"
                               >
                                 {subItem.icon}

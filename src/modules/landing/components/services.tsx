@@ -132,14 +132,14 @@ export const Services: React.FC<ServicesProps> = ({ serviceSection }) => {
                       />
                     )}
                     
-                    {/* Service card overlay gradient */}
+                    {/* Service card overlay - consistent brown overlay */}
                     <div 
                       className="absolute inset-0 transition-opacity duration-500"
                       style={{
                         background: backgroundImage 
-                          ? `linear-gradient(135deg, ${service.accentColor}40 0%, rgba(0,0,0,0.3) 50%, ${service.accentColor}30 100%)`
+                          ? 'linear-gradient(135deg, rgba(69, 28, 21, 0.85) 0%, rgba(69, 28, 21, 0.75) 50%, rgba(69, 28, 21, 0.85) 100%)'
                           : `linear-gradient(135deg, ${service.accentColor}20 0%, transparent 50%, ${service.accentColor}10 100%)`,
-                        opacity: backgroundImage ? 0.8 : 0.5
+                        opacity: backgroundImage ? 1 : 0.5
                       }}
                     />
 
@@ -149,11 +149,11 @@ export const Services: React.FC<ServicesProps> = ({ serviceSection }) => {
                         <div 
                           className="inline-flex items-center justify-center w-14 h-14 sm:w-16 sm:h-16 rounded-2xl transition-all duration-500 group-hover:scale-110"
                           style={{ 
-                            backgroundColor: `${service.accentColor}15`,
-                            border: `2px solid ${service.accentColor}30`
+                            backgroundColor: backgroundImage ? 'rgba(255, 255, 255, 0.15)' : `${service.accentColor}15`,
+                            border: backgroundImage ? '2px solid rgba(255, 255, 255, 0.3)' : `2px solid ${service.accentColor}30`
                           }}
                         >
-                          <div style={{ color: service.accentColor }}>
+                          <div style={{ color: backgroundImage ? 'white' : service.accentColor }}>
                             <IconComponent className="w-7 h-7 sm:w-8 sm:h-8 transition-colors duration-500" />
                           </div>
                         </div>
@@ -161,10 +161,14 @@ export const Services: React.FC<ServicesProps> = ({ serviceSection }) => {
 
                       {/* Content */}
                       <div className="flex-1">
-                        <h3 className="text-xl sm:text-2xl font-light text-amber-900 [font-family:var(--font-playfair)] mb-3 group-hover:text-amber-800 transition-colors duration-300">
+                        <h3 className={`text-xl sm:text-2xl font-light [font-family:var(--font-playfair)] mb-3 group-hover:text-amber-800 transition-colors duration-300 ${
+                          backgroundImage ? 'text-white' : 'text-amber-900'
+                        }`}>
                           {service.title}
                         </h3>
-                        <p className="text-amber-800/70 text-sm sm:text-base leading-relaxed [font-family:var(--font-inter)] mb-6">
+                        <p className={`text-sm sm:text-base leading-relaxed [font-family:var(--font-inter)] mb-6 ${
+                          backgroundImage ? 'text-white/90' : 'text-amber-800/70'
+                        }`}>
                           {service.description}
                         </p>
                       </div>
@@ -173,7 +177,7 @@ export const Services: React.FC<ServicesProps> = ({ serviceSection }) => {
                       {service.buttonText && (
                         <div 
                           className="flex items-center text-sm font-medium group-hover:gap-2 transition-all duration-300" 
-                          style={{ color: service.accentColor }}
+                          style={{ color: backgroundImage ? 'white' : service.accentColor }}
                         >
                           <span className="group-hover:translate-x-1 transition-transform duration-300">
                             {service.buttonText}

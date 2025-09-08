@@ -47,10 +47,12 @@ export default function Footer() {
         email: '',
         phone: '',
         address: '',
-        workingHours: ''
+        hours: '',
+        title: ''
       },
       
       social: footerData.socialLinks || [],
+      socialTitle: footerData.socialTitle || '',
       
       newsletter: footerData.newsletter || {
         title: '',
@@ -63,9 +65,10 @@ export default function Footer() {
       certifications: footerData.certifications || [],
       
       copyright: footerData.copyright || {
-        text: '',
-        developedByText: '',
-        developedByUrl: ''
+        companyName: '',
+        rightsText: '',
+        madeWithText: '',
+        locationText: ''
       }
     };
   }, [footerData]);
@@ -105,13 +108,15 @@ export default function Footer() {
   }
 
   // Map social icons
-  const getSocialIcon = (platform: string) => {
-    switch (platform?.toLowerCase()) {
+  const getSocialIcon = (iconName: string) => {
+    switch (iconName?.toLowerCase()) {
       case 'instagram': return Instagram;
       case 'facebook': return Facebook;
       case 'youtube': return Youtube;
       case 'twitter': 
       case 'x': return Twitter;
+      case 'mail':
+      case 'email': return Mail;
       default: return null;
     }
   };
@@ -261,9 +266,9 @@ export default function Footer() {
                         {section.title}
                       </h5>
                       <ul className="space-y-3">
-                        {section.links && section.links.map((link: { text?: string; url?: string }, linkIndex: number) => (
+                        {section.links && section.links.map((link, linkIndex: number) => (
                           <motion.li
-                            key={linkIndex}
+                            key={`${link.label}-${linkIndex}`}
                             initial={{ opacity: 0, x: -10 }}
                             whileInView={{ opacity: 1, x: 0 }}
                             transition={{
@@ -272,10 +277,10 @@ export default function Footer() {
                             viewport={{ once: true }}
                           >
                             <Link
-                              href={link.url || '#'}
+                              href={link.href || '#'}
                               className="group text-[#E0D9C9]/50 hover:text-[#E0D9C9] transition-colors duration-300 text-sm flex items-center gap-1 [font-family:var(--font-inter)]"
                             >
-                              <span>{link.text}</span>
+                              <span>{link.label}</span>
                               <ArrowUpRight className="w-3 h-3 opacity-0 -translate-y-1 translate-x-1 group-hover:opacity-100 group-hover:translate-y-0 group-hover:translate-x-0 transition-all duration-300" />
                             </Link>
                           </motion.li>
@@ -300,7 +305,7 @@ export default function Footer() {
                 className="text-center md:text-left"
               >
                 <h5 className="text-[#E0D9C9] font-medium mb-4 text-sm uppercase tracking-wider [font-family:var(--font-inter)]">
-                  Visit Us
+                  {footerContent.contact.title || 'Visit Us'}
                 </h5>
                 <div className="space-y-3 text-[#E0D9C9]/50 text-sm [font-family:var(--font-inter)]">
                   {footerContent.contact.address && (
@@ -321,10 +326,10 @@ export default function Footer() {
                       <span>{footerContent.contact.email}</span>
                     </div>
                   )}
-                  {footerContent.contact.workingHours && (
+                  {footerContent.contact.hours && (
                     <div className="flex items-center gap-3 justify-center md:justify-start">
                       <span className="text-[#D4A574]">
-                        {footerContent.contact.workingHours}
+                        {footerContent.contact.hours}
                       </span>
                     </div>
                   )}
@@ -342,23 +347,23 @@ export default function Footer() {
                 className="text-center md:text-right"
               >
                 <h5 className="text-[#E0D9C9] font-medium mb-4 text-sm uppercase tracking-wider [font-family:var(--font-inter)]">
-                  Follow Our Journey
+                  {footerContent.socialTitle || 'Follow Our Journey'}
                 </h5>
                 <div className="flex gap-3 justify-center md:justify-end">
-                  {footerContent.social.map((social: { platform?: string; url?: string; icon?: string }, index: number) => {
-                    const Icon = getSocialIcon(social.platform || '');
+                  {footerContent.social.map((social, index: number) => {
+                    const Icon = getSocialIcon(social.iconName || '');
                     if (!Icon) return null;
                     
                     return (
                       <motion.a
-                        key={index}
-                        href={social.url || '#'}
+                        key={`${social.label}-${index}`}
+                        href={social.href || '#'}
                         target="_blank"
                         rel="noopener noreferrer"
                         whileHover={{ scale: 1.1, y: -2 }}
                         whileTap={{ scale: 0.95 }}
                         className="group relative w-10 h-10 rounded-full bg-[#E0D9C9]/10 backdrop-blur-sm border border-[#E0D9C9]/20 flex items-center justify-center hover:bg-[#E0D9C9]/20 hover:border-[#D4A574]/50 transition-all duration-300"
-                        aria-label={social.platform}
+                        aria-label={social.label}
                       >
                         <Icon className="w-4 h-4 text-[#E0D9C9]/60 group-hover:text-[#E0D9C9] transition-colors duration-300" />
                         <div className="absolute inset-0 rounded-full bg-gradient-to-r from-[#D4A574]/0 via-[#D4A574]/20 to-[#D4A574]/0 opacity-0 group-hover:opacity-100 blur-lg transition-opacity duration-300" />
@@ -380,17 +385,12 @@ export default function Footer() {
               className="pt-8 text-center"
             >
               <p className="text-[#E0D9C9]/40 text-xs sm:text-sm [font-family:var(--font-inter)]">
-                {footerContent.copyright.text || `© ${new Date().getFullYear()} DeliceMy. All rights reserved.`}
-                {footerContent.copyright.developedByText && (
+                © {new Date().getFullYear()} {footerContent.copyright.companyName || 'DeliceMy'}. {footerContent.copyright.rightsText || 'All rights reserved.'}
+                {footerContent.copyright.madeWithText && (
                   <span className="inline-flex items-center gap-1 ml-2">
-                    <Link 
-                      href={footerContent.copyright.developedByUrl || '#'} 
-                      className="hover:text-[#D4A574] transition-colors"
-                      target="_blank"
-                      rel="noopener noreferrer"
-                    >
-                      {footerContent.copyright.developedByText}
-                    </Link>
+                    <span className="text-[#D4A574]">
+                      {footerContent.copyright.madeWithText}
+                    </span>
                     <motion.span
                       animate={{ scale: [1, 1.2, 1] }}
                       transition={{ duration: 2, repeat: Infinity }}
@@ -398,6 +398,11 @@ export default function Footer() {
                     >
                       <Heart className="w-3 h-3 fill-current" />
                     </motion.span>
+                  </span>
+                )}
+                {footerContent.copyright.locationText && (
+                  <span className="ml-2 text-[#D4A574]">
+                    {footerContent.copyright.locationText}
                   </span>
                 )}
               </p>
