@@ -93,7 +93,7 @@ export interface HeroSection {
 export interface FeaturedService {
   title: string;
   description: string;
-  image?: string;
+  image?: StrapiImage;
   buttonText?: string;
   href: string;
   gridClass: string;

@@ -26,6 +26,7 @@ import {
   Calendar
 } from "lucide-react";
 import type { ServiceSection, FeaturedService } from "@/types/strapi";
+import { getStrapiMediaUrl } from "@/lib/strapi";
 
 interface ServicesProps {
   serviceSection?: ServiceSection;
@@ -99,6 +100,7 @@ export const Services: React.FC<ServicesProps> = ({ serviceSection }) => {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 auto-rows-fr gap-6 lg:gap-8 max-w-7xl mx-auto">
           {featuredServices.map((service: FeaturedService, index: number) => {
             const IconComponent = getServiceIcon(service.iconName);
+            const backgroundImage = getStrapiMediaUrl(service.image);
             
             return (
               <motion.div
@@ -122,23 +124,24 @@ export const Services: React.FC<ServicesProps> = ({ serviceSection }) => {
                   className="block h-full"
                 >
                   <div className="relative h-full bg-white/80 backdrop-blur-sm rounded-2xl sm:rounded-3xl border border-amber-100/50 hover:border-amber-200/70 transition-all duration-500 hover:shadow-2xl hover:shadow-amber-500/10 overflow-hidden group-hover:scale-[1.02] transform">
-                    {/* Service card background gradient */}
+                    {/* Full background image if provided */}
+                    {backgroundImage && (
+                      <div 
+                        className="absolute inset-0 bg-cover bg-center bg-no-repeat opacity-15 group-hover:opacity-25 group-hover:scale-105 transition-all duration-700"
+                        style={{ backgroundImage: `url(${backgroundImage})` }}
+                      />
+                    )}
+                    
+                    {/* Service card overlay gradient */}
                     <div 
-                      className="absolute inset-0 opacity-5 group-hover:opacity-10 transition-opacity duration-500"
+                      className="absolute inset-0 transition-opacity duration-500"
                       style={{
-                        background: `linear-gradient(135deg, ${service.accentColor}20 0%, transparent 50%, ${service.accentColor}10 100%)`
+                        background: backgroundImage 
+                          ? `linear-gradient(135deg, ${service.accentColor}40 0%, rgba(0,0,0,0.3) 50%, ${service.accentColor}30 100%)`
+                          : `linear-gradient(135deg, ${service.accentColor}20 0%, transparent 50%, ${service.accentColor}10 100%)`,
+                        opacity: backgroundImage ? 0.8 : 0.5
                       }}
                     />
-                    
-                    {/* Service image background if provided */}
-                    {service.image && (
-                      <div className="absolute top-4 right-4 w-16 h-16 rounded-full opacity-10 group-hover:opacity-20 transition-opacity duration-500 overflow-hidden">
-                        <div 
-                          className="w-full h-full bg-cover bg-center"
-                          style={{ backgroundImage: `url(${service.image})` }}
-                        />
-                      </div>
-                    )}
 
                     <div className="relative z-10 p-6 sm:p-8 h-full flex flex-col">
                       {/* Icon */}

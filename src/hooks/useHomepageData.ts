@@ -28,7 +28,13 @@ export function useHomepageData() {
               },
               serviceSection: {
                 populate: {
-                  featuredServices: '*'
+                  featuredServices: {
+                    populate: {
+                      image: {
+                        fields: ['url', 'alternativeText', 'width', 'height']
+                      }
+                    }
+                  }
                 }
               },
               aboutSection: true,
