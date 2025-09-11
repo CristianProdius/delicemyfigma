@@ -238,6 +238,11 @@ curl "http://localhost:1337/api/homepage?populate=*&locale=ru" | jq
 curl "http://localhost:1337/api/homepage?populate[heroSection][populate]=heroImage&locale=ru"
 ```
 
+use: 
+  cat src/api/... to see the structure of a component in strapi
+
+
+
 ## Component Development Guidelines
 
 When creating new components that need CMS content:
