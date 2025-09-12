@@ -29,6 +29,7 @@ interface BlogListingProps {
   showSearch?: boolean;
   showFilters?: boolean;
   className?: string;
+  listingSettings?: any;
   onPostClick?: (post: BlogPost) => void;
 }
 
@@ -98,9 +99,11 @@ const SkeletonCard = ({
 const EmptyState = ({
   searchQuery,
   category,
+  listingSettings,
 }: {
   searchQuery?: string;
   category?: string;
+  listingSettings?: any;
 }) => {
   return (
     <motion.div
@@ -135,15 +138,15 @@ const EmptyState = ({
       
       {/* Message */}
       <h3 className="text-2xl font-light text-[#451C15] mb-3 [font-family:var(--font-playfair)]">
-        No articles found
+        {listingSettings?.noArticlesFoundTitle || "No articles found"}
       </h3>
       <p className="text-[#451C15]/60 text-center max-w-md [font-family:var(--font-inter)]">
         {searchQuery ? (
-          <>We couldn&apos;t find any articles matching &quot;{searchQuery}&quot;</>
+          <>{listingSettings?.noArticlesWithSearchText || "We couldn't find any articles matching"} &quot;{searchQuery}&quot;</>
         ) : category ? (
-          <>No articles available in this category yet</>
+          <>{listingSettings?.noArticlesInCategoryText || "No articles available in this category yet"}</>
         ) : (
-          <>Check back soon for new chocolate stories and recipes</>
+          <>{listingSettings?.noArticlesDefaultText || "Check back soon for new chocolate stories and recipes"}</>
         )}
       </p>
       
@@ -155,7 +158,7 @@ const EmptyState = ({
           onClick={() => window.location.reload()}
           className="mt-6 px-6 py-3 bg-[#451C15] text-white rounded-full hover:bg-[#5A241C] transition-colors [font-family:var(--font-inter)]"
         >
-          Clear filters
+          {listingSettings?.clearFiltersText || "Clear filters"}
         </motion.button>
       )}
     </motion.div>
@@ -260,6 +263,7 @@ export const BlogListing = ({
   showSearch = true,
   showFilters = true,
   className,
+  listingSettings,
   onPostClick,
 }: BlogListingProps) => {
   // State management
@@ -356,7 +360,7 @@ export const BlogListing = ({
                   type="text"
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
-                  placeholder="Search articles, recipes, tutorials..."
+                  placeholder={listingSettings?.searchPlaceholder || "Search articles, recipes, tutorials..."}
                   className="w-full px-6 py-4 pl-14 pr-12 bg-white border border-[#451C15]/10 rounded-2xl text-[#451C15] placeholder-[#451C15]/40 [font-family:var(--font-inter)] focus:outline-none focus:border-[#D4A574] focus:shadow-lg transition-all duration-300"
                 />
                 <Search className="absolute left-5 top-1/2 -translate-y-1/2 w-5 h-5 text-[#451C15]/40" />
@@ -387,7 +391,7 @@ export const BlogListing = ({
                         : "bg-white text-[#451C15] hover:bg-[#451C15]/10 border border-[#451C15]/20"
                     )}
                   >
-                    All Articles
+                    {listingSettings?.allArticlesText || "All Articles"}
                   </motion.button>
                   {categories.map((category) => (
                     <motion.button
@@ -430,7 +434,7 @@ export const BlogListing = ({
                   >
                     <span className="flex items-center gap-2 text-[#451C15] [font-family:var(--font-inter)]">
                       <Filter className="w-5 h-5" />
-                      Filter by Category
+                      {listingSettings?.filterByCategoryText || "Filter by Category"}
                     </span>
                     <motion.div
                       animate={{ rotate: showMobileFilters ? 180 : 0 }}
@@ -463,7 +467,7 @@ export const BlogListing = ({
                                 : "text-[#451C15] hover:bg-[#451C15]/10"
                             )}
                           >
-                            All Articles
+                            {listingSettings?.allArticlesText || "All Articles"}
                           </button>
                           {categories.map((category) => (
                             <button
@@ -510,7 +514,7 @@ export const BlogListing = ({
             className="mb-6 text-center"
           >
             <p className="text-sm text-[#451C15]/60 [font-family:var(--font-inter)]">
-              Showing {paginatedPosts.length} of {filteredPosts.length} articles
+              {listingSettings?.showingText || "Showing"} {paginatedPosts.length} {listingSettings?.ofText || "of"} {filteredPosts.length} {listingSettings?.articlesText || "articles"}
               {searchQuery && ` for "${searchQuery}"`}
               {activeCategory !== "all" &&
                 ` in ${categories.find((c) => c.id === activeCategory)?.name}`}
@@ -540,6 +544,7 @@ export const BlogListing = ({
               <EmptyState
                 searchQuery={searchQuery}
                 category={activeCategory !== "all" ? activeCategory : undefined}
+                listingSettings={listingSettings}
               />
             ) : (
               // Blog Posts

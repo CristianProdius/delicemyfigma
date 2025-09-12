@@ -29,6 +29,7 @@ interface BlogSidebarProps {
   popularPosts: BlogPost[];
   currentPostId?: string;
   className?: string;
+  widgets?: any[];
   onCategoryClick?: (categoryId: string) => void;
   onTagClick?: (tag: string) => void;
   onNewsletterSubmit?: (email: string) => Promise<void>;
@@ -102,14 +103,16 @@ const CategoriesWidget = ({
   postsCount,
   onCategoryClick,
   activeCategory,
+  widget,
 }: {
   categories: BlogCategory[];
   postsCount: Record<string, number>;
   onCategoryClick?: (categoryId: string) => void;
   activeCategory?: string;
+  widget?: any;
 }) => {
   return (
-    <WidgetCard title="Categories" icon={FolderOpen} accentColor="#95A99C">
+    <WidgetCard title={widget?.title || "Categories"} icon={FolderOpen} accentColor={widget?.accentColor || "#95A99C"}>
       <div className="space-y-2">
         {categories.map((category, index) => (
           <motion.button
@@ -163,15 +166,17 @@ const CategoriesWidget = ({
 const PopularPostsWidget = ({
   posts,
   currentPostId,
+  widget,
 }: {
   posts: BlogPost[];
   currentPostId?: string;
+  widget?: any;
 }) => {
   return (
     <WidgetCard
-      title="Popular Articles"
+      title={widget?.title || "Popular Articles"}
       icon={TrendingUp}
-      accentColor="#E8B4B8"
+      accentColor={widget?.accentColor || "#E8B4B8"}
     >
       <div className="space-y-4">
         {posts.slice(0, 5).map((post, index) => (
@@ -236,7 +241,7 @@ const PopularPostsWidget = ({
           href="/blog?sort=popular"
           className="flex items-center gap-2 text-sm text-[#D4A574] hover:text-[#A67B5B] transition-colors [font-family:var(--font-inter)]"
         >
-          <span>View all popular posts</span>
+          <span>{widget?.viewAllText || "View all popular posts"}</span>
           <ArrowRight className="w-4 h-4" />
         </Link>
       </motion.div>
@@ -247,8 +252,10 @@ const PopularPostsWidget = ({
 // Newsletter Widget
 const NewsletterWidget = ({
   onSubmit,
+  widget,
 }: {
   onSubmit?: (email: string) => Promise<void>;
+  widget?: any;
 }) => {
   const [email, setEmail] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -304,13 +311,12 @@ const NewsletterWidget = ({
             <Mail className="w-5 h-5 text-white" />
           </div>
           <h3 className="text-xl font-medium text-white [font-family:var(--font-playfair)]">
-            Sweet Updates
+            {widget?.newsletterSettings?.widgetTitle || "Sweet Updates"}
           </h3>
         </div>
 
         <p className="text-white/80 text-sm mb-5 [font-family:var(--font-inter)]">
-          Get exclusive recipes, chocolate tips, and early access to new
-          articles delivered to your inbox.
+          {widget?.newsletterSettings?.widgetDescription || "Get exclusive recipes, chocolate tips, and early access to new articles delivered to your inbox."}
         </p>
 
         <AnimatePresence mode="wait">
@@ -327,7 +333,7 @@ const NewsletterWidget = ({
                   type="email"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
-                  placeholder="Enter your email"
+                  placeholder={widget?.newsletterSettings?.placeholder || "Enter your email"}
                   required
                   className="w-full px-4 py-3 pr-12 bg-white/20 backdrop-blur-sm border border-white/30 rounded-full text-white placeholder-white/60 focus:outline-none focus:border-white/50 transition-colors text-sm [font-family:var(--font-inter)]"
                 />
@@ -354,7 +360,7 @@ const NewsletterWidget = ({
               </div>
 
               <p className="text-xs text-white/60 text-center [font-family:var(--font-inter)]">
-                No spam, unsubscribe anytime
+                {widget?.newsletterSettings?.privacyText || "No spam, unsubscribe anytime"}
               </p>
             </motion.form>
           ) : (
@@ -366,7 +372,7 @@ const NewsletterWidget = ({
             >
               <CheckCircle className="w-5 h-5 text-green-400" />
               <span className="text-white text-sm [font-family:var(--font-inter)]">
-                Successfully subscribed!
+                {widget?.newsletterSettings?.successMessage || "Successfully subscribed!"}
               </span>
             </motion.div>
           )}
@@ -376,9 +382,9 @@ const NewsletterWidget = ({
         <div className="mt-5 pt-5 border-t border-white/20">
           <div className="flex items-center justify-around">
             {[
-              { icon: BookOpen, label: "Weekly" },
-              { icon: Star, label: "Exclusive" },
-              { icon: Heart, label: "Free" },
+              { icon: BookOpen, label: widget?.newsletterSettings?.benefitWeekly || "Weekly" },
+              { icon: Star, label: widget?.newsletterSettings?.benefitExclusive || "Exclusive" },
+              { icon: Heart, label: widget?.newsletterSettings?.benefitFree || "Free" },
             ].map((item, index) => (
               <motion.div
                 key={item.label}
@@ -404,9 +410,11 @@ const NewsletterWidget = ({
 const TagsWidget = ({
   tags,
   onTagClick,
+  widget,
 }: {
   tags: Array<{ tag: string; count: number }>;
   onTagClick?: (tag: string) => void;
+  widget?: any;
 }) => {
   const maxCount = Math.max(...tags.map((t) => t.count));
 
@@ -425,7 +433,7 @@ const TagsWidget = ({
   };
 
   return (
-    <WidgetCard title="Popular Topics" icon={Tag} accentColor="#B8B2D8">
+    <WidgetCard title={widget?.title || "Popular Topics"} icon={Tag} accentColor={widget?.accentColor || "#B8B2D8"}>
       <div className="flex flex-wrap gap-2">
         {tags.map((item, index) => (
           <motion.button
@@ -480,7 +488,7 @@ const TagsWidget = ({
 };
 
 // About Widget
-const AboutWidget = () => {
+const AboutWidget = ({ widget }: { widget?: any }) => {
   return (
     <WidgetCard accentColor="#A87C5A">
       <div className="text-center">
@@ -505,14 +513,13 @@ const AboutWidget = () => {
 
         {/* Content */}
         <h3 className="text-xl font-medium text-[#451C15] mb-2 [font-family:var(--font-playfair)]">
-          Olesea Stamatin
+          {widget?.authorName || "Olesea Stamatin"}
         </h3>
         <p className="text-sm text-[#D4A574] mb-3 [font-family:var(--font-inter)]">
-          Master Chocolatier
+          {widget?.authorTitle || "Master Chocolatier"}
         </p>
         <p className="text-sm text-[#451C15]/70 mb-4 [font-family:var(--font-inter)]">
-          Sharing the art of chocolate making through stories, recipes, and a
-          passion for sweet perfection.
+          {widget?.authorBio || "Sharing the art of chocolate making through stories, recipes, and a passion for sweet perfection."}
         </p>
 
         {/* Social Links */}
@@ -539,6 +546,7 @@ export const BlogSidebar = ({
   popularPosts,
   currentPostId,
   className,
+  widgets,
   onCategoryClick,
   onTagClick,
   onNewsletterSubmit,
@@ -553,6 +561,55 @@ export const BlogSidebar = ({
   // Get popular tags
   const popularTags = getPopularTags(15);
 
+  // Render widgets dynamically if provided from Strapi
+  if (widgets && widgets.length > 0) {
+    return (
+      <aside className={cn("sticky top-24", className)}>
+        <div className="space-y-6">
+          {widgets.map((widget, index) => {
+            switch (widget.widgetType) {
+              case 'about':
+                return <AboutWidget key={index} widget={widget} />;
+              case 'newsletter':
+                return <NewsletterWidget key={index} widget={widget} onSubmit={onNewsletterSubmit} />;
+              case 'categories':
+                return (
+                  <CategoriesWidget
+                    key={index}
+                    widget={widget}
+                    categories={categories}
+                    postsCount={postsCount}
+                    onCategoryClick={onCategoryClick}
+                  />
+                );
+              case 'popular-posts':
+                return (
+                  <PopularPostsWidget
+                    key={index}
+                    widget={widget}
+                    posts={popularPosts}
+                    currentPostId={currentPostId}
+                  />
+                );
+              case 'tags':
+                return (
+                  <TagsWidget
+                    key={index}
+                    widget={widget}
+                    tags={popularTags}
+                    onTagClick={onTagClick}
+                  />
+                );
+              default:
+                return null;
+            }
+          })}
+        </div>
+      </aside>
+    );
+  }
+
+  // Fallback to default widget order if no widgets provided
   return (
     <aside className={cn("sticky top-24", className)}>
       <div className="space-y-6">

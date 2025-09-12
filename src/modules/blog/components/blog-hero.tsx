@@ -1,7 +1,7 @@
 // src/modules/blog/components/blog-hero.tsx
 "use client";
 
-import React, { useState, useRef, useEffect } from "react";
+import React, { useState, useRef } from "react";
 import { motion, useScroll, useTransform } from "motion/react";
 import {
   Search,
@@ -12,16 +12,36 @@ import {
   BookOpen,
   Filter,
   ChevronRight,
+  Heart,
+  Coffee,
+  Clock,
 } from "lucide-react";
-import { blogCategories, getFeaturedPosts, blogPosts } from "../data/blog-content";
 
-export const BlogHero = () => {
+interface BlogHeroProps {
+  data: any;
+  categories?: any[];
+  posts?: any[];
+}
+
+const getIconComponent = (iconName: string) => {
+  const icons: Record<string, React.ComponentType<{ className?: string }>> = {
+    BookOpen,
+    TrendingUp,
+    Calendar,
+    Heart,
+    Sparkles,
+    Coffee,
+    Clock,
+  };
+  return icons[iconName] || BookOpen;
+};
+
+export const BlogHero = ({ data, categories = [], posts = [] }: BlogHeroProps) => {
   const containerRef = useRef<HTMLDivElement>(null);
   const [searchQuery, setSearchQuery] = useState("");
   const [isSearchFocused, setIsSearchFocused] = useState(false);
   const [activeCategory, setActiveCategory] = useState<string | null>(null);
   const [showAllCategories, setShowAllCategories] = useState(false);
-  const [featuredPosts, setFeaturedPosts] = useState<{title: string; excerpt: string; category: {name: string}; readingTime: number}[]>([]);
 
   const { scrollY } = useScroll();
 
@@ -31,9 +51,8 @@ export const BlogHero = () => {
   const opacity = useTransform(scrollY, [0, 400], [1, 0.3]);
   const scale = useTransform(scrollY, [0, 500], [1, 0.95]);
 
-  useEffect(() => {
-    setFeaturedPosts(getFeaturedPosts());
-  }, []);
+  // Get featured post from posts
+  const featuredPost = posts?.find(post => post.featured) || posts?.[0];
 
   // Handle search
   const handleSearch = (e: React.FormEvent) => {
@@ -54,29 +73,10 @@ export const BlogHero = () => {
     }
   };
 
-  // Animated counter for posts
-  const totalPosts = blogPosts.length;
-  const [displayCount, setDisplayCount] = useState(0);
-  
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      if (displayCount < totalPosts) {
-        setDisplayCount((prev) =>
-          Math.min(prev + Math.ceil(totalPosts / 20), totalPosts)
-        );
-      }
-    }, 50);
-    return () => clearTimeout(timer);
-  }, [displayCount, totalPosts]);
-
-  const featuredPost = featuredPosts[0]
-    ? {
-        title: featuredPosts[0].title,
-        excerpt: featuredPosts[0].excerpt,
-        category: featuredPosts[0].category.name,
-        readingTime: featuredPosts[0].readingTime,
-      }
-    : undefined;
+  // Get background image URL
+  const backgroundImageUrl = data?.backgroundImage?.url 
+    ? `${process.env.NEXT_PUBLIC_STRAPI_URL || 'http://localhost:1337'}${data.backgroundImage.url}`
+    : '/img/bg.jpg';
 
   return (
     <section
@@ -87,7 +87,7 @@ export const BlogHero = () => {
       <motion.div className="absolute inset-0" style={{ y: backgroundY }}>
         <div 
           className="absolute inset-0 bg-cover bg-center bg-no-repeat"
-          style={{ backgroundImage: "url('/img/bg.jpg')" }}
+          style={{ backgroundImage: `url('${backgroundImageUrl}')` }}
         />
         {/* Dark overlay for better text readability */}
         <div className="absolute inset-0 bg-gradient-to-br from-black/70 via-black/60 to-black/70" />
@@ -118,73 +118,69 @@ export const BlogHero = () => {
               className="text-center mb-10 sm:mb-12"
             >
               {/* Small Label */}
-              <motion.div
-                initial={{ opacity: 0, scale: 0.9 }}
-                animate={{ opacity: 1, scale: 1 }}
-                transition={{ delay: 0.2, duration: 0.6 }}
-                className="inline-flex items-center gap-2 px-4 py-2 bg-white/10 backdrop-blur-md rounded-full border border-white/20 mb-6"
-              >
-                <BookOpen className="w-4 h-4 text-amber-200" />
-                <span className="text-sm text-amber-100 [font-family:var(--font-inter)]">
-                  Chocolate Chronicles
-                </span>
-              </motion.div>
+              {data?.headerLabel && (
+                <motion.div
+                  initial={{ opacity: 0, scale: 0.9 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  transition={{ delay: 0.2, duration: 0.6 }}
+                  className="inline-flex items-center gap-2 px-4 py-2 bg-white/10 backdrop-blur-md rounded-full border border-white/20 mb-6"
+                >
+                  {data.headerLabel.icon && (
+                    <>{React.createElement(getIconComponent(data.headerLabel.icon), { className: "w-4 h-4 text-amber-200" })}</>
+                  )}
+                  <span className="text-sm text-amber-100 [font-family:var(--font-inter)]">
+                    {data.headerLabel.text}
+                  </span>
+                </motion.div>
+              )}
 
               {/* Main Title */}
               <h1 className="[font-family:var(--font-playfair)] text-4xl sm:text-5xl lg:text-6xl xl:text-7xl font-light leading-[1.1] mb-4">
                 <span className="block text-transparent bg-clip-text bg-gradient-to-br from-white via-amber-50/95 to-amber-100/90">
-                  Stories, Recipes &
+                  {data?.mainTitleLine1}
                 </span>
                 <span className="block mt-2 text-transparent bg-clip-text bg-gradient-to-br from-amber-100/90 via-amber-200/80 to-amber-300/70 italic">
-                  Sweet Inspirations
+                  {data?.mainTitleLine2}
                 </span>
               </h1>
 
               {/* Subtitle */}
-              <motion.p
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                transition={{ delay: 0.4, duration: 0.8 }}
-                className="text-base sm:text-lg text-white/70 [font-family:var(--font-inter)] max-w-2xl mx-auto mt-4"
-              >
-                Discover the art of chocolate making through expert tutorials,
-                business insights, and delicious recipes
-              </motion.p>
+              {data?.subtitle && (
+                <motion.p
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  transition={{ delay: 0.4, duration: 0.8 }}
+                  className="text-base sm:text-lg text-white/70 [font-family:var(--font-inter)] max-w-2xl mx-auto mt-4"
+                >
+                  {data.subtitle}
+                </motion.p>
+              )}
 
               {/* Stats */}
-              <motion.div
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.6, duration: 0.8 }}
-                className="flex items-center justify-center gap-8 mt-6"
-              >
-                <div className="text-center">
-                  <span className="block text-2xl sm:text-3xl font-light text-amber-100 [font-family:var(--font-playfair)]">
-                    {displayCount}+
-                  </span>
-                  <span className="text-xs text-white/60 [font-family:var(--font-inter)]">
-                    Articles
-                  </span>
-                </div>
-                <div className="w-px h-10 bg-white/20" />
-                <div className="text-center">
-                  <span className="block text-2xl sm:text-3xl font-light text-amber-100 [font-family:var(--font-playfair)]">
-                    {blogCategories.length}
-                  </span>
-                  <span className="text-xs text-white/60 [font-family:var(--font-inter)]">
-                    Topics
-                  </span>
-                </div>
-                <div className="w-px h-10 bg-white/20" />
-                <div className="text-center">
-                  <span className="block text-2xl sm:text-3xl font-light text-amber-100 [font-family:var(--font-playfair)]">
-                    12+
-                  </span>
-                  <span className="text-xs text-white/60 [font-family:var(--font-inter)]">
-                    Years
-                  </span>
-                </div>
-              </motion.div>
+              {data?.stats && data.stats.length > 0 && (
+                <motion.div
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: 0.6, duration: 0.8 }}
+                  className="flex items-center justify-center gap-8 mt-6"
+                >
+                  {data.stats.map((stat: any, index: number) => (
+                    <React.Fragment key={index}>
+                      <div className="text-center">
+                        <span className="block text-2xl sm:text-3xl font-light text-amber-100 [font-family:var(--font-playfair)]">
+                          {stat.value}{stat.suffix || ''}
+                        </span>
+                        <span className="text-xs text-white/60 [font-family:var(--font-inter)]">
+                          {stat.label}
+                        </span>
+                      </div>
+                      {index < data.stats.length - 1 && (
+                        <div className="w-px h-10 bg-white/20" />
+                      )}
+                    </React.Fragment>
+                  ))}
+                </motion.div>
+              )}
             </motion.div>
 
             {/* Search Bar */}
@@ -207,7 +203,7 @@ export const BlogHero = () => {
                   onChange={(e) => setSearchQuery(e.target.value)}
                   onFocus={() => setIsSearchFocused(true)}
                   onBlur={() => setIsSearchFocused(false)}
-                  placeholder="Search articles, recipes, tutorials..."
+                  placeholder={data?.searchConfig?.placeholder || "Search..."}
                   className="
                     w-full px-6 py-4 pl-14 pr-12
                     bg-white/10 backdrop-blur-xl
@@ -245,17 +241,18 @@ export const BlogHero = () => {
             </motion.form>
 
             {/* Category Filter Pills */}
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 1, duration: 0.8 }}
-              className="flex flex-wrap items-center justify-center gap-3"
-            >
-              {/* Category buttons remain the same */}
-              {(showAllCategories
-                ? blogCategories
-                : blogCategories.slice(0, 4)
-              ).map((category, index) => (
+            {data?.showCategoryFilter && categories && categories.length > 0 && (
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 1, duration: 0.8 }}
+                className="flex flex-wrap items-center justify-center gap-3"
+              >
+                {/* Category buttons */}
+                {(showAllCategories
+                  ? categories
+                  : categories.slice(0, 4)
+                ).map((category, index) => (
                 <motion.button
                   key={category.id}
                   initial={{ opacity: 0, scale: 0.8 }}
@@ -285,25 +282,16 @@ export const BlogHero = () => {
                   }}
                 >
                   <span className="flex items-center gap-2">
-                    {category.icon === "Book" && (
-                      <BookOpen className="w-4 h-4" />
-                    )}
-                    {category.icon === "TrendingUp" && (
-                      <TrendingUp className="w-4 h-4" />
-                    )}
-                    {category.icon === "Calendar" && (
-                      <Calendar className="w-4 h-4" />
-                    )}
-                    {category.icon === "Tool" && (
-                      <Sparkles className="w-4 h-4" />
+                    {category.icon && (
+                      <>{React.createElement(getIconComponent(category.icon), { className: "w-4 h-4" })}</>
                     )}
                     {category.name}
                   </span>
                 </motion.button>
               ))}
 
-              {/* Show More/Less Button */}
-              {blogCategories.length > 4 && (
+                {/* Show More/Less Button */}
+                {categories.length > 4 && (
                 <motion.button
                   initial={{ opacity: 0, scale: 0.8 }}
                   animate={{ opacity: 1, scale: 1 }}
@@ -323,12 +311,12 @@ export const BlogHero = () => {
                   <Filter className="w-4 h-4" />
                   {showAllCategories
                     ? "Show Less"
-                    : `+${blogCategories.length - 4} More`}
+                    : `+${categories.length - 4} More`}
                 </motion.button>
-              )}
+                )}
 
-              {/* Clear Filter */}
-              {activeCategory && (
+                {/* Clear Filter */}
+                {activeCategory && (
                 <motion.button
                   initial={{ opacity: 0, x: -20 }}
                   animate={{ opacity: 1, x: 0 }}
@@ -350,11 +338,12 @@ export const BlogHero = () => {
                   <X className="w-4 h-4" />
                   Clear
                 </motion.button>
-              )}
-            </motion.div>
+                )}
+              </motion.div>
+            )}
 
             {/* Featured Post Teaser */}
-            {featuredPost && (
+            {data?.showFeaturedPost && featuredPost && (
               <motion.div
                 initial={{ opacity: 0, y: 30 }}
                 animate={{ opacity: 1, y: 0 }}
@@ -368,11 +357,11 @@ export const BlogHero = () => {
                     </span>
                     <span className="text-xs text-white/40">•</span>
                     <span className="text-xs text-white/60 [font-family:var(--font-inter)]">
-                      {featuredPost.category}
+                      {featuredPost.blog_categories?.[0]?.name || 'Uncategorized'}
                     </span>
                     <span className="text-xs text-white/40">•</span>
                     <span className="text-xs text-white/60 [font-family:var(--font-inter)]">
-                      {featuredPost.readingTime} min read
+                      {featuredPost.readingTime || 5} min read
                     </span>
                   </div>
                   <h3 className="text-lg sm:text-xl text-white [font-family:var(--font-playfair)] mb-2 group-hover:text-amber-100 transition-colors">
